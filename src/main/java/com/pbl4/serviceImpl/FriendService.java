@@ -24,6 +24,12 @@ public class FriendService implements IFriendService{
 		// TODO Auto-generated method stub
 		return FriendDAO.getInstance().getListSearchNewFr(Userid, name);
 	}
+
+	@Override
+	public void addnewFriend(Long UserId, Long FriendId) {
+		FriendDAO.getInstance().addNewFriend(UserId, FriendId);
+		
+	}
 	
 	
 }

@@ -122,5 +122,23 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.4</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/jakarta.websocket/jakarta.websocket-api -->
+<dependency>
+    <groupId>jakarta.websocket</groupId>
+    <artifactId>jakarta.websocket-api</artifactId>
+    <version>2.1.1</version>
+    <scope>provided</scope>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-websocket -->
+<dependency>
+    <groupId>org.apache.tomcat</groupId>
+    <artifactId>tomcat-websocket</artifactId>
+    <version>10.1.25</version>
+</dependency>
+		
 	</dependencies>
+	
+	
 </project>

@@ -123,20 +123,47 @@
             success: function (results) {
             	console.log(results);
                 results.forEach(result => {
-                	console.log(result.nameFriend);
+                	console.log(result);
                 	console.log(typeof result.nameFriend); // In ra kiểu dữ liệu
                 	const name = result.nameFriend ||"Tên không xác định";
                 	console.log(name);
-                	const test="hoang";
+                	const test=result.status;
+                	console.log(test);
                     const li=document.createElement('li');
                     li.className = "flex items-center justify-between bg-secondary p-2 rounded-md border border-tertiary";
                     li.innerHTML = `
                         <div class="flex items-center">
                             <img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="${result.nameFriend}" class="w-10 h-10 rounded-full mr-3">
-                            <span class="text-white">${result.nameFriend}</span>
-                        </div>
-                        <button /* onclick="addFriend('${result.nameFriend}', this)" */ class="bg-accent1 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300">Add Friend</button>
+                            <span class="text-white"></span>
+                            
+                        </div>                    
                     `;
+                    if (result.status == null){
+                        li.innerHTML +=` 
+                    	<button /* onclick="addFriend('${result.nameFriend}', this)" */ class="bg-blue-400 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition duration-300">Add Friend</button>
+					`;
+                    }else if (result.status == 'pending'){
+                    	 li.innerHTML +=` 
+                    	 <div>
+                         	<button class="bg-green-400 text-white px-3 py-1 rounded-md hover:bg-green-600 transition duration-300">Chấp nhận</button>
+                         	<button class="bg-accent1 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300">Từ chối</button>
+     					<div>
+                         	`;
+                    }else if (result.status == 'accepted'){
+                    	 li.innerHTML +=`
+                    	 <div>
+                          	<button  class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300">Bạn bè  	<i class="fa-solid fa-user-group"></i></button>
+                          	<button  class="bg-yellow-400 text-white px-3 py-1 rounded-md hover:bg-yellow-500 transition duration-300">Thách đấu</button>
+                       	 <div>
+                          	`;
+                    }else if (result.status == 'pended'){
+                    	 li.innerHTML +=` 
+                    	 <div>
+                         	<button class="bg-gray-500 text-white px-3 py-1 rounded-md transition duration-300 cursor-not-allowed" disables>Đã gửi lời mời kết bạn</button>
+                         
+     					<div>
+                         	`;
+                    }
                     const span = li.querySelector('span');
         			span.textContent = result.nameFriend;;
         			
@@ -205,7 +232,7 @@
         function addFriend(name, button) {
             console.log(`Friend request sent to ${name}`);
             button.textContent = "Đã gửi lời mời kết bạn";
-            button.classList.remove("bg-accent1", "hover:bg-red-600");
+            button.classList.remove("bg-blue-400", "hover:bg-blue-600");
             button.classList.add("bg-gray-500", "cursor-not-allowed");
             button.disabled = true;
         }

@@ -34,4 +34,12 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 		return ar.isEmpty()?null:ar;
 	}
 
+	@Override
+	public void addNewFriend(Long Userid, Long FriendId) {
+		StringBuilder sql1 = new StringBuilder("insert into friend_list(idUser,idfriend,status) values (?,?,'pended')");
+		StringBuilder sql2 = new StringBuilder("insert into friend_list(idUser,idfriend,status) values (?,?,'pending')");
+		update(sql1.toString(), Userid,FriendId);
+		update(sql2.toString(), FriendId,Userid);
+	}
+
 }

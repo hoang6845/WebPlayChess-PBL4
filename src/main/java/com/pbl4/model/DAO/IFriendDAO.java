@@ -9,4 +9,6 @@ public interface IFriendDAO extends DAOInterface<FriendModel> {
 	ArrayList<FriendModel> getListFriend(Long id);
 	
 	ArrayList<FriendModel> getListSearchNewFr(Long Userid, String name);
+	
+	void addNewFriend(Long Userid, Long FriendId);
 }
