@@ -20,7 +20,11 @@ public class PlayChessController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL"); 
+		String room = req.getParameter("room");
+		req.setAttribute("room", room);
+		System.out.println("room là :"+room);
 		if (model !=null) {
+			
 			System.out.print("model!=null"+model.getId());
 			RequestDispatcher rd= req.getRequestDispatcher("/WEB-INF/views/web/PvP.jsp");
 			rd.forward(req, resp);	

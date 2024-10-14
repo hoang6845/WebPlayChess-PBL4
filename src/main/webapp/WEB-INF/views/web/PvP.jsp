@@ -35,7 +35,7 @@
             <div class="w-full lg:w-2/3">
                 <div class="bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col items-center">
                     <div class="flex justify-between items-center w-full mb-4">
-                        <div class="flex items-center hover-effect">
+                        <div class="flex items-center hover-effect cursor-pointer rounded" style="padding: 2px 8px;">
                             <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
                                 alt="White Player" class="w-10 h-10 rounded-full mr-2">
                             <div>
@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="flex justify-between items-center w-full">
-                        <div class="flex items-center hover-effect">
+                        <div class="flex items-center hover-effect cursor-pointer rounded" style="padding: 2px 8px;">
                             <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
                                 alt="Black Player" class="w-10 h-10 rounded-full mr-2">
                             <div>
@@ -75,8 +75,12 @@
             </div>
 
             <div class="w-full lg:w-1/3 mt-8 lg:mt-0">
-                <div class="bg-gray-800 rounded-lg shadow-lg p-6">
-                    <h2 class="text-2xl font-bold mb-4">Move History</h2>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6 h-full">
+                    <h2 class="text-2xl font-bold mb-4 block inline-block">Move History</h2>
+                   	<button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover-effect float-right"
+                            aria-label="Draw">
+                            Exit
+                        </button>
                     <div class="h-48 overflow-y-auto mb-4 bg-gray-700 p-2 rounded hover-effect">
                         <ul class="list-decimal pl-5">
                             <li>e4 e5</li>
@@ -116,10 +120,9 @@
 
     <!-- Player Info Modal -->
     <div id="playerInfoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full relative hover-effect">
+        <div id="playerInfoModal_container" class="bg-gray-500 p-8 rounded-lg shadow-xl max-w-md w-full relative hover-effect">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold" id="playerName"></h2>
-                <button onclick="closePlayerInfo()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-300 text-2xl hover-effect">&times;</button>
             </div>
             <div class="flex items-center mb-4">
                 <img id="playerAvatar" src="" alt="Player Avatar" class="w-20 h-20 rounded-full mr-4 hover-effect">
@@ -134,36 +137,79 @@
     </div>
 
     <script>
+    
+    	
+    	var RoomGame = ${room};
     	let ws = new WebSocket('ws://localhost:8080/chess-game/PvP');
+    	window.onload = function() {
+    	    joinRoom(); 
+    	};
+    	
+    	window.onbeforeunload = function(){
+    		outRoom();
+    	}
+    	
     	let chatbox = document.getElementById('chatBox');
     	console.log(chatbox);
+    	
         ws.onmessage = function(event) {
         	console.log(event.data)
         	const receivedMessage = JSON.parse(event.data);
     
     		// Xử lý thông tin nhận được
     		console.log('Received message:', receivedMessage);
-            let newMessage = document.createElement('div');
-            newMessage.className = "mb-2";
-            newMessage.innerHTML = `<span class="font-bold"> :</span> <p></p>`
-            const span = newMessage.querySelector('span');
-            span.textContent = receivedMessage.sender+':';
-            const p = newMessage.querySelector('p') ;
-            p.textContent=receivedMessage.content;
-            chatbox.appendChild(newMessage);
+    		if (receivedMessage.type == "chat"){
+    			if (receivedMessage.room == RoomGame){
+	    			let newMessage = document.createElement('div');
+		            newMessage.className = "mb-2";
+		            newMessage.innerHTML = `<span class="font-bold"> :</span> <p></p>`
+		            const span = newMessage.querySelector('span');
+		            span.textContent = receivedMessage.sender+':';
+		            const p = newMessage.querySelector('p') ;
+		            p.classList.add('inline-block');
+		            p.textContent=receivedMessage.content;
+		            chatbox.appendChild(newMessage);
+    			}
+    		}
+    		
+          
             
         };
         class Message {
-            constructor(sender, content) {
+            constructor(room, type, sender, content) {
+            	this.room = room;
+            	this.type= type;
                 this.sender = sender;
                 this.content = content;
             }
         }
         
+        
+        function joinRoom(){
+        	const room = "${room}";
+        	console.log(room);
+        	const username = "${USERMODEL.fullname}";
+        	const message = new Message(room, "join", username,"");
+        	console.log(message);
+        	ws.send(JSON.stringify(message));
+        }
+        
+        function outRoom(){
+        	const room = "${room}";
+        	console.log(room);
+        	const username = "${USERMODEL.fullname}";
+        	const message = new Message(room, "out", username,"");
+        	console.log(message);
+        	ws.send(JSON.stringify(message));
+        }
+        
         function sendMessage() {
             let input = document.getElementById('messageInput');
+            const room = "${room}";
+            console.log(room);
             const username = "${USERMODEL.fullname}"; // Lấy tên người dùng từ JSP
-            const message = new Message(username, input.value);
+            const message = new Message(room, "chat", username, input.value);
+            console.log(message);
             ws.send(JSON.stringify(message));
             input.value = '';
         }
@@ -182,6 +228,16 @@
             document.getElementById('playerInfoModal').classList.add('hidden');
             document.getElementById('playerInfoModal').classList.remove('flex');
         }
+        
+        const modal = document.getElementById("playerInfoModal");
+        const modalContainer = document.getElementById("playerInfoModal_container");
+     // click vào ngoài container sẽ tắt
+     	console.log(modal);
+        modal.addEventListener('click', closePlayerInfo);
+        modalContainer.addEventListener('click', function (event) {
+            event.stopPropagation();
+            // ngăn việc nổi bọt(sự kiện nổi bọt)
+        })
 
         // Add click event listener to opponent's name
         document.querySelector('.flex.justify-between.items-center:last-child .font-bold.cursor-pointer').addEventListener('click', function() {

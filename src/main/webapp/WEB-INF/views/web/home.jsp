@@ -67,11 +67,11 @@
                         <div class="space-y-2 max-h-36 overflow-y-auto">
                             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-lg shadow cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
                                 <span>Table #1 (1750+)</span>
-                                <button onclick="chuyenTrang('<c:url value="/PvP"></c:url>')" class="bg-gradient-to-r from-gray-400 to-gray-600 text-white px-4 py-1 rounded-lg hover:from-gray-500 hover:to-gray-700 transition duration-300 shadow transform hover:scale-105">Join</button>
+                                <button onclick="chuyenTrang('<c:url value="/PvP?room=1"></c:url>')" class="bg-gradient-to-r from-gray-400 to-gray-600 text-white px-4 py-1 rounded-lg hover:from-gray-500 hover:to-gray-700 transition duration-300 shadow transform hover:scale-105">Join</button>
                             </div>
                             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-lg shadow cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
                                 <span>Table #2 (1500-1800)</span>
-                                <button class="bg-gradient-to-r from-gray-400 to-gray-600 text-white px-4 py-1 rounded-lg hover:from-gray-500 hover:to-gray-700 transition duration-300 shadow transform hover:scale-105">Join</button>
+                                <button onclick="chuyenTrang('<c:url value="/PvP?room=2"></c:url>')" class="bg-gradient-to-r from-gray-400 to-gray-600 text-white px-4 py-1 rounded-lg hover:from-gray-500 hover:to-gray-700 transition duration-300 shadow transform hover:scale-105">Join</button>
                             </div>
                             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-lg shadow cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
                                 <span>Table #3 (Open)</span>
@@ -89,7 +89,7 @@
     </main>
     <script type="text/javascript">
          function chuyenTrang(url) {
-        window.location.assign(url); // Chuyển hướng đến trang_moi.html
+        window.location.assign(url); 
     }
     </script>
 </body>
