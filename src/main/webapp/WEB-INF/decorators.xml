@@ -16,4 +16,7 @@
      <decorator name="login" page="login.jsp">
         <pattern>/dang-nhap</pattern>
     </decorator>
+     <decorator name="chessBoard" page="chessBoard.jsp">
+        <pattern>/chess</pattern>
+    </decorator>
 </decorators>

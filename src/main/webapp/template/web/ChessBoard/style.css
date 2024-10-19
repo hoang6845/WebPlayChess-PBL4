@@ -1,0 +1,75 @@
+/* body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+} */
+.chessBoard {
+  height: 100%; 
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.square {
+  width: 12.5%;
+  height: 12.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.white {
+  background-color: rgb(222 234 186);
+}
+.black {
+  background-color: rgb(216 140 52);
+}
+.coordinate {
+  display: flex;
+  position: absolute;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.rank {
+  top: 4%;
+  right: 4%;
+}
+.coordinate.bottom-left {
+  bottom: 4%;
+  left: 4%;
+}
+.whiteText {
+  color: #4b5563;
+}
+.blackText {
+  color: #d1d5db;
+}
+.piece {
+  width: 100%;
+  z-index: 1;
+  cursor: pointer;
+}
+.piece img {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+/* Adjust font size for coordinates on smaller screens */
+@media (max-width: 600px) {
+  .coordinate {
+    font-size: 8px;
+  }
+}
+.highlight {
+  opacity:0.6; 
+  background-color: red;
+  border: 0.5px solid;
+
+ 
+ 
+}
+
+

@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="w-full max-w-[500px] aspect-square relative mb-4 mx-auto">
-                        <iframe src="./banco/banco.html" scrolling="no" class="absolute inset-0 w-full h-full"></iframe>
+                       	<%@ include file="/common/chessBoard/chessBoard.jsp"%>
                     </div>
 
                     <div class="flex justify-between items-center w-full">
@@ -76,7 +76,7 @@
 
             <div class="w-full lg:w-1/3 mt-8 lg:mt-0">
                 <div class="bg-gray-800 rounded-lg shadow-lg p-6 h-full">
-                    <h2 class="text-2xl font-bold mb-4 block inline-block">Move History</h2>
+                    <h2 class="text-2xl font-bold mb-4 block inline-block">Move History</h2>	
                    	<button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover-effect float-right"
                             aria-label="Draw">
                             Exit
