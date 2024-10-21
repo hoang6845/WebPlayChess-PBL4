@@ -28,13 +28,14 @@ body, html {
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 	integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+<link href="<c:url value='template/web/ChessBoard/style.css'></c:url>"
+	rel="stylesheet" type="text/css" media="all">
 </head>
-<body>
+<body style="overflow: auto">
 	<%@ include file="/common/web/header.jsp"%>
 
 	<div
-		class="bg-[#6b7280]  font-sans flex items-center justify-center min-h-screen home_body h-screen">
+		class="bg-[#6b7280]  font-sans flex items-center justify-center min-h-screen home_body">
 		<dec:body />
 	</div>
 

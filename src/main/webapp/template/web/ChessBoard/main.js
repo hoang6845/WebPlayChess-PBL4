@@ -1,4 +1,4 @@
-
+console.log("abc");
 
 let boardSquaresArray = [];
 let isWhiteTurn = true;
@@ -216,6 +216,7 @@ function drop(ev) {
       boardSquaresArray
     );
     checkForCheckMate();
+    dropSendToServer(pieceId,destinationSquareId);
     return;
   }
   if (
@@ -240,6 +241,7 @@ function drop(ev) {
       boardSquaresArray
     );
     checkForCheckMate();
+    dropSendToServer(pieceId,destinationSquareId);
     return;
   }
   console.log("di xong");
@@ -882,3 +884,5 @@ function showAlert(message) {
        alert.style.display="none";
   },3000);
 }
+
+

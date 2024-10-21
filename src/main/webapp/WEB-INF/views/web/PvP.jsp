@@ -77,8 +77,12 @@
             <div class="w-full lg:w-1/3 mt-8 lg:mt-0">
                 <div class="bg-gray-800 rounded-lg shadow-lg p-6 h-full">
                     <h2 class="text-2xl font-bold mb-4 block inline-block">Move History</h2>	
+                    <div class="text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover-effect inline-block cursor-pointer" id="numberInRoom">
+                    	<i class="fa-solid fa-eye"></i>
+                    	${numberInRoom} 5
+                    </div>
                    	<button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover-effect float-right"
-                            aria-label="Draw">
+                            aria-label="Draw" id="btn_leaveRoom">
                             Exit
                         </button>
                     <div class="h-48 overflow-y-auto mb-4 bg-gray-700 p-2 rounded hover-effect">
@@ -134,23 +138,47 @@
             </div>
             <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">Add Friend</button>
         </div>
+          
     </div>
+    
 
     <script>
     
     	
-    	var RoomGame = ${room};
+    	var RoomGame = '${room}';
     	let ws = new WebSocket('ws://localhost:8080/chess-game/PvP');
-    	window.onload = function() {
-    	    joinRoom(); 
-    	};
-    	
+    /* 	 class Message {
+             constructor(room, type, sender, content) {
+             	this.room = room;
+             	this.type= type;
+                 this.sender = sender;
+                 this.content = content;
+             }
+         } */
+    	function joinRoom(){
+         	const room = "${room}";
+         	console.log(room);
+         	const username = "${USERMODEL.fullname}";
+         	const message = new Message(room, "join", username,"");
+         	console.log(message);
+         	ws.send(JSON.stringify(message));
+         }
+    	ws.addEventListener('open',function(ev){
+    		joinRoom();
+    	});
+    	let numberInRoom = 0;
     	window.onbeforeunload = function(){
     		outRoom();
-    	}
+    	};
     	
+    	document.getElementById("btn_leaveRoom").addEventListener('click',function(){
+    		outRoom();
+    		ws.close();
+    		window.location.assign("/chess-game/trang-chu?page=home");
+    	});
     	let chatbox = document.getElementById('chatBox');
     	console.log(chatbox);
+    	
     	
         ws.onmessage = function(event) {
         	console.log(event.data)
@@ -171,28 +199,41 @@
 		            chatbox.appendChild(newMessage);
     			}
     		}
+    		else if(receivedMessage.type == "join"){
+    			if (receivedMessage.room == RoomGame){
+    				let numberInRoom = document.getElementById('numberInRoom');
+    				console.log(numberInRoom);
+    				numberInRoom.innerHTML=`<i class="fa-solid fa-eye"></i>
+    										<p></p>`
+    				const p=numberInRoom.querySelector('p');
+    				p.classList.add('inline-block');
+    				p.textContent = receivedMessage.content;
+    			}
+    		}
+    		else if(receivedMessage.type == "out"){
+    			if (receivedMessage.room == RoomGame){
+    				let numberInRoom = document.getElementById('numberInRoom');
+    				console.log(numberInRoom);
+    				numberInRoom.innerHTML=`<i class="fa-solid fa-eye"></i>
+    										<p></p>`
+    				const p=numberInRoom.querySelector('p');
+    				p.classList.add('inline-block');
+    				p.textContent = receivedMessage.content;
+    			}
     		
           
             
         };
-        class Message {
-            constructor(room, type, sender, content) {
-            	this.room = room;
-            	this.type= type;
-                this.sender = sender;
-                this.content = content;
-            }
-        }
         
-        
-        function joinRoom(){
-        	const room = "${room}";
-        	console.log(room);
-        	const username = "${USERMODEL.fullname}";
-        	const message = new Message(room, "join", username,"");
-        	console.log(message);
-        	ws.send(JSON.stringify(message));
+        class Room {
+        	constructor(room, whitePlayer, blackPlayer){
+        		this.room = room;
+        		this.whitePlayer = whitePlayer;
+        		this.blackPlayer = blackPlayer;
+        	}
         }
+       
+       
         
         function outRoom(){
         	const room = "${room}";
@@ -212,6 +253,14 @@
             console.log(message);
             ws.send(JSON.stringify(message));
             input.value = '';
+        }
+        
+        function dropSendToServer(pieceId,destinationSquareId){
+        	const room = "${room}";
+            console.log(room);
+            const username = "${USERMODEL.fullname}";
+        	const message = new Message(room,"move",username,pieceId+destinationSquareId)
+        	 ws.send(JSON.stringify(message));
         }
     
         function showPlayerInfo(name, avatar, rank, matches, friends) {
@@ -237,13 +286,15 @@
         modalContainer.addEventListener('click', function (event) {
             event.stopPropagation();
             // ngăn việc nổi bọt(sự kiện nổi bọt)
-        })
+        });
 
         // Add click event listener to opponent's name
         document.querySelector('.flex.justify-between.items-center:last-child .font-bold.cursor-pointer').addEventListener('click', function() {
             showPlayerInfo('BlackPlayer456', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80', 6000, 500, 120);
         });
+    }
     </script>
 
+	<script src="<c:url value='template/web/ChessBoard/main.js' />"></script>
 </body>
 </html>

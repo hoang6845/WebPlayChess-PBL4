@@ -47,6 +47,11 @@ public class ChatWebsocket {
 				players.add(session);
 				System.out.println("Session " + session.getId()+" Player "+ responseMessage.getSender() + " joined room: " + roomId);
 				System.out.println("Room "+ roomId + " có "+ players.size()+" Player");
+				Message joinMessage = new Message(roomId,"join",responseMessage.getSender(),String.valueOf(players.size()));
+				String jsonJoinMessage =gson.toJson(joinMessage);
+				for (Session client : clients) {
+					client.getBasicRemote().sendText(jsonJoinMessage);
+				}
 			}
 			else if (responseMessage.getType().equals("chat")) {
 				for (Session client : clients) {
@@ -65,6 +70,11 @@ public class ChatWebsocket {
 					}
 					System.out.println("Session " + session.getId()+" Player "+ responseMessage.getSender() + " out room: " + roomId);
 					System.out.println("Room "+ roomId + " có "+ players.size()+" Player");
+					Message outMessage = new Message(roomId,"out",responseMessage.getSender(),String.valueOf(players.size()));
+					String jsonoutMessage =gson.toJson(outMessage);
+					for (Session client : clients) {
+						client.getBasicRemote().sendText(jsonoutMessage);
+					}
 					
 				}
 			}

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<nav class="bg-[#4b5563] shadow-lg home_heading">
+<nav class="bg-[#4b5563] shadow-lg home_heading" style="position: fixed; z-index: 1;">
 	<div class="max-w-7xl mx-auto px-4">
 		<div class="flex justify-between items-center h-[70px]">
 			<c:if test="${ empty USERMODEL }">
