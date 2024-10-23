@@ -22,7 +22,7 @@ public class GameModePvP {
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 90, 10, 0, 0, 0, 0, -10, -90 }, { 1000, 10, 0, 0, 0, 0, -10, -1000 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 30, 10, 0, 0, 0, 0, -10, -30 }, { 50, 10, 0, 0, 0, 0, -10, -50 } };
 
-	void begin() {
+	public void begin() {
 		int[][] board = { { 50, 10, 0, 0, 0, 0, -10, -50 }, { 30, 10, 0, 0, 0, 0, -10, -30 },
 				{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 90, 10, 0, 0, 0, 0, -10, -90 },
 				{ 1000, 10, 0, 0, 0, 0, -10, -1000 }, { 35, 10, 0, 0, 0, 0, -10, -35 },
@@ -41,7 +41,7 @@ public class GameModePvP {
 
 	}
 
-	void banco() {
+	public void banco() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (Board[j][i] == 10)
@@ -75,7 +75,7 @@ public class GameModePvP {
 		}
 	}
 
-	void CopyMang(int begin[][], int end[][]) {
+	public void CopyMang(int begin[][], int end[][]) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				end[i][j] = begin[i][j];
@@ -83,7 +83,7 @@ public class GameModePvP {
 		}
 	}
 
-	void CopyChess(Chess begin[], Chess end[]) {
+	public void CopyChess(Chess begin[], Chess end[]) {
 		for (int i = 0; i < 16; i++) {
 			if (begin[i] instanceof Pawn) {
 				end[i] = new Pawn((Pawn) begin[i]);
@@ -103,13 +103,26 @@ public class GameModePvP {
 		}
 	}
 
-	int Move(int j, int x1, int y1) {
-		banco();
+	public int Move(int j, int x1, int y1) {
+
 		if (turn == true) {
 			/*
 			 * Stack<Location> P = ValidMove(j, Board, Player1.PosB); for (int i = 0; i <
 			 * P.getCurrent(); i++) { cout << endl << P.top().x << " " << P.top().y; }
 			 */
+			Stack<Location> P = mgr.Player[j].ValidMove(Board);
+			boolean validMove =false;
+			int k=P.size();
+			for (int i=0;i<k;i++) {
+				System.out.println(P.lastElement().getX()+" "+P.lastElement().getY());
+				if (P.lastElement().getX()==x1&&P.lastElement().getY()==y1) {
+					validMove=true;
+					break;
+				}
+				P.pop();
+			}
+	
+			if (validMove==false) return 0;
 			if (Board[x1][y1] > 0) {
 				for (int i = 0; i < 16; i++) {
 					if (Board[x1][y1] == mgr.Computer[i].getValue() && mgr.Computer[i].getP().getX() == x1
@@ -150,6 +163,7 @@ public class GameModePvP {
 				return j;
 			}
 			U.push(n);
+			banco();
 			return -1;
 		} else {
 			/*
@@ -158,7 +172,18 @@ public class GameModePvP {
 			 * for (int i = 0; i < P.getCurrent(); i++) { cout << endl << P.top().x << " "
 			 * << P.top().y; }
 			 */
-
+			Stack<Location> P = mgr.Computer[j].ValidMove(Board);
+			boolean validMove =false;
+			int k=P.size();
+			for (int i=0;i<k;i++) {
+				System.out.println(P.lastElement().getX()+" "+P.lastElement().getY());
+				if (P.lastElement().getX()==x1&&P.lastElement().getY()==y1) {
+					validMove=true;
+					break;
+				}
+				P.pop();
+			}
+			if (validMove==false) return 0;
 			if (Board[x1][y1] < 0) {
 				for (int i = 0; i < 16; i++) {
 					if (Board[x1][y1] == mgr.Player[i].getValue() && mgr.Player[i].getP().getX() == x1
@@ -202,11 +227,13 @@ public class GameModePvP {
 
 			}
 			U.push(n);
+			banco();
 			return -1;
 		}
+		
 	}
 
-	void undo() {
+	public void undo() {
 		boolean y = true;
 		Undo R;
 		while (y == true && !U.isEmpty()) {
@@ -268,6 +295,12 @@ public class GameModePvP {
 
 			}
 		}
+	}
+	
+	public static void main(String args[]) {
+		GameModePvP G = new GameModePvP();
+		G.begin();
+		G.Move(0, 0, 5);
 	}
 
 }

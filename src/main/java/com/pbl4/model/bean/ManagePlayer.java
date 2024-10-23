@@ -33,6 +33,7 @@ public class ManagePlayer {
 
 		// King cua nguoi
 		Player[15] = new King();
+		
 		for (int i = 0; i < 8; i++) {
 			Player[i].setP(i, 6);
 			Player[i].setIndex(-1);

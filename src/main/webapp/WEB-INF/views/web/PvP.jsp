@@ -146,6 +146,7 @@
     
     	
     	var RoomGame = '${room}';
+    	var checkTypePlayer ="";
     	let ws = new WebSocket('ws://localhost:8080/chess-game/PvP');
     /* 	 class Message {
              constructor(room, type, sender, content) {
@@ -220,6 +221,43 @@
     				p.classList.add('inline-block');
     				p.textContent = receivedMessage.content;
     			}
+    		}
+    		else if(receivedMessage.type == "start"){
+    			if (receivedMessage.room == RoomGame){
+    				let [whitePlayer, blackPlayer]=receivedMessage.sender.split("|");
+    				console.log(whitePlayer);
+    				console.log(blackPlayer);
+    				const username = "${USERMODEL.fullname}";
+    				if (username == whitePlayer){
+    					checkTypePlayer = "white";
+    				}else if(username == blackPlayer){
+    					checkTypePlayer = "black";
+    				}
+    	
+    			}
+    		}
+    		else if (receivedMessage.type == "move"){
+    			if (receivedMessage.room == RoomGame&&receivedMessage.sender != "${USERMODEL.fullname}"){
+    				let [pieceId, destinationSquareId] = receivedMessage.content.split("|");
+    				console.log(pieceId);
+    				 const piece = document.getElementById(pieceId);
+    				 const destinationSquare = document.getElementById(destinationSquareId);
+    				 const dataTransfer = {
+    				          data: {},
+    				          setData: function(type,val) {
+    				            this.data[type] = val;
+    				          },
+    				          getData: function(type){
+    				            return this.data[type];
+    				          }
+    				 }
+    				 console.log(piece);
+    				 drag({target: piece, dataTransfer:dataTransfer},1);
+    				 console.log(dataTransfer);
+    			     drop({currentTarget:destinationSquare, dataTransfer: dataTransfer},1);
+    				 
+    			}
+    		}
     		
           
             
@@ -259,8 +297,9 @@
         	const room = "${room}";
             console.log(room);
             const username = "${USERMODEL.fullname}";
-        	const message = new Message(room,"move",username,pieceId+destinationSquareId)
+        	const message = new Message(room,"move",username,pieceId+"|"+destinationSquareId)
         	 ws.send(JSON.stringify(message));
+        	console.log(message);
         }
     
         function showPlayerInfo(name, avatar, rank, matches, friends) {
@@ -292,7 +331,7 @@
         document.querySelector('.flex.justify-between.items-center:last-child .font-bold.cursor-pointer').addEventListener('click', function() {
             showPlayerInfo('BlackPlayer456', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80', 6000, 500, 120);
         });
-    }
+    
     </script>
 
 	<script src="<c:url value='template/web/ChessBoard/main.js' />"></script>
