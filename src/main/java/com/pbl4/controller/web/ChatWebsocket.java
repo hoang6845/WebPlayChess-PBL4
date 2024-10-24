@@ -102,6 +102,11 @@ public class ChatWebsocket {
 				}
 				if (players.size()==1) {
 					roomsGame.remove(roomId);
+					Message restartMessage = new Message(roomId,"restart",responseMessage.getSender(),"restart");
+					String jsonRestartMessage = gson.toJson(restartMessage);
+					for (Session client : clients) {
+						client.getBasicRemote().sendText(jsonRestartMessage);
+					}
 				}
 
 			} else if (responseMessage.getType().equals("move")) {

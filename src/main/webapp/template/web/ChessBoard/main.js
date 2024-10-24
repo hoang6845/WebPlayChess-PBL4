@@ -214,6 +214,12 @@ function drop(ev,MoveToClient=0) {
     console.log("da di:"+destinationSquareId);
     console.log(boardSquaresArray);
     destinationSquare.appendChild(piece);
+     if (isWhiteTurn){
+		startBlackPlayerClock();
+	}
+	else{
+		startWhitePlayerClock();
+	}
     isWhiteTurn = !isWhiteTurn;
     updateBoardSquaresArray(
       startingSquareId,
@@ -241,6 +247,12 @@ function drop(ev,MoveToClient=0) {
     //   destinationSquare.removeChild(destinationSquare.firstChild);
     // }
     destinationSquare.appendChild(piece);
+    if (isWhiteTurn){
+		startBlackPlayerClock();
+	}
+	else{
+		startWhitePlayerClock();
+	}
     isWhiteTurn = !isWhiteTurn;
     updateBoardSquaresArray(
       startingSquareId,
@@ -872,7 +884,8 @@ function getAllPossibleMoves(squaresArray, color) {
       let legalSquares = getPossibleMoves(
         square.squareId,
         pieceObject,
-        squaresArrayCopy
+        squaresArrayCopy,
+        1
       );
       legalSquares = isMoveValidAgainstCheck(
         legalSquares,
