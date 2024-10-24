@@ -10,9 +10,9 @@ import java.sql.Statement;
 public class connectDatabase {
 	
 	public static Connection getConnection(){
-		String Server = "LAPTOP-97M6INJM";
+		String Server = "LAPTOP-LSOV3LBJ";
 		String databaseName = "ChessGame";
-		String password = "110204";
+		String password = "123456";
 		String connectionUrl = "jdbc:sqlserver://" + Server + ":1433;databaseName=" + databaseName + ";user=sa;password=" + password + ";encrypt=true;trustServerCertificate=true";
 		try {
 			try {
