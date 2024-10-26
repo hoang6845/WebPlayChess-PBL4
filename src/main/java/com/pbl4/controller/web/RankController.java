@@ -1,8 +1,12 @@
 package com.pbl4.controller.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import com.pbl4.model.bean.RankModel;
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.serviceImpl.RankService;
+import com.pbl4.serviceImpl.UserService;
 import com.pbl4.utils.SessionUtil;
 
 import jakarta.servlet.RequestDispatcher;
@@ -22,7 +26,14 @@ public class RankController extends HttpServlet {
 
 			if (model !=null) {
 				System.out.print("model!=null"+model.getId());
-			
+				RankModel MyRankModel = RankService.getInstance().findByUserId(model.getId());
+				MyRankModel.setRankPosition(RankService.getInstance().findRankPosition(model.getId()));
+				System.out.println(MyRankModel.getRankPosition());
+				MyRankModel.setRankPositionPercentage(model.getId());
+				req.setAttribute("RANKMODEL",MyRankModel);
+				
+				ArrayList<UserModel> PlayerRanking = UserService.getInstance().getTop10UserRanks();
+				req.setAttribute("PLAYERRANKING", PlayerRanking);
 				RequestDispatcher rd= req.getRequestDispatcher("/WEB-INF/views/web/rank.jsp");
 				rd.forward(req, resp);	
 			}else {

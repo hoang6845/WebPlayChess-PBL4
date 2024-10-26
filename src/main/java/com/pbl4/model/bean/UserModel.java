@@ -9,7 +9,14 @@ public class UserModel extends AbstractModel<UserModel> {
 	private String password;
 	private RoleModel Role;
 	private ArrayList<FriendModel> FriendList;
+	private int elo;
 	
+	public int getElo() {
+		return elo;
+	}
+	public void setElo(int elo) {
+		this.elo = elo;
+	}
 	public ArrayList<FriendModel> getFriendList() {
 		return FriendList;
 	}

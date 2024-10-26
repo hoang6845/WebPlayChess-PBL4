@@ -10,4 +10,10 @@ public interface IUserService extends IService {
 	ArrayList<UserModel> getListUser();
 
 	ArrayList<UserModel> findUserByName(String mname);
+	
+	String findUserNameById(long id);
+	
+	UserModel FindUserById(long id);
+	
+	ArrayList<UserModel> getTop10UserRanks();
 }

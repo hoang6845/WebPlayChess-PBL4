@@ -43,7 +43,7 @@ body, html {
 		  function dropSendToServer(pieceId,destinationSquareId){
 	        	const room = "${room}";
 	            console.log(room);
-	            const username = "${USERMODEL.fullname}";
+	            const username = "${USERMODEL.id}";
 	        	const message = new Message(room,"move",username,pieceId+"|"+destinationSquareId);
 	        	console.log(message);
 	        	 ws.send(JSON.stringify(message));

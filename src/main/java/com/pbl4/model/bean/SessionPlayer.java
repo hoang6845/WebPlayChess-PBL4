@@ -5,12 +5,19 @@ import jakarta.websocket.Session;
 public class SessionPlayer {
 	Session session;
 	String nameSession;
+	long userId;
 	
-	
-	public SessionPlayer(Session session, String nameSession) {
+	public SessionPlayer(Session session, String nameSession, long userId) {
 		super();
 		this.session = session;
 		this.nameSession = nameSession;
+		this.userId = userId;
+	}
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	public Session getSession() {
 		return session;

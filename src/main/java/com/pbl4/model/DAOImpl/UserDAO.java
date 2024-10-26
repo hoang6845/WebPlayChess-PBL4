@@ -2,6 +2,7 @@ package com.pbl4.model.DAOImpl;
 
 import java.util.ArrayList;
 
+import com.pbl4.SystemConstant.SystemConstant;
 import com.pbl4.mapper.UserMapper;
 import com.pbl4.model.DAO.IUserDAO;
 import com.pbl4.model.bean.UserModel;
@@ -34,6 +35,25 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 		sql.append(" Where fullname like ? and idRole=?");
 		ArrayList<UserModel> ar = query(sql.toString(), new UserMapper(),"%"+ mname+"%",2);
 		return ar.isEmpty()?null:ar;
+	}
+
+	@Override
+	public String findUserNameById(long id) {
+		StringBuilder sql =  new StringBuilder("Select * from Userr U");
+		sql.append(" inner join Rolee r on r.id=U.idRole");
+		sql.append(" Where U.id = ? and codeRole=?");
+		ArrayList<UserModel> ar = query(sql.toString(), new UserMapper(),id,SystemConstant.PLAYER);
+		String fullname= ar.isEmpty()?null:ar.get(0).getFullname();
+		return fullname;
+	}
+
+	@Override
+	public UserModel FindUserById(long id) {
+		StringBuilder sql =  new StringBuilder("Select * from Userr U");
+		sql.append(" inner join Rolee r on r.id=U.idRole");
+		sql.append(" Where U.id = ? and codeRole=?");
+		ArrayList<UserModel> ar = query(sql.toString(), new UserMapper(),id,SystemConstant.PLAYER);
+		return ar.isEmpty()?null:ar.get(0);
 	}
 
 	

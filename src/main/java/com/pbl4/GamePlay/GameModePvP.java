@@ -16,8 +16,17 @@ import com.pbl4.model.bean.Undo;
 public class GameModePvP {
 	ManagePlayer mgr = new ManagePlayer();
 	Stack<Undo> U = new Stack<Undo>();
-	Location Pdie = new Location();
+	public Location Pdie = new Location();
 	boolean turn;
+	
+	public Stack<Undo> getU() {
+		return U;
+	}
+
+	public void setU(Stack<Undo> u) {
+		U = u;
+	}
+
 	int[][] Board = { { 50, 10, 0, 0, 0, 0, -10, -50 }, { 30, 10, 0, 0, 0, 0, -10, -30 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 90, 10, 0, 0, 0, 0, -10, -90 }, { 1000, 10, 0, 0, 0, 0, -10, -1000 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 30, 10, 0, 0, 0, 0, -10, -30 }, { 50, 10, 0, 0, 0, 0, -10, -50 } };

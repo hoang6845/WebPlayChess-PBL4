@@ -9,5 +9,9 @@ public interface IUserDAO extends DAOInterface<UserModel> {
 	
 	ArrayList<UserModel> getListUser();
 	
+	UserModel FindUserById(long id);
+	
 	ArrayList<UserModel> findUserByName(String mname);
+	
+	String findUserNameById(long id);
 }

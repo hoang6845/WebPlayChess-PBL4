@@ -218,8 +218,8 @@
     	function joinRoom(){
          	const room = "${room}";
          	console.log(room);
-         	const username = "${USERMODEL.fullname}";
-         	const message = new Message(room, "join", username,"");
+         	const userId = "${USERMODEL.id}";
+         	const message = new Message(room, "join", userId,"");
          	console.log(message);
          	ws.send(JSON.stringify(message));
          }
@@ -268,6 +268,10 @@
     				const p=numberInRoom.querySelector('p');
     				p.classList.add('inline-block');
     				p.textContent = receivedMessage.content;
+    				if(numberInRoom>=3){
+    					let modal = document.getElementById('modal');
+        				modal.classList.add('modal_hidden');
+    				}
     			}
     		}
     		else if(receivedMessage.type == "out"){
@@ -286,7 +290,7 @@
     				let [whitePlayer, blackPlayer]=receivedMessage.sender.split("|");
     				console.log(whitePlayer);
     				console.log(blackPlayer);
-    				const username = "${USERMODEL.fullname}";
+    				const username = "${USERMODEL.id}";
     				if (username == whitePlayer){
     					checkTypePlayer = "white";
     				}else if(username == blackPlayer){
@@ -311,7 +315,7 @@
     			}
     		}
     		else if (receivedMessage.type == "move"){
-    			if (receivedMessage.room == RoomGame&&receivedMessage.sender != "${USERMODEL.fullname}"){
+    			if (receivedMessage.room == RoomGame&&receivedMessage.sender != "${USERMODEL.id}"){
     				let [pieceId, destinationSquareId] = receivedMessage.content.split("|");
     				console.log(pieceId);
     				 const piece = document.getElementById(pieceId);
@@ -331,6 +335,8 @@
     			     drop({currentTarget:destinationSquare, dataTransfer: dataTransfer},1);
     				 
     			}
+    		}else if (receivedMessage.type == "updateMove"){
+    			
     		}else if(receivedMessage.type == "restart"){
     			if (receivedMessage.room == RoomGame){
     				whitePlayerTime = 10 * 60; 
@@ -375,8 +381,8 @@
         function outRoom(){
         	const room = "${room}";
         	console.log(room);
-        	const username = "${USERMODEL.fullname}";
-        	const message = new Message(room, "out", username,"");
+        	const userId = "${USERMODEL.id}";
+        	const message = new Message(room, "out", userId,"");
         	console.log(message);
         	ws.send(JSON.stringify(message));
         }
@@ -385,8 +391,8 @@
             let input = document.getElementById('messageInput');
             const room = "${room}";
             console.log(room);
-            const username = "${USERMODEL.fullname}"; // Lấy tên người dùng từ JSP
-            const message = new Message(room, "chat", username, input.value);
+            const userId = "${USERMODEL.id}"; // Lấy tên người dùng từ JSP
+            const message = new Message(room, "chat", userId, input.value);
             console.log(message);
             ws.send(JSON.stringify(message));
             input.value = '';
@@ -395,7 +401,7 @@
         function dropSendToServer(pieceId,destinationSquareId){
         	const room = "${room}";
             console.log(room);
-            const username = "${USERMODEL.fullname}";
+            const username = "${USERMODEL.id}";
         	const message = new Message(room,"move",username,pieceId+"|"+destinationSquareId)
         	 ws.send(JSON.stringify(message));
         	console.log(message);

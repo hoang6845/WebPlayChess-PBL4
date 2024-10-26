@@ -8,11 +8,14 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import com.google.gson.Gson;
 import com.pbl4.GamePlay.GameModePvP;
 import com.pbl4.model.bean.Message;
 import com.pbl4.model.bean.SessionPlayer;
+import com.pbl4.model.bean.Undo;
+import com.pbl4.serviceImpl.UserService;
 
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -43,7 +46,7 @@ public class ChatWebsocket {
 		Message responseMessage = new Message(mess.getRoom(), mess.getType(), mess.getSender(), mess.getContent());
 		// Chuyển đổi đối tượng thành chuỗi JSON
 		String jsonResponse = gson.toJson(responseMessage);
-
+		System.out.println(jsonResponse);
 		System.out.println(mess.getContent());
 		// Gửi tin nhắn đến tất cả các client khác
 		synchronized (clients) {
@@ -51,10 +54,12 @@ public class ChatWebsocket {
 				String roomId = responseMessage.getRoom();
 				rooms.putIfAbsent(roomId, new LinkedHashSet<SessionPlayer>());
 				Set<SessionPlayer> players = rooms.get(roomId);
-				SessionPlayer newPlayer = new SessionPlayer(session, responseMessage.getSender());
+				String senderName = UserService.getInstance()
+						.findUserNameById(Long.parseLong(responseMessage.getSender()));
+				SessionPlayer newPlayer = new SessionPlayer(session, senderName,
+						Long.parseLong(responseMessage.getSender()));
 				players.add(newPlayer);
-				System.out.println("Session " + session.getId() + " Player " + responseMessage.getSender()
-						+ " joined room: " + roomId);
+				System.out.println("Session " + session.getId() + " Player " + senderName + " joined room: " + roomId);
 				System.out.println("Room " + roomId + " có " + players.size() + " Player");
 				Message joinMessage = new Message(roomId, "join", responseMessage.getSender(),
 						String.valueOf(players.size()));
@@ -69,20 +74,62 @@ public class ChatWebsocket {
 						Iterator<SessionPlayer> iterator = players.iterator();
 						SessionPlayer firstPlayer = iterator.next();
 						SessionPlayer SecondPlayer = iterator.next();
-						Message gameStartMessage = new Message(roomId, "start", firstPlayer.getNameSession()+"|"+SecondPlayer.getNameSession(), "start");
+						Message gameStartMessage = new Message(roomId, "start",
+								firstPlayer.getUserId() + "|" + SecondPlayer.getUserId(), "start");
 						String jsonGameStartMessage = gson.toJson(gameStartMessage);
-						System.out.println(firstPlayer.getNameSession()+"|"+SecondPlayer.getNameSession());
+						System.out.println(firstPlayer.getNameSession() + "|" + SecondPlayer.getNameSession());
 						for (Session client : clients) {
 							client.getBasicRemote().sendText(jsonGameStartMessage);
 						}
 					}
+				} else if (players.size() >= 3) {
+					GameModePvP G = roomsGame.get(roomId);
+					Stack<Undo> u = G.getU();
+					Undo[] historyMove = new Undo[u.size()];
+					u.copyInto(historyMove);
+					for (Undo undo : historyMove) {
+						System.out.println(undo.getI() + " " + undo.getBegin().getX() + "," + undo.getBegin().getY()
+								+ " " + undo.getEnd().getX() + "," + undo.getEnd().getY());
+						if (!undo.getBegin().equals(G.Pdie)) {
+							// nước đi hợp lệ
+							for (Session client : clients) {
+								for (SessionPlayer player : players) {
+									if (client.equals(player.getSession())
+											&& player.getUserId() == Long.parseLong(responseMessage.getSender())
+										) {
+										//tạo message "updateHistoryMove"
+										//client.getBasicRemote().sendText("");
+									}
+								}
+							}
+							//test code tương đương vòng for trên
+//							for (SessionPlayer player : players) {
+//								if (player.getUserId()==Long.parseLong(responseMessage.getSender())){
+//									player.getSession().getBasicRemote().sendText("");
+//								}
+//							}
+						}
+					}
 				}
 			} else if (responseMessage.getType().equals("chat")) {
+				String senderName = UserService.getInstance()
+						.findUserNameById(Long.parseLong(responseMessage.getSender()));
+				String roomId = responseMessage.getRoom();
+				Set<SessionPlayer> players = rooms.get(roomId);
+				Message chatMessage = new Message(roomId, "chat", senderName, responseMessage.getContent());
+				String jsonChatMessage = gson.toJson(chatMessage);
 				for (Session client : clients) {
-					client.getBasicRemote().sendText(jsonResponse);
+					for (SessionPlayer player : players) {
+						if (client.equals(player.getSession())) {
+							client.getBasicRemote().sendText(jsonChatMessage);
+						}
+					}
+
 				}
 
 			} else if (responseMessage.getType().equals("out")) {
+				String senderName = UserService.getInstance()
+						.findUserNameById(Long.parseLong(responseMessage.getSender()));
 				String roomId = responseMessage.getRoom();
 				Set<SessionPlayer> players = rooms.get(roomId);
 				for (SessionPlayer player : players) {
@@ -91,8 +138,7 @@ public class ChatWebsocket {
 						break;
 					}
 				}
-				System.out.println("Session " + session.getId() + " Player " + responseMessage.getSender()
-						+ " out room: " + roomId);
+				System.out.println("Session " + session.getId() + " Player " + senderName + " out room: " + roomId);
 				System.out.println("Room " + roomId + " có " + players.size() + " Player");
 				Message outMessage = new Message(roomId, "out", responseMessage.getSender(),
 						String.valueOf(players.size()));
@@ -100,9 +146,9 @@ public class ChatWebsocket {
 				for (Session client : clients) {
 					client.getBasicRemote().sendText(jsonoutMessage);
 				}
-				if (players.size()==1) {
+				if (players.size() == 1) {
 					roomsGame.remove(roomId);
-					Message restartMessage = new Message(roomId,"restart",responseMessage.getSender(),"restart");
+					Message restartMessage = new Message(roomId, "restart", responseMessage.getSender(), "restart");
 					String jsonRestartMessage = gson.toJson(restartMessage);
 					for (Session client : clients) {
 						client.getBasicRemote().sendText(jsonRestartMessage);
@@ -114,14 +160,20 @@ public class ChatWebsocket {
 				String content = responseMessage.getContent();
 				int indexOfI = content.indexOf('|');
 				String chessMove = content.substring(0, indexOfI);
-				String moveTo = content.substring(indexOfI+1);
+				String moveTo = content.substring(indexOfI + 1);
 				GameModePvP G = roomsGame.get(roomId);
 				ArrayList<Integer> data = ConvertChessBoardToBoard(chessMove, moveTo);
 				G.Move(data.get(0), data.get(1), data.get(2));
-				Message MoveMessage = new Message(roomId,"move",responseMessage.getSender(),content);
+				Message MoveMessage = new Message(roomId, "move", responseMessage.getSender(), content);
 				String jsonMoveMessage = gson.toJson(MoveMessage);
+				Set<SessionPlayer> players = rooms.get(roomId);
 				for (Session client : clients) {
-					client.getBasicRemote().sendText(jsonMoveMessage);
+					for (SessionPlayer player : players) {
+						if (client.equals(player.getSession())) {
+							client.getBasicRemote().sendText(jsonMoveMessage);
+						}
+					}
+
 				}
 			}
 		}
@@ -133,60 +185,60 @@ public class ChatWebsocket {
 		System.out.println("Connection closed: " + session.getId());
 
 	}
-	
-	public ArrayList<Integer> ConvertChessBoardToBoard(String chessMove,String moveTo){
+
+	public ArrayList<Integer> ConvertChessBoardToBoard(String chessMove, String moveTo) {
 		ArrayList<Integer> data = new ArrayList<Integer>();
-		int chessMoveX = chessMove.charAt(chessMove.length()-2)-'a';
-		int chessMoveY = chessMove.charAt(chessMove.length()-1)-'0';
-		chessMoveY = 8-(chessMoveY);
-		if (chessMoveY==0 || chessMoveY==1) {
+		int chessMoveX = chessMove.charAt(chessMove.length() - 2) - 'a';
+		int chessMoveY = chessMove.charAt(chessMove.length() - 1) - '0';
+		chessMoveY = 8 - (chessMoveY);
+		if (chessMoveY == 0 || chessMoveY == 1) {
 			System.out.println("-----------Quân đen");
-		}else if (chessMoveY==6 || chessMoveY==7) {
+		} else if (chessMoveY == 6 || chessMoveY == 7) {
 			System.out.println("-----------Quân trắng");
-		}else {
+		} else {
 			System.out.println("----------------Lỗi");
 		}
-		int moveToX = moveTo.charAt(moveTo.length()-2)-'a';
-		int moveToY = moveTo.charAt(moveTo.length()-1)-'0';
-		moveToY = 8-moveToY;
+		int moveToX = moveTo.charAt(moveTo.length() - 2) - 'a';
+		int moveToY = moveTo.charAt(moveTo.length() - 1) - '0';
+		moveToY = 8 - moveToY;
 		switch (chessMoveY) {
-			case 1:
-			case 6:
-				data.add(chessMoveX);
-				break;
+		case 1:
+		case 6:
+			data.add(chessMoveX);
+			break;
+		case 0:
+		case 7:
+			switch (chessMoveX) {
 			case 0:
+				data.add(8);
+				break;
 			case 7:
-				switch (chessMoveX) {
-					case 0:
-						data.add(8);
-						break;
-					case 7:
-						data.add(9);
-						break;
-					case 1:
-						data.add(10);
-						break;
-					case 6:
-						data.add(11);
-						break;
-					case 2:
-						data.add(12);
-						break;
-					case 5:
-						data.add(13);
-						break;
-					case 3:
-						data.add(14);
-						break;
-					case 4:
-						data.add(15);
-						break;
-				}
+				data.add(9);
+				break;
+			case 1:
+				data.add(10);
+				break;
+			case 6:
+				data.add(11);
+				break;
+			case 2:
+				data.add(12);
+				break;
+			case 5:
+				data.add(13);
+				break;
+			case 3:
+				data.add(14);
+				break;
+			case 4:
+				data.add(15);
+				break;
+			}
 		}
 		data.add(moveToX);
 		data.add(moveToY);
-		System.out.println("_______"+data.size()+": "+"quân thứ "+data.get(0)+" đi tới: "+data.get(1)+" "+data.get(2));
+		System.out.println("_______" + data.size() + ": " + "quân thứ " + data.get(0) + " đi tới: " + data.get(1) + " "
+				+ data.get(2));
 		return data;
-		
 	}
 }
