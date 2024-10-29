@@ -1,5 +1,6 @@
-
-
+console.log("abc");
+console.log(RoomGame); 
+console.log(checkTypePlayer);
 let boardSquaresArray = [];
 let isWhiteTurn = true;
 let whiteKingSquare="e1";
@@ -136,8 +137,10 @@ function setupPieces() {
 function allowDrop(ev) {
   ev.preventDefault();
 }
-function drag(ev) {
+function drag(ev,MoveToClient=0) {
+	console.log("da chay drag");
   const piece = ev.target;
+ 
   const pieceColor = piece.getAttribute("color");
   const pieceType =piece.classList[1];
   const pieceId = piece.id;
@@ -148,19 +151,21 @@ function drag(ev) {
   ) {
     const startingSquareId = piece.parentNode.id;
     ev.dataTransfer.setData("text", pieceId + "|" + startingSquareId);
+     console.log(pieceId);
+      console.log(startingSquareId);
     const pieceObject ={pieceColor:pieceColor,pieceType:pieceType,pieceId:pieceId}
     let legalSquares = getPossibleMoves(
       startingSquareId,
       pieceObject,
-      boardSquaresArray
+      boardSquaresArray,
+      MoveToClient
     );
 
     let legalSquaresJson = JSON.stringify(legalSquares);
     ev.dataTransfer.setData("application/json", legalSquaresJson);
   }
 }
-function drop(ev) {
-  ev.preventDefault();
+function drop(ev,MoveToClient=0) {
   let data = ev.dataTransfer.getData("text");
   console.log(data);
   let [pieceId, startingSquareId] = data.split("|");
@@ -209,6 +214,12 @@ function drop(ev) {
     console.log("da di:"+destinationSquareId);
     console.log(boardSquaresArray);
     destinationSquare.appendChild(piece);
+     if (isWhiteTurn){
+		startBlackPlayerClock();
+	}
+	else{
+		startWhitePlayerClock();
+	}
     isWhiteTurn = !isWhiteTurn;
     updateBoardSquaresArray(
       startingSquareId,
@@ -216,7 +227,9 @@ function drop(ev) {
       boardSquaresArray
     );
     checkForCheckMate();
-    dropSendToServer(pieceId,destinationSquareId);
+    if (MoveToClient==0){
+	    dropSendToServer(pieceId,destinationSquareId);
+	}
     return;
   }
   if (
@@ -234,6 +247,12 @@ function drop(ev) {
     //   destinationSquare.removeChild(destinationSquare.firstChild);
     // }
     destinationSquare.appendChild(piece);
+    if (isWhiteTurn){
+		startBlackPlayerClock();
+	}
+	else{
+		startWhitePlayerClock();
+	}
     isWhiteTurn = !isWhiteTurn;
     updateBoardSquaresArray(
       startingSquareId,
@@ -241,17 +260,21 @@ function drop(ev) {
       boardSquaresArray
     );
     checkForCheckMate();
-    dropSendToServer(pieceId,destinationSquareId);
+    if (MoveToClient==0){
+	    dropSendToServer(pieceId,destinationSquareId);
+	}
     return;
   }
   console.log("di xong");
 
 }
 
-function getPossibleMoves(startingSquareId, piece, boardSquaresArray) {
+function getPossibleMoves(startingSquareId, piece, boardSquaresArray,MoveToClients=0) {
   const pieceColor = piece.pieceColor;
   const pieceType = piece.pieceType;
-
+  if(checkTypePlayer!=pieceColor&&MoveToClients==0){
+	return;
+  }
   let legalSquares = [];
   if (pieceType=="pawn") {
     legalSquares = getPawnMoves(
@@ -861,7 +884,8 @@ function getAllPossibleMoves(squaresArray, color) {
       let legalSquares = getPossibleMoves(
         square.squareId,
         pieceObject,
-        squaresArrayCopy
+        squaresArrayCopy,
+        1
       );
       legalSquares = isMoveValidAgainstCheck(
         legalSquares,
@@ -884,5 +908,6 @@ function showAlert(message) {
        alert.style.display="none";
   },3000);
 }
+
 
 

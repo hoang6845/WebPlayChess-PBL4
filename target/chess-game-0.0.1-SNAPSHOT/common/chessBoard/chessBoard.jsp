@@ -280,7 +280,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal ">
+<div class="modal" id="modal">
 	<div class="modal__message">Awaiting opponent...</div>
 </div>
 

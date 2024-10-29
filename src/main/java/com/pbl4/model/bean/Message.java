@@ -5,7 +5,8 @@ public class Message {
 	private String type;
 	private String sender;
 	private String content;
-	
+	private UserModel whiteModel;
+	private UserModel blackModel;
 	public Message(String room, String type, String sender, String content) {
 		super();
 		this.room = room;
@@ -14,6 +15,18 @@ public class Message {
 		this.content = content;
 	}
 	
+	public Message(String room, String type, String sender, String content, UserModel whiteModel, UserModel blackModel) {
+		super();
+		this.room = room;
+		this.type = type;
+		this.sender = sender;
+		this.content = content;
+		this.whiteModel = whiteModel;
+		this.blackModel = blackModel;
+	}
+
+
+
 	public Message() {
 		
 	}

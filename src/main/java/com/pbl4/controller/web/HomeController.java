@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.pbl4.SystemConstant.SystemConstant;
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.serviceImpl.RankService;
 import com.pbl4.serviceImpl.UserService;
 import com.pbl4.utils.FormUtil;
 import com.pbl4.utils.SessionUtil;
@@ -29,7 +30,9 @@ public class HomeController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.print("\nGetHomeControllerWeb");
+		System.out.println("GetHomeControllerWeb");
+		System.out.println(req.getSession());
+		SessionUtil.getInstance().setSession(req);
 		String action = req.getParameter("action");
 		String page = req.getParameter("page");
 		if (action != null && action.equals("login")) {
@@ -65,6 +68,7 @@ public class HomeController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.print("dang nhap thanh cong");
+		System.out.println(req.getSession());
 		String action = req.getParameter("action");
 		Map<String, String[]> parameterMap = req.getParameterMap();
 		for (String key : parameterMap.keySet()) {
@@ -76,8 +80,8 @@ public class HomeController extends HttpServlet {
 			System.out.print(model.getUsername()+model.getPassword());
 			model = UserService.getInstance().findByUserNameAndPasswordAndStatus(model.getUsername(), model.getPassword());
 			if (model!=null)System.out.print("toi la "+model.getRole().getCodeRole());
-			
 			if (model!=null) {
+				
 				SessionUtil.getInstance().putValue(req, "USERMODEL", model);
 				if (model.getRole().getCodeRole().equals(SystemConstant.PLAYER)) {
 					resp.sendRedirect(req.getContextPath()+"/trang-chu?page=home");
