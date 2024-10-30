@@ -23,7 +23,7 @@ public class RankController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub			
 			UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL"); 
-
+			String page = req.getParameter("page");
 			if (model !=null) {
 				System.out.print("model!=null"+model.getId());
 				RankModel MyRankModel = RankService.getInstance().findByUserId(model.getId());
@@ -34,6 +34,7 @@ public class RankController extends HttpServlet {
 				
 				ArrayList<UserModel> PlayerRanking = UserService.getInstance().getTop10UserRanks();
 				req.setAttribute("PLAYERRANKING", PlayerRanking);
+				req.setAttribute("page", page);
 				RequestDispatcher rd= req.getRequestDispatcher("/WEB-INF/views/web/rank.jsp");
 				rd.forward(req, resp);	
 			}else {

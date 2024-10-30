@@ -30,6 +30,27 @@ body, html {
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="<c:url value='template/web/ChessBoard/style.css'></c:url>"
 	rel="stylesheet" type="text/css" media="all">
+	
+		<script type="text/javascript">
+		 class Message {
+             constructor(room, type, sender, content) {
+             	this.room = room;
+             	this.type= type;
+                 this.sender = sender;
+                 this.content = content;
+             }
+         }
+		  function dropSendToServer(pieceId,destinationSquareId){
+	        	const room = "${room}";
+	            console.log(room);
+	            const username = "${USERMODEL.id}";
+	        	const message = new Message(room,"move",username,pieceId+"|"+destinationSquareId);
+	        	console.log(message);
+	        	 ws.send(JSON.stringify(message));
+	        }
+		</script>
+	
+		
 </head>
 <body style="overflow: auto">
 	<%@ include file="/common/web/header.jsp"%>

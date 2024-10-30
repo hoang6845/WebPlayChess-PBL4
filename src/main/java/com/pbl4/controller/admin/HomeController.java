@@ -17,7 +17,7 @@ public class HomeController extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.print("da vao admin");
-		RequestDispatcher rd= req.getRequestDispatcher("/views/admin/home.jsp");
+		RequestDispatcher rd= req.getRequestDispatcher("/WEB-INF/views/admin/home.jsp");
 		rd.forward(req, resp);
 	}
 	

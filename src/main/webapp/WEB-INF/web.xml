@@ -18,13 +18,13 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping> 
 	
-	<!-- <filter>
+ <filter>
 		<filter-name>servletFilter</filter-name>
-		<filter-class>com.javaweb.filter.AuthorizationFilter</filter-class>
+		<filter-class>com.pbl4.filter.AuthorizationFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>servletFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
+	</filter-mapping> 
 	
 </web-app>

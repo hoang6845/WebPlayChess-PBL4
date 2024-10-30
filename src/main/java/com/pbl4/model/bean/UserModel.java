@@ -10,7 +10,14 @@ public class UserModel extends AbstractModel<UserModel> {
 	private RoleModel Role;
 	private ArrayList<FriendModel> FriendList;
 	private int elo;
+	private int totalMatches;
 	
+	public int getTotalMatches() {
+		return totalMatches;
+	}
+	public void setTotalMatches(int totalMatches) {
+		this.totalMatches = totalMatches;
+	}
 	public int getElo() {
 		return elo;
 	}

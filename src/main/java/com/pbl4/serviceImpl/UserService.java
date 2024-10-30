@@ -39,7 +39,11 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserModel FindUserById(long id) {
-		return UserDAO.getInstance().FindUserById(id);
+		UserModel result= UserDAO.getInstance().FindUserById(id);
+		RankModel rankModel= RankService.getInstance().findByUserId(id);
+		result.setElo(rankModel.getElo());
+		result.setTotalMatches(rankModel.getTotalMatches());
+		return result;
 	}
 
 	@Override

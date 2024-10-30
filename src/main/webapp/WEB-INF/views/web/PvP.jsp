@@ -38,49 +38,41 @@
 			<div class="w-full lg:w-2/3">
 				<div
 					class="bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col items-center">
-					<div class="flex justify-between items-center w-full mb-4">
-						<div class="flex items-center hover-effect cursor-pointer rounded"
+					<div class="flex justify-between items-center w-full mb-4"
+						id="blackPlayer">
+						<div class="flex items-center hover-effect cursor-pointer rounded" id="blackPlayerContent"
 							style="padding: 2px 8px;">
 							<img
-								src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-								alt="White Player" class="w-10 h-10 rounded-full mr-2">
-							<div>
-								<p class="font-bold cursor-pointer hover:underline"
-									onclick="showPlayerInfo('WhitePlayer123', 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80', 500, 250, 75)">WhitePlayer123</p>
-								<div class="flex items-center">
-									<p class="text-sm text-gray-400">Rank: 500</p>
-									<span class="ml-2 text-yellow-500">🏆</span>
-								</div>
+								src='<c:url value='template/web/ChessBoard/img/avatarNoPeople.jpg'></c:url>'
+								alt="Black Player img" class="w-10 h-10 rounded-full mr-2">
+							<div id="blackPlayerInfo">
+							
+							
+								
 							</div>
 						</div>
 						<div
-							class="text-3xl font-bold bg-gray-700 px-4 py-2 rounded hover-effect" id="blackPlayerClock">
-							10:00</div>
+							class="text-3xl font-bold bg-gray-700 px-4 py-2 rounded hover-effect opacity-50"
+							id="blackPlayerClock">10:00</div>
 					</div>
 
 					<div
-						class="w-full max-w-[500px] aspect-square relative mb-4 mx-auto">
+						class="w-full max-w-[500px] aspect-square relative mb-4 mx-auto" id="board"> 
 						<%@ include file="/common/chessBoard/chessBoard.jsp"%>
 					</div>
 
-					<div class="flex justify-between items-center w-full">
-						<div class="flex items-center hover-effect cursor-pointer rounded"
+					<div class="flex justify-between items-center w-full"
+						id="whitePlayer">
+						<div class="flex items-center hover-effect cursor-pointer rounded" id="whitePlayerContent"
 							style="padding: 2px 8px;">
 							<img
-								src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+								src='<c:url value='template/web/ChessBoard/img/avatarNoPeople.jpg'></c:url>'
 								alt="Black Player" class="w-10 h-10 rounded-full mr-2">
-							<div>
-								<p class="font-bold cursor-pointer hover:underline"
-									onclick="showPlayerInfo('BlackPlayer456', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80', 6000, 500, 120)">BlackPlayer456</p>
-								<div class="flex items-center">
-									<p class="text-sm text-gray-400">Rank: 6000</p>
-									<span class="ml-2 text-yellow-500">🏆</span>
-								</div>
-							</div>
+							<div id="whitePlayerInfo"></div>
 						</div>
 						<div
-							class="text-3xl font-bold bg-gray-700 px-4 py-2 rounded hover-effect" id="whitePlayerClock">
-							10:00</div>
+							class="text-3xl font-bold bg-gray-700 px-4 py-2 rounded hover-effect opacity-50"
+							id="whitePlayerClock">10:00</div>
 					</div>
 				</div>
 			</div>
@@ -139,7 +131,7 @@
 
 	<!-- Player Info Modal -->
 	<div id="playerInfoModal"
-		class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+		class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-10">
 		<div id="playerInfoModal_container"
 			class="bg-gray-500 p-8 rounded-lg shadow-xl max-w-md w-full relative hover-effect">
 			<div class="flex justify-between items-center mb-4">
@@ -175,6 +167,10 @@
 
     	function startWhitePlayerClock() {
     		  clearInterval(blackPlayerInterval); // Dừng đồng hồ của Player black
+    		  let whiteClock = document.getElementById('whitePlayerClock');
+    		  let blackClock = document.getElementById('blackPlayerClock');
+    		  whiteClock.classList.add("clockRun");
+    		  blackClock.classList.remove("clockRun");
     		  whitePlayerInterval = setInterval(() => {
     		    if (whitePlayerTime > 0) {
     		    	whitePlayerTime--;
@@ -187,6 +183,10 @@
     		}
     	function startBlackPlayerClock() {
   		  clearInterval(whitePlayerInterval); // Dừng đồng hồ của Player white
+  		  let whiteClock = document.getElementById('whitePlayerClock');
+		  let blackClock = document.getElementById('blackPlayerClock');
+		  blackClock.classList.add("clockRun");
+		  whiteClock.classList.remove("clockRun");
   		  blackPlayerInterval = setInterval(() => {
   		    if (blackPlayerTime > 0) {
   		    	blackPlayerTime--;
@@ -203,6 +203,32 @@
     		 /*  document.getElementById(elementId).textContent = formattedTime; */
     		  document.getElementById(elementId).textContent = minutes+":"+seconds;
     		}
+    	
+        function startCountdown(callback) {
+            let modal = document.getElementById('modal');
+            let countdownValue = 3;
+
+            // Thiết lập để hiển thị chữ "Start"
+            modal.style.fontSize = '200px'; // Tăng kích thước chữ
+            modal.textContent = "Start"; 
+
+            // Đợi 1 giây trước khi bắt đầu đếm ngược từ 3
+            setTimeout(() => {
+                const interval = setInterval(() => {
+                    modal.textContent = countdownValue; // Cập nhật nội dung
+
+                    if (countdownValue < 1) {
+                        clearInterval(interval); // Dừng đếm ngược khi đạt 0
+                        modal.textContent = 'Play!';
+                        setTimeout(() => {
+                            modal.classList.add('modal_hidden'); // Ẩn sau 1 giây
+                        }, 1000);
+                        callback();
+                    }
+                    countdownValue--; // Giảm 1
+                }, 1000); // Cập nhật mỗi giây
+            }, 1000); // Bắt đầu đếm ngược sau khi hiển thị "Start" 1 giây
+        }
     	
     	var RoomGame = '${room}';
     	var checkTypePlayer ="";
@@ -234,7 +260,9 @@
     	document.getElementById("btn_leaveRoom").addEventListener('click',function(){
     		outRoom();
     		ws.close();
-    		window.location.assign("/chess-game/trang-chu?page=home");
+    		setTimeout(() => {
+    	        window.location.assign("/chess-game/trang-chu?page=home");
+    	    }, 1000); // Chờ 1000ms trước khi chuyển hướng
     	});
     	let chatbox = document.getElementById('chatBox');
     	console.log(chatbox);
@@ -268,9 +296,30 @@
     				const p=numberInRoom.querySelector('p');
     				p.classList.add('inline-block');
     				p.textContent = receivedMessage.content;
-    				if(numberInRoom>=3){
+    				let IntNumberInRoom =receivedMessage.content;
+    				console.log(IntNumberInRoom);
+    				if(IntNumberInRoom>=3){
     					let modal = document.getElementById('modal');
         				modal.classList.add('modal_hidden');
+    				}
+    				if(IntNumberInRoom==1){
+    					
+    					let whitePlayerInfo = document.getElementById('whitePlayerInfo');
+    					whitePlayerInfo.innerHTML = `<p class="font-bold cursor-pointer hover:underline" id="whitePlayerName"
+							onclick="showPlayerInfo()">WhitePlayer</p>
+							<div class="flex items-center">
+								<p class="text-sm text-gray-400" id="whitePlayerRank">Rank: ?</p>
+								<span class="ml-2 text-yellow-500">🏆</span>
+							</div>`
+    					let whitePlayerName = whitePlayerInfo.querySelector('#whitePlayerName');
+    					let whitePlayerRank = whitePlayerInfo.querySelector('#whitePlayerRank');
+    					console.log(whitePlayerName);
+    					whitePlayerName.textContent = "${USERMODEL.fullname}" ;
+    					whitePlayerRank.textContent = "${USERMODEL.getElo()}" ;
+    					let whitePlayerContent = document.getElementById('whitePlayerContent');
+    					console.log(whitePlayerContent);
+    					whitePlayerContent.appendChild(whitePlayerInfo)
+							
     				}
     			}
     		}
@@ -287,6 +336,41 @@
     		}
     		else if(receivedMessage.type == "start"){
     			if (receivedMessage.room == RoomGame){
+    				
+    				//set info whitePlayer
+    				let whitePlayerInfo = document.getElementById('whitePlayerInfo');
+					whitePlayerInfo.innerHTML = `<p class="font-bold cursor-pointer hover:underline" id="whitePlayerName"
+						onclick="showPlayerInfo()">WhitePlayer</p>
+						<div class="flex items-center">
+							<p class="text-sm text-gray-400" id="whitePlayerRank">Rank: ?</p>
+							<span class="ml-2 text-yellow-500">🏆</span>
+						</div>`
+					let whitePlayerName = whitePlayerInfo.querySelector('#whitePlayerName');
+					let whitePlayerRank = whitePlayerInfo.querySelector('#whitePlayerRank');
+					console.log(whitePlayerName);
+					whitePlayerName.textContent = receivedMessage.whiteModel.fullname ;
+					whitePlayerRank.textContent = receivedMessage.whiteModel.elo ;
+					let whitePlayerContent = document.getElementById('whitePlayerContent');
+					console.log(whitePlayerContent);
+					whitePlayerContent.appendChild(whitePlayerInfo)
+    				
+					//set info backPlayer
+					let blackPlayerInfo = document.getElementById('blackPlayerInfo');
+					blackPlayerInfo.innerHTML = `<p class="font-bold cursor-pointer hover:underline" id="blackPlayerName"
+						onclick="showPlayerInfo()"></p>
+						<div class="flex items-center">
+							<p class="text-sm text-gray-400" id="blackPlayerRank">Rank: ?</p>
+							<span class="ml-2 text-yellow-500">🏆</span>
+						</div>`
+					let blackPlayerName = blackPlayerInfo.querySelector('#blackPlayerName');
+					let blackPlayerRank = blackPlayerInfo.querySelector('#blackPlayerRank');
+					console.log(blackPlayerName);
+					blackPlayerName.textContent = receivedMessage.blackModel.fullname ;
+					blackPlayerRank.textContent = receivedMessage.blackModel.elo ;
+					let blackPlayerContent = document.getElementById('blackPlayerContent');
+					console.log(blackPlayerContent);
+					blackPlayerContent.appendChild(blackPlayerInfo)
+    				
     				let [whitePlayer, blackPlayer]=receivedMessage.sender.split("|");
     				console.log(whitePlayer);
     				console.log(blackPlayer);
@@ -307,12 +391,23 @@
     				        console.log(coordinate);
     				        element.classList.add('reverse');
     				    });
+    				    let whitePlayer = document.getElementById('whitePlayer');
+    				    let blackPlayer = document.getElementById('blackPlayer');
+    				    let board = document.getElementById('board');
+    				    whitePlayer.classList.add('order-1');
+    				    blackPlayer.classList.add('order-3');
+    				    board.classList.add('order-2');
+    				    
     				}
     				let modal = document.getElementById('modal');
-    				modal.classList.add('modal_hidden');
+
+    		//		modal.classList.add('modal_hidden');
     				startCountdown(startWhitePlayerClock);
-    				
+    		//		startWhitePlayerClock();
+
     				console.log("da chay dong ho white")
+    				
+    				
     			}
     		}
     		else if (receivedMessage.type == "move"){
@@ -349,6 +444,7 @@
     				checkTypePlayer = "";
     				let modal = document.getElementById('modal');
     				modal.classList.remove('modal_hidden');
+    				modal.innerHTML=`<div class="modal__message">Awaiting opponent...</div>`;
     				let chessBoard = document.querySelector('.chessBoard');
 				    chessBoard.classList.remove('reverse');
 				    let piece= document.querySelectorAll('.piece');
