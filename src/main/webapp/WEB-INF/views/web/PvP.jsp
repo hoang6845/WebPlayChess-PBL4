@@ -40,16 +40,12 @@
 					class="bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col items-center">
 					<div class="flex justify-between items-center w-full mb-4"
 						id="blackPlayer">
-						<div class="flex items-center hover-effect cursor-pointer rounded" id="blackPlayerContent"
-							style="padding: 2px 8px;">
+						<div class="flex items-center hover-effect cursor-pointer rounded"
+							id="blackPlayerContent" style="padding: 2px 8px;">
 							<img
 								src='<c:url value='template/web/ChessBoard/img/avatarNoPeople.jpg'></c:url>'
 								alt="Black Player img" class="w-10 h-10 rounded-full mr-2">
-							<div id="blackPlayerInfo">
-							
-							
-								
-							</div>
+							<div id="blackPlayerInfo"></div>
 						</div>
 						<div
 							class="text-3xl font-bold bg-gray-700 px-4 py-2 rounded hover-effect opacity-50"
@@ -57,14 +53,15 @@
 					</div>
 
 					<div
-						class="w-full max-w-[500px] aspect-square relative mb-4 mx-auto" id="board"> 
+						class="w-full max-w-[500px] aspect-square relative mb-4 mx-auto"
+						id="board">
 						<%@ include file="/common/chessBoard/chessBoard.jsp"%>
 					</div>
 
 					<div class="flex justify-between items-center w-full"
 						id="whitePlayer">
-						<div class="flex items-center hover-effect cursor-pointer rounded" id="whitePlayerContent"
-							style="padding: 2px 8px;">
+						<div class="flex items-center hover-effect cursor-pointer rounded"
+							id="whitePlayerContent" style="padding: 2px 8px;">
 							<img
 								src='<c:url value='template/web/ChessBoard/img/avatarNoPeople.jpg'></c:url>'
 								alt="Black Player" class="w-10 h-10 rounded-full mr-2">
@@ -545,33 +542,7 @@
         document.querySelector('.flex.justify-between.items-center:last-child .font-bold.cursor-pointer').addEventListener('click', function() {
             showPlayerInfo('BlackPlayer456', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80', 6000, 500, 120);
         });
-        function startCountdown(callback) {
-            let countdownElement = document.getElementById('modal');
-            let countdownValue = 3;
 
-            // Thiết lập để hiển thị chữ "Start"
-            countdownElement.style.display = 'flex'; // Hiển thị div đếm ngược
-            countdownElement.style.fontSize = '200px'; // Tăng kích thước chữ
-            countdownElement.textContent = "Start"; 
-
-            // Đợi 1 giây trước khi bắt đầu đếm ngược từ 3
-            setTimeout(() => {
-                const interval = setInterval(() => {
-                    countdownElement.textContent = countdownValue; // Cập nhật nội dung
-
-                    if (countdownValue < 1) {
-                        clearInterval(interval); // Dừng đếm ngược khi đạt 0
-                        countdownElement.textContent = 'Play!';
-                        setTimeout(() => {
-                            countdownElement.style.display = 'none'; // Ẩn sau 1 giây
-                        }, 1000);
-                        callback();
-                    }
-
-                    countdownValue--; // Giảm 1
-                }, 1000); // Cập nhật mỗi giây
-            }, 1000); // Bắt đầu đếm ngược sau khi hiển thị "Start" 1 giây
-        }
     </script>
 
 	<script src="<c:url value='template/web/ChessBoard/main.js' />"></script>
