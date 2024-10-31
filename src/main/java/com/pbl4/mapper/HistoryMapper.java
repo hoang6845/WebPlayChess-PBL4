@@ -13,15 +13,15 @@ public class HistoryMapper implements RowMapper<HistoryModel> {
         HistoryModel history = null;
         try {
             long id = rs.getLong("id");
-            long playerId = rs.getLong("playerId");
-            long opponentId = rs.getLong("opponentId");
+            long whiteId = rs.getLong("whiteId");
+            long blackId = rs.getLong("blackId");
             String result = rs.getString("result");
             Date createDate = rs.getDate("createdate");
             Date modifiedDate = rs.getDate("modifieddate");
             String createBy = rs.getString("createby");
             String modifiedBy = rs.getString("modifiedby");
             int eloChange = rs.getInt("eloChange"); 
-            history = new HistoryModel(id, playerId, opponentId, result, createDate, createBy, modifiedDate, modifiedBy, eloChange); // Thêm eloChange vào constructor
+            history = new HistoryModel(id, whiteId, blackId, result, createDate, createBy, modifiedDate, modifiedBy, eloChange); // Thêm eloChange vào constructor
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -26,8 +26,6 @@ public class FriendController extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println(req.getSession());
 		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-		UserModel wmodel = (UserModel) SessionUtil.getInstance().getValue(req, "WHITEMODEL");
-		System.out.println(wmodel.getFullname());
 		String page = req.getParameter("page");
 		if (model != null) {
 			System.out.print("model!=null" + model.getId());

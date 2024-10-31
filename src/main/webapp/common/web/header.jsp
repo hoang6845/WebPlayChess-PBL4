@@ -40,7 +40,7 @@
 					<i
 					class="fas fa-trophy mr-2 group-hover:scale-110 transition-transform"></i>
 					Ranking
-				</a> <a href="/profile/page=profile" target="content"
+				</a> <a href='<c:url value="/profile?page=profile"></c:url>' target="content"
 					class="nav-item py-4 px-2 text-white font-semibold hover:text-gray-300 transition duration-300 group  <c:if test='${page=="profile"}'>active</c:if>">
 					<i
 					class="fas fa-user mr-2 group-hover:scale-110 transition-transform"></i>

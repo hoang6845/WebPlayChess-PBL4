@@ -13,21 +13,15 @@ public class HistoryDAO extends DAOimple<HistoryModel> implements IHistoryDAO {
         return new HistoryDAO();
     }
     @Override
-    public HistoryModel findByUserId(long userId) {
-        String sql = "SELECT * FROM match_history WHERE playerId = ?";
-        ArrayList<HistoryModel> HList = query(sql, new HistoryMapper(), userId);
-        return HList.isEmpty() ? null : HList.get(0);
-    }
-    @Override
     public ArrayList<HistoryModel> findAllByPlayerId(long playerId) {
-        String sql = "SELECT * FROM match_history WHERE playerId = ? OR opponentId = ?";
+        String sql = "SELECT * FROM history WHERE whiteId = ? OR blackId = ? ORDER BY createdate DESC";
         return query(sql, new HistoryMapper(), playerId, playerId);
     }
     @Override
     public void insert(HistoryModel history) {
     	
-        String sql = "INSERT INTO match_history (playerId, opponentId, result,  eloChange ,createdate, createby, modifieddate, modifiedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        insert(sql, history.getPlayerId(), history.getOpponentId(), history.getResult(),history.getEloChange(),
+        String sql = "INSERT INTO history (playerId, opponentId, result,  eloChange ,createdate, createby, modifieddate, modifiedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        insert(sql, history.getWhiteId(), history.getBlackId(), history.getResult(),history.getEloChange(),
                history.getCreateDate(), history.getCreateBy(), 
                history.getModifiedDate(), history.getModifiedBy() 
                );
