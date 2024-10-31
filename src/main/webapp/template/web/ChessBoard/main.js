@@ -226,10 +226,10 @@ function drop(ev,MoveToClient=0) {
       destinationSquareId,
       boardSquaresArray
     );
-    checkForCheckMate();
     if (MoveToClient==0){
 	    dropSendToServer(pieceId,destinationSquareId);
 	}
+    checkForCheckMate(MoveToClient);
     return;
   }
   if (
@@ -259,10 +259,10 @@ function drop(ev,MoveToClient=0) {
       destinationSquareId,
       boardSquaresArray
     );
-    checkForCheckMate();
     if (MoveToClient==0){
 	    dropSendToServer(pieceId,destinationSquareId);
 	}
+    checkForCheckMate(MoveToClient);
     return;
   }
   console.log("di xong");
@@ -856,7 +856,7 @@ function isMoveValidAgainstCheck(legalSquares,startingSquareId,pieceColor,pieceT
   return legalSquares;
 }
 
-function checkForCheckMate() {
+function checkForCheckMate(MoveToClient = 0) {
   let kingSqaure=isWhiteTurn  ? whiteKingSquare: blackKingSquare;
   let pieceColor=isWhiteTurn  ? "white": "black";
   let boardSquaresArrayCopy = deepCopyArray(boardSquaresArray);
@@ -867,7 +867,13 @@ function checkForCheckMate() {
   if(possibleMoves.length>0) return;
   let message="";
   isWhiteTurn  ? (message="Black Wins") : (message="White Wins");
-  showAlert(message);
+  if (MoveToClient == 0){
+	console.log("da chayyyy");
+	endGameToServer();
+  }else {
+	console.log("khong chayyy");
+  }
+  console.log(message);
 }
 
 function getAllPossibleMoves(squaresArray, color) {
@@ -899,15 +905,7 @@ function getAllPossibleMoves(squaresArray, color) {
 }
 
 
-function showAlert(message) {
-  const alert= document.getElementById("alert");
-  alert.innerHTML=message;
-  alert.style.display="block";
 
-  setTimeout(function(){
-       alert.style.display="none";
-  },3000);
-}
 
 
 

@@ -35,7 +35,6 @@ import jakarta.websocket.server.ServerEndpoint;
 import jakarta.websocket.server.ServerEndpointConfig;
 import jakarta.websocket.server.ServerEndpointConfig.Configurator;
 
-
 @ServerEndpoint(value = "/PvP", configurator = ChatWebsocket.SessionConfigurator.class)
 public class ChatWebsocket {
 	private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
@@ -43,18 +42,18 @@ public class ChatWebsocket {
 	private static Map<String, Set<SessionPlayer>> rooms = new HashMap<String, Set<SessionPlayer>>();
 
 	private static Map<String, GameModePvP> roomsGame = new HashMap<String, GameModePvP>();
-	
+
 	private HttpSession httpSession;
 
 	public static class SessionConfigurator extends Configurator {
-        public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
-            HttpSession httpSession = (HttpSession) request.getHttpSession();
-            config.getUserProperties().put(HttpSession.class.getName(), httpSession);
-        }
-    }
-	
+		public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
+			HttpSession httpSession = (HttpSession) request.getHttpSession();
+			config.getUserProperties().put(HttpSession.class.getName(), httpSession);
+		}
+	}
+
 	@OnOpen
-	public void onOpen(Session session,EndpointConfig config) {
+	public void onOpen(Session session, EndpointConfig config) {
 		clients.add(session);
 		System.out.println("New connection: " + session.getId());
 		httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
@@ -83,21 +82,24 @@ public class ChatWebsocket {
 				players.add(newPlayer);
 				System.out.println("Session " + session.getId() + " Player " + senderName + " joined room: " + roomId);
 				System.out.println("Room " + roomId + " có " + players.size() + " Player");
-			
-/*				if (players.size()==2) {
-					
-					Iterator<SessionPlayer> iterator = players.iterator();
-					SessionPlayer firstPlayer = iterator.next();
-					SessionPlayer secondPlayer = iterator.next();
-					UserModel whiteModel = UserService.getInstance().FindUserById(firstPlayer.getUserId());
-					UserModel blackModel = UserService.getInstance().FindUserById(secondPlayer.getUserId());
-					
-//cách 1			SessionUtil.getInstance().putValueBySession("WHITEMODEL", whiteModel); 
-//cách 2			httpSession.setAttribute("WHITEMODEL", whiteModel);
-//					Không dùng được vì 2 cách đều cần reload lại trang để lấy dữ liệu trên http
 
-				}*/
-				
+				/*
+				 * if (players.size()==2) {
+				 * 
+				 * Iterator<SessionPlayer> iterator = players.iterator(); SessionPlayer
+				 * firstPlayer = iterator.next(); SessionPlayer secondPlayer = iterator.next();
+				 * UserModel whiteModel =
+				 * UserService.getInstance().FindUserById(firstPlayer.getUserId()); UserModel
+				 * blackModel =
+				 * UserService.getInstance().FindUserById(secondPlayer.getUserId());
+				 * 
+				 * //cách 1 SessionUtil.getInstance().putValueBySession("WHITEMODEL",
+				 * whiteModel); //cách 2 httpSession.setAttribute("WHITEMODEL", whiteModel); //
+				 * Không dùng được vì 2 cách đều cần reload lại trang để lấy dữ liệu trên http
+				 * 
+				 * }
+				 */
+
 				Message joinMessage = new Message(roomId, "join", responseMessage.getSender(),
 						String.valueOf(players.size()));
 				String jsonJoinMessage = gson.toJson(joinMessage);
@@ -114,7 +116,8 @@ public class ChatWebsocket {
 						UserModel whiteModel = UserService.getInstance().FindUserById(firstPlayer.getUserId());
 						UserModel blackModel = UserService.getInstance().FindUserById(SecondPlayer.getUserId());
 						Message gameStartMessage = new Message(roomId, "start",
-								firstPlayer.getUserId() + "|" + SecondPlayer.getUserId(), "start", whiteModel, blackModel);
+								firstPlayer.getUserId() + "|" + SecondPlayer.getUserId(), "start", whiteModel,
+								blackModel);
 						String jsonGameStartMessage = gson.toJson(gameStartMessage);
 						System.out.println(firstPlayer.getNameSession() + "|" + SecondPlayer.getNameSession());
 						for (Session client : clients) {
@@ -139,14 +142,13 @@ public class ChatWebsocket {
 							for (Session client : clients) {
 								for (SessionPlayer player : players) {
 									if (client.equals(player.getSession())
-											&& player.getUserId() == Long.parseLong(responseMessage.getSender())
-										) {
-										//tạo message "updateHistoryMove"
-										//client.getBasicRemote().sendText("");
+											&& player.getUserId() == Long.parseLong(responseMessage.getSender())) {
+										// tạo message "updateHistoryMove"
+										// client.getBasicRemote().sendText("");
 									}
 								}
 							}
-							//test code tương đương vòng for trên
+							// test code tương đương vòng for trên
 //							for (SessionPlayer player : players) {
 //								if (player.getUserId()==Long.parseLong(responseMessage.getSender())){
 //									player.getSession().getBasicRemote().sendText("");
@@ -190,7 +192,7 @@ public class ChatWebsocket {
 				for (Session client : clients) {
 					client.getBasicRemote().sendText(jsonoutMessage);
 				}
-				
+
 				if (players.size() == 1) {
 					roomsGame.remove(roomId);
 					Message restartMessage = new Message(roomId, "restart", responseMessage.getSender(), "restart");
@@ -199,7 +201,6 @@ public class ChatWebsocket {
 						client.getBasicRemote().sendText(jsonRestartMessage);
 					}
 				}
-		
 
 			} else if (responseMessage.getType().equals("move")) {
 				String roomId = responseMessage.getRoom();
@@ -221,6 +222,42 @@ public class ChatWebsocket {
 					}
 
 				}
+			}else if (responseMessage.getType().equals("win")) {
+				String roomId = responseMessage.getRoom();
+				GameModePvP G = roomsGame.get(roomId);
+				Message endGame = new Message(roomId, "win", responseMessage.getSender(), "");
+				String jsonEndGame = gson.toJson(endGame);
+				Set<SessionPlayer> players = rooms.get(roomId);
+				Iterator<SessionPlayer> iterator = players.iterator();
+				SessionPlayer firstPlayer = iterator.next();
+				SessionPlayer SecondPlayer = iterator.next();
+				if (firstPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
+					if (G.endGameP1()) {
+						for (Session client : clients) {
+							for (SessionPlayer player : players) {
+								if (client.equals(player.getSession())) {
+									client.getBasicRemote().sendText(jsonEndGame);
+								}
+							}
+						}
+					}
+					else {
+						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
+					}
+				}else if (SecondPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
+					if (G.endGameP2()) {
+						for (Session client : clients) {
+							for (SessionPlayer player : players) {
+								if (client.equals(player.getSession())) {
+									client.getBasicRemote().sendText(jsonEndGame);
+								}
+							}
+						}
+					}
+					else {
+						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
+					}
+				}
 			}
 		}
 	}
@@ -229,17 +266,17 @@ public class ChatWebsocket {
 	public void onClose(Session session) {
 		clients.remove(session);
 		System.out.println("Connection closed: " + session.getId());
-	
 
 	}
-	
-	/*
-	 * @OnError public void onError(Session session, Throwable throwable) { // Ghi
-	 * lại lỗi hoặc thực hiện các hành động xử lý cần thiết if (throwable instanceof
-	 * IOException) { System.out.println("Client disconnected unexpectedly: " +
-	 * throwable.getMessage()); } else { // Ghi lại các lỗi khác
-	 * throwable.printStackTrace(); } }
-	 */
+
+	@OnError
+	public void onError(Session session, Throwable throwable) {
+		if (throwable instanceof IOException) {
+			System.out.println("Client disconnected unexpectedly: " + throwable.getMessage());
+		} else { // Ghi lại các lỗi khác
+			throwable.printStackTrace();
+		}
+	}
 
 	public ArrayList<Integer> ConvertChessBoardToBoard(String chessMove, String moveTo) {
 		ArrayList<Integer> data = new ArrayList<Integer>();
@@ -296,5 +333,5 @@ public class ChatWebsocket {
 				+ data.get(2));
 		return data;
 	}
-	
+
 }

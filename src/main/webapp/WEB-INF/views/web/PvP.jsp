@@ -267,6 +267,9 @@
     	let chatbox = document.getElementById('chatBox');
     	console.log(chatbox);
     	
+    	function endGameToServer(){
+    		
+    	}
     	
         ws.onmessage = function(event) {
         	console.log(event.data)
@@ -501,6 +504,15 @@
         	 ws.send(JSON.stringify(message));
         	console.log(message);
         }
+        
+        function endGameToServer(){
+		  	const room = "${room}";
+            console.log(room);
+            const userId = "${USERMODEL.id}";
+            const message = new Message(room,"win",userId,"");
+            console.log(message);
+        	ws.send(JSON.stringify(message));
+	  }
     
         function showPlayerInfo(name, avatar, rank, matches, friends) {
             document.getElementById('playerName').textContent = name;
