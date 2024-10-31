@@ -403,9 +403,11 @@
     				    
     				}
     				let modal = document.getElementById('modal');
+
     		//		modal.classList.add('modal_hidden');
     				startCountdown(startWhitePlayerClock);
     		//		startWhitePlayerClock();
+
     				console.log("da chay dong ho white")
     				
     				
@@ -543,7 +545,33 @@
         document.querySelector('.flex.justify-between.items-center:last-child .font-bold.cursor-pointer').addEventListener('click', function() {
             showPlayerInfo('BlackPlayer456', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80', 6000, 500, 120);
         });
-    
+        function startCountdown(callback) {
+            let countdownElement = document.getElementById('modal');
+            let countdownValue = 3;
+
+            // Thiết lập để hiển thị chữ "Start"
+            countdownElement.style.display = 'flex'; // Hiển thị div đếm ngược
+            countdownElement.style.fontSize = '200px'; // Tăng kích thước chữ
+            countdownElement.textContent = "Start"; 
+
+            // Đợi 1 giây trước khi bắt đầu đếm ngược từ 3
+            setTimeout(() => {
+                const interval = setInterval(() => {
+                    countdownElement.textContent = countdownValue; // Cập nhật nội dung
+
+                    if (countdownValue < 1) {
+                        clearInterval(interval); // Dừng đếm ngược khi đạt 0
+                        countdownElement.textContent = 'Play!';
+                        setTimeout(() => {
+                            countdownElement.style.display = 'none'; // Ẩn sau 1 giây
+                        }, 1000);
+                        callback();
+                    }
+
+                    countdownValue--; // Giảm 1
+                }, 1000); // Cập nhật mỗi giây
+            }, 1000); // Bắt đầu đếm ngược sau khi hiển thị "Start" 1 giây
+        }
     </script>
 
 	<script src="<c:url value='template/web/ChessBoard/main.js' />"></script>
