@@ -4,4 +4,5 @@ import com.pbl4.model.bean.ProfileModel;
 public interface IProfileService extends IService {
     ProfileModel findByUserId(long userId);
     boolean updateProfile(ProfileModel profile);
+    boolean updateScription(long userId, String newScription);
 }

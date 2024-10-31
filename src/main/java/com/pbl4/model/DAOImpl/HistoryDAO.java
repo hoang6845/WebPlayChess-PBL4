@@ -2,10 +2,8 @@ package com.pbl4.model.DAOImpl;
 
 import java.util.ArrayList;
 import com.pbl4.mapper.HistoryMapper;
-import com.pbl4.mapper.RankMapper;
 import com.pbl4.model.DAO.IHistoryDAO;
 import com.pbl4.model.bean.HistoryModel;
-import com.pbl4.model.bean.RankModel;
 
 public class HistoryDAO extends DAOimple<HistoryModel> implements IHistoryDAO {
 

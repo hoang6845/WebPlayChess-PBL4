@@ -6,7 +6,7 @@ import com.pbl4.model.DAOImpl.UserDAO;
 import com.pbl4.model.bean.RankModel;
 import com.pbl4.model.bean.UserModel;
 import com.pbl4.service.IUserService;
-
+import org.mindrot.jbcrypt.BCrypt;
 public class UserService implements IUserService {
 
 	public static UserService getInstance() {
@@ -14,9 +14,13 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public UserModel findByUserNameAndPasswordAndStatus(String UserName, String password) {
-		// TODO Auto-generated method stub
-		return UserDAO.getInstance().findByUserNameAndPasswordAndStatus(UserName, password);
+	public UserModel findByUserNameAndPasswordAndStatus(String userName, String password) {
+	    UserModel user = UserDAO.getInstance().findByUserName(userName);
+
+	    if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+	        return user;
+	    }
+	    return null;
 	}
 
 	@Override
@@ -59,5 +63,29 @@ public class UserService implements IUserService {
 		}
 		return result;
 	}
+	
+	@Override
+    public boolean updatePassword(long userId, String newPassword) {
+        UserModel user = FindUserById(userId);
+        if (user != null) {
+        	String hashedPassword = hashPassword(newPassword);
+            user.setPassword(hashedPassword);
+            return UserDAO.getInstance().updateUser(user); 
+        }
+        return false;
+    }
+	@Override
+    public boolean updateName(long userId, String newName) {
+        UserModel user = FindUserById(userId);
+        if (user != null) {
+            user.setFullname(newName); 
+            return UserDAO.getInstance().updateUser(user);
+        }
+        return false;
+    }
+	@Override
+    public String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 
 }
