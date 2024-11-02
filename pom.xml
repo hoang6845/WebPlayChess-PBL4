@@ -137,6 +137,12 @@
     <artifactId>tomcat-websocket</artifactId>
     <version>10.1.25</version>
 </dependency>
+<!--ma hoa mk-->
+<dependency>
+    <groupId>org.mindrot</groupId>
+    <artifactId>jbcrypt</artifactId>
+    <version>0.4</version>
+</dependency>
 		
 	</dependencies>
 	

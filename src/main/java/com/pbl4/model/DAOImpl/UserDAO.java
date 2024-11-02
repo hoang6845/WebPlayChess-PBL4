@@ -13,15 +13,7 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 	public static UserDAO getInstance() {
 		return new UserDAO();
 	}
-
-	@Override
-	public UserModel findByUserNameAndPasswordAndStatus(String username, String password) {
-		StringBuilder sql = new StringBuilder("Select * from Userr U ");
-		sql.append(" inner join Rolee r on r.id=U.idRole");
-		sql.append(" where username=? and password = ? ");
-		ArrayList<UserModel> ar= query(sql.toString(),new UserMapper(), username, password);
-		return ar.isEmpty()?null:ar.get(0);
-	}
+	
 
 	@Override
 	public ArrayList<UserModel> getListUser() {
@@ -55,12 +47,29 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 		ArrayList<UserModel> ar = query(sql.toString(), new UserMapper(),id,SystemConstant.PLAYER);
 		return ar.isEmpty()?null:ar.get(0);
 	}
+	@Override
+	public boolean updateUser(UserModel user) {
+	    String sql = "UPDATE Userr SET username = ?, password = ?, fullname = ?, createdate = ?, modifieddate = ?, createby = ?, modifiedby = ? " +
+	                 "WHERE id = ?";
+	    return update(sql, user.getUsername(), user.getPassword(), user.getFullname(), 
+	                   user.getCreateDate(), user.getModifiedDate(), user.getCreateBy(),
+	                  user.getModifiedBy(), user.getId()) == 0;
+	}
+	@Override
+	public UserModel findByUserName(String userName) {
+		StringBuilder sql = new StringBuilder("Select * from Userr U ");
+		sql.append(" inner join Rolee r on r.id=U.idRole");
+		sql.append(" where username=? ");
 
-	
-
-
-	
-
-	
-
+	    ArrayList<UserModel> userList = query(sql.toString(), new UserMapper(), userName);
+	    return userList.isEmpty() ? null : userList.get(0);
+	}
 }
+
+	
+
+
+	
+
+	
+

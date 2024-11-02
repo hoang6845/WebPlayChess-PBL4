@@ -5,19 +5,29 @@ import com.pbl4.model.bean.ProfileModel;
 import com.pbl4.service.IProfileService;
 
 public class ProfileService implements IProfileService {
-	public static ProfileService getInstance() {
-		return new ProfileService();
-	}
 
-	@Override
-	public ProfileModel findByUserId(long userId) {
-		// TODO Auto-generated method stub
-		return ProfileDAO.getInstance().findByUserId(userId);
-	}
+    public static ProfileService getInstance() {
+        return new ProfileService();
+    }
 
-	@Override
-	public boolean updateProfile(ProfileModel profile) {
-		// TODO Auto-generated method stub
-		return ProfileDAO.getInstance().updateProfile(profile);
-	}
+    @Override
+    public ProfileModel findByUserId(long userId) {
+        return ProfileDAO.getInstance().findByUserId(userId);
+    }
+
+    @Override
+    public boolean updateProfile(ProfileModel profile) {
+        return ProfileDAO.getInstance().updateProfile(profile);
+    }
+
+    @Override
+    public boolean updateScription(long userId, String newScription) {
+        ProfileModel profile = findByUserId(userId);
+        if (profile != null) {
+            profile.setDescription(newScription);
+            return ProfileDAO.getInstance().updateProfile(profile);
+        }
+        return true;
+    }
+
 }
