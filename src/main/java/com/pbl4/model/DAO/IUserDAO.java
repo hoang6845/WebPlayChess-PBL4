@@ -16,5 +16,5 @@ public interface IUserDAO extends DAOInterface<UserModel> {
 	
 	boolean updateUser(UserModel user);
 	
-	UserModel findByUserName(String userName);
+	ArrayList<UserModel> findByUserName(String userName);
 }

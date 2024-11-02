@@ -21,7 +21,7 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public boolean updateScription(long userId, String newScription) {
+    public boolean updateDescription(long userId, String newScription) {
         ProfileModel profile = findByUserId(userId);
         if (profile != null) {
             profile.setDescription(newScription);

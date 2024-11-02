@@ -30,14 +30,25 @@ body, html {
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="<c:url value='template/web/ChessBoard/style.css'></c:url>"
 	rel="stylesheet" type="text/css" media="all">
-	
-		<script type="text/javascript">
+
+<script type="text/javascript">
+		 class Model {
+			 constructor(id, fullname,elo, totalMatches)
+			{
+				this.id = id;
+				this.fullname = fullname;
+				this.elo = elo;
+				this.totalMatches = totalMatches;
+			} 
+		 }
 		 class Message {
-             constructor(room, type, sender, content) {
-             	this.room = room;
-             	this.type= type;
+             constructor(room, type, sender, content){
+            	 this.room = room;
+              	 this.type= type;
                  this.sender = sender;
                  this.content = content;
+      //         this.whiteModel = whiteModel? new Model(whiteModel.id, whiteModel.fullname, whiteModel.elo, whiteModel.totalMatches):null;
+      //       	 this.blackModel = blackModel? new Model(blackModel.id, blackModel.fullname, blackModel.elo, blackModel.totalMatches):null;
              }
          }
 		  function dropSendToServer(pieceId,destinationSquareId){
@@ -46,11 +57,20 @@ body, html {
 	            const username = "${USERMODEL.id}";
 	        	const message = new Message(room,"move",username,pieceId+"|"+destinationSquareId);
 	        	console.log(message);
-	        	 ws.send(JSON.stringify(message));
+	        	ws.send(JSON.stringify(message));
 	        }
+		  
+		  function endGameToServer(){
+			  	const room = "${room}";
+	            console.log(room);
+	            const userId = "${USERMODEL.id}";
+	            const message = new Message(room,"win",userId,"");
+	            console.log(message);
+	        	ws.send(JSON.stringify(message));
+		  }
 		</script>
-	
-		
+
+
 </head>
 <body style="overflow: auto">
 	<%@ include file="/common/web/header.jsp"%>

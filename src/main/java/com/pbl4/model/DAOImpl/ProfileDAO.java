@@ -22,6 +22,6 @@ public class ProfileDAO extends DAOimple<ProfileModel> implements IProfileDAO {
         String sql = "UPDATE Profile SET imageOfUser = ?, description = ?, email = ?, createdate = ?, modifieddate = ?, createby = ?, modifiedby = ? " +
                      "WHERE userId = ?";
         return update(sql, profile.getImageOfUser(), profile.getDescription(), profile.getEmail(),
-                      profile.getCreateDate(), profile.getModifiedDate(), profile.getCreateBy(), profile.getModifiedBy(), profile.getUserId()) == 0;
+                      profile.getCreateDate(), profile.getModifiedDate(), profile.getCreateBy(), profile.getModifiedBy(), profile.getUserId()) > 0;
     }
 }

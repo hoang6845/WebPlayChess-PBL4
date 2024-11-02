@@ -35,18 +35,19 @@ public class DAOimple<T> implements DAOInterface<T> {
 
 	@Override
 	public int update(String sql, Object...parameters) {
+		int kq=0;
 		try {
 			Connection con = connectDatabase.getConnection();
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			setParameter(pstmt, parameters);
-			int kq = pstmt.executeUpdate();
+			kq = pstmt.executeUpdate();
 			System.out.println("Thuc thi: " + sql);
 			System.out.println("Co" + kq + "Ket qua thay doi");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return kq;
 	}
 
 	@Override

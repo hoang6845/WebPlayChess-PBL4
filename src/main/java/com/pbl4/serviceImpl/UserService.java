@@ -15,10 +15,11 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserModel findByUserNameAndPasswordAndStatus(String userName, String password) {
-	    UserModel user = UserDAO.getInstance().findByUserName(userName);
-
-	    if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-	        return user;
+	    ArrayList<UserModel> userList = UserDAO.getInstance().findByUserName(userName);
+	    for (UserModel user : userList) {
+	    	if (BCrypt.checkpw(password, user.getPassword())){
+	    		return user;
+	    	}
 	    }
 	    return null;
 	}
