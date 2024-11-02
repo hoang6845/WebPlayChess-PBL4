@@ -81,7 +81,8 @@ public class HomeController extends HttpServlet {
 			model = UserService.getInstance().findByUserNameAndPasswordAndStatus(model.getUsername(), model.getPassword());
 			if (model!=null)System.out.print("toi la "+model.getRole().getCodeRole());
 			if (model!=null) {
-				model.setElo(RankService.getInstance().findByUserId(model.getId()).getElo());
+				if (model.getRole().getCodeRole().equals(SystemConstant.PLAYER))
+					model.setElo(RankService.getInstance().findByUserId(model.getId()).getElo());
 				SessionUtil.getInstance().putValue(req, "USERMODEL", model);
 				if (model.getRole().getCodeRole().equals(SystemConstant.PLAYER)) {
 					resp.sendRedirect(req.getContextPath()+"/trang-chu?page=home");

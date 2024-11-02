@@ -60,8 +60,8 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 	public ArrayList<UserModel> findByUserName(String userName) {
 		StringBuilder sql = new StringBuilder("Select * from Userr U ");
 		sql.append(" inner join Rolee r on r.id=U.idRole");
-		sql.append(" where username=? and codeRole=?");
-	    ArrayList<UserModel> userList = query(sql.toString(), new UserMapper(), userName,SystemConstant.PLAYER);
+		sql.append(" where username=?");
+	    ArrayList<UserModel> userList = query(sql.toString(), new UserMapper(), userName);
 	    return userList.isEmpty() ? null : userList;
 	}
 }

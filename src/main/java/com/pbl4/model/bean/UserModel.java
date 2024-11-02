@@ -11,31 +11,39 @@ public class UserModel extends AbstractModel<UserModel> {
 	private ArrayList<FriendModel> FriendList;
 	private int elo;
 	private int totalMatches;
-	
+
 	public int getTotalMatches() {
 		return totalMatches;
 	}
+
 	public void setTotalMatches(int totalMatches) {
 		this.totalMatches = totalMatches;
 	}
+
 	public int getElo() {
 		return elo;
 	}
+
 	public void setElo(int elo) {
 		this.elo = elo;
 	}
+
 	public ArrayList<FriendModel> getFriendList() {
 		return FriendList;
 	}
+
 	public void setFriendList(ArrayList<FriendModel> friendList) {
 		FriendList = friendList;
 	}
+
 	public RoleModel getRole() {
 		return Role;
 	}
+
 	public void setRole(RoleModel role) {
 		Role = role;
 	}
+
 	public UserModel(long id, Date createDate, String createBy, Date modifiedDate, String modifiedBy, String fullname,
 			String username, String password, RoleModel Role) {
 		super(id, createDate, createBy, modifiedDate, modifiedBy);
@@ -44,28 +52,33 @@ public class UserModel extends AbstractModel<UserModel> {
 		this.password = password;
 		this.Role = Role;
 	}
+
 	public UserModel() {
 		super();
 	}
+
 	public String getFullname() {
 		return fullname;
 	}
+
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	
-	
 }
