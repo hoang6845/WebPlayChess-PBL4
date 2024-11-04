@@ -2,6 +2,7 @@ package com.pbl4.serviceImpl;
 
 import java.util.ArrayList;
 import com.pbl4.model.DAOImpl.HistoryDAO;
+import com.pbl4.model.DAOImpl.RankDAO;
 import com.pbl4.model.bean.HistoryModel;
 import com.pbl4.service.IHistoryService;
 
@@ -24,8 +25,10 @@ public class HistoryService implements IHistoryService {
     @Override
     public void insert(HistoryModel history) {
     	int k=40;
-    	double mmrA = RankService.getInstance().findByUserId(history.getBlackId()).getElo();
-    	double mmrB = RankService.getInstance().findByUserId(history.getWhiteId()).getElo();
+    	double A = RankService.getInstance().findByUserId(history.getBlackId()).getElo();
+    	double B = RankService.getInstance().findByUserId(history.getWhiteId()).getElo();
+    	double mmrA = A;
+    	double mmrB = B;
     	if (mmrA<mmrB) {
     		double temp= mmrA;
     		mmrA=mmrB;
@@ -33,11 +36,18 @@ public class HistoryService implements IHistoryService {
     	}
     	double E = 1.0 / (1.0 + Math.pow(10, (mmrB - mmrA) / 400));
     	int elo=(int)((int)k*E);
-    	if (history.getResult().equals("win"))
+    	if (history.getResult().equals("win")) {
     		history.setEloChange(elo);
-    	else if (history.getResult().equals("lose"))
+    		RankService.getInstance().UpdateAfterGames(history.getWhiteId(), history.getBlackId(), history.getResult(), elo);
+    	}
+    	else if (history.getResult().equals("lose")) {
     		history.setEloChange(-elo);
-    	else history.setEloChange(0);
+    		RankService.getInstance().UpdateAfterGames(history.getWhiteId(), history.getBlackId(), history.getResult(), elo);
+		}
+    	else {
+    		history.setEloChange(0);
+    		RankService.getInstance().UpdateAfterGames(history.getWhiteId(), history.getBlackId(), history.getResult(), elo);
+    	}
     	HistoryDAO.getInstance().insert(history); // Gọi phương thức chèn từ HistoryDAO
     }
 }

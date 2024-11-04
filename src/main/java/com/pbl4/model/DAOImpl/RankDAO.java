@@ -42,5 +42,17 @@ public class RankDAO extends DAOimple<RankModel> implements IRankDAO {
         return (double) mytopRank / allRank * 100;
     }
 
+	@Override
+	public int updateElo(long userId,int eloAfterChange) {
+		String sql = "Update Rank set elo = ? where userId=?";
+		return update(sql, eloAfterChange,userId);
+	}
+
+	@Override
+	public int updateGames(long userId, int totalMatches, int win, int draws, int lose) {
+		String sql = "Update Rank set totalMatches=?, win=?, draws=?, lose=? where userId=?";
+		return update(sql, totalMatches, win, draws, lose, userId);
+	}
+
     
 }

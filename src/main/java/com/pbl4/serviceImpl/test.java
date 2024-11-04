@@ -1,6 +1,10 @@
 package com.pbl4.serviceImpl;
 
 import com.pbl4.model.bean.UserModel;
+
+import java.util.ArrayList;
+
+import com.pbl4.model.bean.HistoryModel;
 import com.pbl4.model.bean.ProfileModel;
 public class test {
 
@@ -36,9 +40,7 @@ public class test {
 		 * System.out.println("Are both hashed passwords the same? " + (isSameHash ?
 		 * "Yes" : "No"));
 		 */
-    	UserModel u= UserService.getInstance().findByUserNameAndPasswordAndStatus("guest01", "123456");
-    	String hashedPassword = UserService.getInstance().hashPassword("123456");
-    	System.out.println(hashedPassword);
-    	System.out.println(u.getFullname());
+    	ArrayList<HistoryModel> a = HistoryService.getInstance().findAllByPlayerId(1);
+    	System.out.println(a.get(0).getEloChange());
     }
 }

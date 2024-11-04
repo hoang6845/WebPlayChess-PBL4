@@ -35,6 +35,13 @@ public class HomeController extends HttpServlet {
 		SessionUtil.getInstance().setSession(req);
 		String action = req.getParameter("action");
 		String page = req.getParameter("page");
+		UserModel modal= (UserModel)SessionUtil.getInstance().getValue(req, "USERMODEL");
+		if (modal!=null) {
+			if (modal.getRole().getCodeRole().equals(SystemConstant.PLAYER)) {
+				modal.setElo(RankService.getInstance().findByUserId(modal.getId()).getElo());
+				SessionUtil.getInstance().putValue(req, "USERMODEL", modal);			
+			}
+		}
 		if (action != null && action.equals("login")) {
 			String message = req.getParameter("message");
 			String alert = req.getParameter("alert");

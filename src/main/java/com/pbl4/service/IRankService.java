@@ -12,4 +12,6 @@ public interface IRankService extends IService {
 	int findRankPosition(long userId);
 
 	double calculateRankPercentage(long userId);
+	
+	void UpdateAfterGames(long whiteId, long BlackId, String result, int eloChange);
 }

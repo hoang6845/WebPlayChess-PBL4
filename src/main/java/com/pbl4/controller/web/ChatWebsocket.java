@@ -1,6 +1,7 @@
 package com.pbl4.controller.web;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,10 +14,12 @@ import java.util.Stack;
 
 import com.google.gson.Gson;
 import com.pbl4.GamePlay.GameModePvP;
+import com.pbl4.model.bean.HistoryModel;
 import com.pbl4.model.bean.Message;
 import com.pbl4.model.bean.SessionPlayer;
 import com.pbl4.model.bean.Undo;
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.serviceImpl.HistoryService;
 import com.pbl4.serviceImpl.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -223,13 +226,22 @@ public class ChatWebsocket {
 				String roomId = responseMessage.getRoom();
 				GameModePvP G = roomsGame.get(roomId);
 				Message endGame = new Message(roomId, "win", responseMessage.getSender(), "");
-				String jsonEndGame = gson.toJson(endGame);
+			
 				Set<SessionPlayer> players = rooms.get(roomId);
 				Iterator<SessionPlayer> iterator = players.iterator();
 				SessionPlayer firstPlayer = iterator.next();
 				SessionPlayer SecondPlayer = iterator.next();
+				
+				HistoryModel h = new HistoryModel();
+				h.setWhiteId(firstPlayer.getUserId());
+				h.setBlackId(SecondPlayer.getUserId());
+				h.setCreateDate(new Date(System.currentTimeMillis()));
 				if (firstPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
 					if (G.endGameP1()) {
+						h.setResult("win");
+						h.setCreateBy(firstPlayer.getNameSession());
+						endGame.setContent(firstPlayer.getNameSession());
+						String jsonEndGame = gson.toJson(endGame);
 						for (Session client : clients) {
 							for (SessionPlayer player : players) {
 								if (client.equals(player.getSession())) {
@@ -243,6 +255,10 @@ public class ChatWebsocket {
 					}
 				}else if (SecondPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
 					if (G.endGameP2()) {
+						h.setResult("lose");
+						h.setCreateBy(SecondPlayer.getNameSession());
+						endGame.setContent(SecondPlayer.getNameSession());
+						String jsonEndGame = gson.toJson(endGame);
 						for (Session client : clients) {
 							for (SessionPlayer player : players) {
 								if (client.equals(player.getSession())) {
@@ -255,6 +271,47 @@ public class ChatWebsocket {
 						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
 					}
 				}
+				HistoryService.getInstance().insert(h);
+			}else if (responseMessage.getType().equals("lose")) {
+				String roomId = responseMessage.getRoom();
+				GameModePvP G = roomsGame.get(roomId);
+				Message endGame = new Message(roomId, "lose", responseMessage.getSender(), "");
+			
+				Set<SessionPlayer> players = rooms.get(roomId);
+				Iterator<SessionPlayer> iterator = players.iterator();
+				SessionPlayer firstPlayer = iterator.next();
+				SessionPlayer SecondPlayer = iterator.next();
+				
+				HistoryModel h = new HistoryModel();
+				h.setWhiteId(firstPlayer.getUserId());
+				h.setBlackId(SecondPlayer.getUserId());
+				h.setCreateDate(new Date(System.currentTimeMillis()));
+				if (firstPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
+						h.setResult("lose");
+						h.setCreateBy(firstPlayer.getNameSession());
+						endGame.setContent(firstPlayer.getNameSession());
+						String jsonEndGame = gson.toJson(endGame);
+						for (Session client : clients) {
+							for (SessionPlayer player : players) {
+								if (client.equals(player.getSession())) {
+									client.getBasicRemote().sendText(jsonEndGame);
+								}
+							}
+						}
+				}else if (SecondPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
+						h.setResult("win");
+						h.setCreateBy(SecondPlayer.getNameSession());
+						endGame.setContent(SecondPlayer.getNameSession());
+						String jsonEndGame = gson.toJson(endGame);
+						for (Session client : clients) {
+							for (SessionPlayer player : players) {
+								if (client.equals(player.getSession())) {
+									client.getBasicRemote().sendText(jsonEndGame);
+								}
+							}
+						}
+				}
+				HistoryService.getInstance().insert(h);
 			}
 		}
 	}

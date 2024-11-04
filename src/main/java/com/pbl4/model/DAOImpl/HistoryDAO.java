@@ -17,11 +17,9 @@ public class HistoryDAO extends DAOimple<HistoryModel> implements IHistoryDAO {
     }
     @Override
     public void insert(HistoryModel history) {
-    	
-        String sql = "INSERT INTO history (playerId, opponentId, result,  eloChange ,createdate, createby, modifieddate, modifiedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO history (whiteId, blackId, result,  eloChange ,createdate, createby) VALUES (?, ?, ?, ?, ?, ?)";
         insert(sql, history.getWhiteId(), history.getBlackId(), history.getResult(),history.getEloChange(),
-               history.getCreateDate(), history.getCreateBy(), 
-               history.getModifiedDate(), history.getModifiedBy() 
+               history.getCreateDate(), history.getCreateBy()  
                );
     }
 }
