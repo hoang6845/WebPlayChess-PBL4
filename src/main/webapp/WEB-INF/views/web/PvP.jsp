@@ -35,15 +35,15 @@
 
 @keyframes winEffect {
   0% {
-    text-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px orange, 0 0 20px orange;
+    text-shadow: 0 0 5px green, 0 0 10px green, 0 0 15px green, 0 0 20px green;
   }
   
   50% {
-    text-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px orange, 0 0 40px orange;
+    text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
   }
   
   100% {
-    text-shadow: 0 0 15px gold, 0 0 30px gold, 0 0 40px orange, 0 0 50px orange;
+    text-shadow: 0 0 15px green, 0 0 30px green, 0 0 40px green, 0 0 50px green;
   }
 }
 
@@ -61,6 +61,19 @@
   }
 }
 
+@keyframes drawsEffect {
+  0% {
+    text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px white;
+  }
+  
+  50% {
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white, 0 0 40px white;
+  }
+  
+  100% {
+    text-shadow: 0 0 15px white, 0 0 30px white, 0 0 40px white, 0 0 50px white;
+  }
+}
 </style>
 	<div class="container mx-auto p-4 text-white">
 		<div class="flex flex-col lg:flex-row gap-8">
@@ -134,12 +147,22 @@
 							class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out relative cursor-not-allowed"
 							id="showDrawChooseButton"
 							aria-label="Draw">Draw
-							<div class="hidden" id="drawModel">
+								<div class="hidden" id="drawModel">
 									<div class="bg-gray-500 p-4 rounded-lg shadow-xl max-w-md w-48 absolute flex flex-col left-0 -translate-x-1/2 top-0 -translate-y-full cursor-default">									
 										<p class="inline">You want to draw?</p>
 										<div class="flex justify-center">
-											<button class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect mr-4">Yes</button>
+											<button class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect mr-4" onclick="drawToServer(event)">Yes</button>
 											<button class="bg-gray-600  text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect" onclick="closeDrawChoose(event)">No</button>								
+										</div>
+									</div>
+								</div>
+								
+								<div class="hidden" id="acceptDrawModel">
+									<div class="bg-gray-500 p-4 rounded-lg shadow-xl max-w-md w-48 absolute flex flex-col left-0 -translate-x-1/2  top-full  cursor-default z-10">									
+										<p class="inline">Your Opponent want to draw</p>
+										<div class="flex justify-center">
+											<button class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect mr-4" onclick="acceptDrawToServer(event)">Accept</button>
+											<button class="bg-gray-600  text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect" onclick="closeAcceptDrawChoose(event)">No</button>								
 										</div>
 									</div>
 								</div>
@@ -236,7 +259,8 @@
 				<p class="font-bold text-3xl text-white" id="eloReal">${USERMODEL.elo}</p>
 			</div>
 			<button
-				class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">
+				class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect"
+				onclick="goHome()">
 				Home</button>
 			<button
 				class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">
@@ -366,13 +390,15 @@
     		outRoom();
     	};
     	
-    	document.getElementById("btn_leaveRoom").addEventListener('click',function(){
+    	document.getElementById("btn_leaveRoom").addEventListener('click',goHome);
+    	
+    	function goHome(){
     		outRoom();
     		ws.close();
     		setTimeout(() => {
     	        window.location.assign("/chess-game/trang-chu?page=home");
-    	    }, 1000); // Chờ 1000ms trước khi chuyển hướng
-    	});
+    	    }, 500); // Chờ 500ms trước khi chuyển hướng
+    	}
     	let chatbox = document.getElementById('chatBox');
     	console.log(chatbox);
     	
@@ -582,6 +608,8 @@
     			}
     		}else if(receivedMessage.type == "win"){
     			if (receivedMessage.room == RoomGame){
+    		    	clearInterval(whitePlayerInterval);
+    		    	clearInterval(blackPlayerInterval);
     				let endGameModal = document.getElementById('EndGameModal');
     				let pEloChange = document.getElementById('eloChange');
     				let pEloReal = document.getElementById('eloReal');
@@ -606,6 +634,57 @@
     					pEloChange.classList.add('text-red-400');
     					pEloReal.textContent = ${USERMODEL.elo}-elo;
     				}
+    			}
+    		}else if(receivedMessage.type == "lose"){
+    			if (receivedMessage.room == RoomGame){
+    		    	clearInterval(whitePlayerInterval);
+    		    	clearInterval(blackPlayerInterval);
+    				let endGameModal = document.getElementById('EndGameModal');
+    				let pEloChange = document.getElementById('eloChange');
+    				let pEloReal = document.getElementById('eloReal');
+    				endGameModal.classList.remove('hidden');
+    				const userId="${USERMODEL.id}";
+    				if (receivedMessage.sender == userId){
+    					let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+    					trophyIcon.forEach(item=>{
+    						item.classList.add('lose');
+    					})
+    					const elo = calculateElo(WhiteModelPlayer.elo,BlackModelPlayer.elo);
+    					pEloChange.textContent = "-"+elo;
+    					pEloChange.classList.add('text-red-400');
+    					pEloReal.textContent = ${USERMODEL.elo}-elo;
+    				}else if (receivedMessage.sender != userId&&(userId == WhiteModelPlayer.id || userId ==BlackModelPlayer.id)){
+    					let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+    					trophyIcon.forEach(item=>{
+    						item.classList.add('victory');
+    					})
+    					const elo = calculateElo(WhiteModelPlayer.elo,BlackModelPlayer.elo);
+    					pEloChange.textContent = "+"+elo;
+    					pEloChange.classList.add('text-green-400');
+    					pEloReal.textContent = ${USERMODEL.elo}+elo;
+    				}
+    			}
+    		}else if((receivedMessage.type == "draw")){
+    			if (receivedMessage.room == RoomGame){
+  					showAcceptDrawChoose();
+    			}
+    		}else if(receivedMessage.type == "acceptDraw"){
+    			if (receivedMessage.room == RoomGame){
+    				clearInterval(whitePlayerInterval);
+    		    	clearInterval(blackPlayerInterval);
+    				let endGameModal = document.getElementById('EndGameModal');
+    				let pEloChange = document.getElementById('eloChange');
+    				let pEloReal = document.getElementById('eloReal');
+    				endGameModal.classList.remove('hidden');
+    				const userId="${USERMODEL.id}";
+    					let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+    					trophyIcon.forEach(item=>{
+    						item.classList.add('draw');
+    					})
+    					const elo = 0
+    					pEloChange.textContent = elo;
+    					pEloChange.classList.add('text-white');
+    					pEloReal.textContent = ${USERMODEL.elo};
     			}
     		}
     		
@@ -679,7 +758,17 @@
             const message = new Message(room,"draw",userId,"");
             console.log(message);
         	ws.send(JSON.stringify(message));
-        	closeAcceptLossChoose(event);
+        	closeDrawChoose(event);
+        }
+        
+        function acceptDrawToServer(event){
+        	const room = "${room}";
+            console.log(room);
+            const userId = "${USERMODEL.id}";
+            const message = new Message(room,"acceptDraw",userId,"");
+            console.log(message);
+        	ws.send(JSON.stringify(message));
+        	closeAcceptDrawChoose(event);
         }
     
         function showPlayerInfo(name, avatar, rank, matches, friends) {
@@ -724,6 +813,16 @@
         function closeDrawChoose(event) {
             event.stopPropagation();
         	document.getElementById('drawModel').classList.add("hidden");
+        	console.log("da chay");
+		}
+        
+        function showAcceptDrawChoose(){
+        	document.getElementById('acceptDrawModel').classList.remove("hidden");
+        }
+        
+        function closeAcceptDrawChoose(event) {
+            event.stopPropagation();
+        	document.getElementById('acceptDrawModel').classList.add("hidden");
         	console.log("da chay");
 		}
         

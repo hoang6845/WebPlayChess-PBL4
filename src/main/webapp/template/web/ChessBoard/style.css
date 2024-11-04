@@ -114,5 +114,8 @@
 .lose{
 	 animation: loseEffect 1.5s ease-in-out infinite alternate;
 }
+.draw{
+	animation: drawsEffect 1.5s ease-in-out infinite alternate;
+}
 
 

@@ -222,21 +222,21 @@ public class ChatWebsocket {
 					}
 
 				}
-			}else if (responseMessage.getType().equals("win")) {
+			} else if (responseMessage.getType().equals("win")) {
 				String roomId = responseMessage.getRoom();
 				GameModePvP G = roomsGame.get(roomId);
 				Message endGame = new Message(roomId, "win", responseMessage.getSender(), "");
-			
+
 				Set<SessionPlayer> players = rooms.get(roomId);
 				Iterator<SessionPlayer> iterator = players.iterator();
 				SessionPlayer firstPlayer = iterator.next();
 				SessionPlayer SecondPlayer = iterator.next();
-				
+
 				HistoryModel h = new HistoryModel();
 				h.setWhiteId(firstPlayer.getUserId());
 				h.setBlackId(SecondPlayer.getUserId());
 				h.setCreateDate(new Date(System.currentTimeMillis()));
-				if (firstPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
+				if (firstPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
 					if (G.endGameP1()) {
 						h.setResult("win");
 						h.setCreateBy(firstPlayer.getNameSession());
@@ -249,11 +249,10 @@ public class ChatWebsocket {
 								}
 							}
 						}
-					}
-					else {
+					} else {
 						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
 					}
-				}else if (SecondPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
+				} else if (SecondPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
 					if (G.endGameP2()) {
 						h.setResult("lose");
 						h.setCreateBy(SecondPlayer.getNameSession());
@@ -266,17 +265,85 @@ public class ChatWebsocket {
 								}
 							}
 						}
-					}
-					else {
+					} else {
 						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
 					}
 				}
 				HistoryService.getInstance().insert(h);
-			}else if (responseMessage.getType().equals("lose")) {
+			} else if (responseMessage.getType().equals("lose")) {
 				String roomId = responseMessage.getRoom();
 				GameModePvP G = roomsGame.get(roomId);
 				Message endGame = new Message(roomId, "lose", responseMessage.getSender(), "");
-			
+
+				Set<SessionPlayer> players = rooms.get(roomId);
+				Iterator<SessionPlayer> iterator = players.iterator();
+				SessionPlayer firstPlayer = iterator.next();
+				SessionPlayer SecondPlayer = iterator.next();
+
+				HistoryModel h = new HistoryModel();
+				h.setWhiteId(firstPlayer.getUserId());
+				h.setBlackId(SecondPlayer.getUserId());
+				h.setCreateDate(new Date(System.currentTimeMillis()));
+				if (firstPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
+					h.setResult("lose");
+					h.setCreateBy(firstPlayer.getNameSession());
+					endGame.setContent(firstPlayer.getNameSession());
+					String jsonEndGame = gson.toJson(endGame);
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())) {
+								client.getBasicRemote().sendText(jsonEndGame);
+							}
+						}
+					}
+				} else if (SecondPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
+					h.setResult("win");
+					h.setCreateBy(SecondPlayer.getNameSession());
+					endGame.setContent(SecondPlayer.getNameSession());
+					String jsonEndGame = gson.toJson(endGame);
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())) {
+								client.getBasicRemote().sendText(jsonEndGame);
+							}
+						}
+					}
+				}
+				HistoryService.getInstance().insert(h);
+			} else if (responseMessage.getType().equals("draw")) {
+				String roomId = responseMessage.getRoom();
+				Message wantDraw = new Message(roomId, "draw", responseMessage.getSender(), "");
+
+				Set<SessionPlayer> players = rooms.get(roomId);
+				Iterator<SessionPlayer> iterator = players.iterator();
+				SessionPlayer firstPlayer = iterator.next();
+				SessionPlayer SecondPlayer = iterator.next();
+				if (firstPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
+					String jsonWantDraw = gson.toJson(wantDraw);
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())
+									&& player.getSession().equals(SecondPlayer.getSession())) {
+								client.getBasicRemote().sendText(jsonWantDraw);
+							}
+						}
+					}
+				} else if (SecondPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
+					String jsonWantDraw = gson.toJson(wantDraw);
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())
+									&& player.getSession().equals(firstPlayer.getSession())) {
+								client.getBasicRemote().sendText(jsonWantDraw);
+
+							}
+						}
+					}
+				}
+			}else if (responseMessage.getType().equals("acceptDraw")) {
+				String roomId = responseMessage.getRoom();
+				Message acceptDraw = new Message(roomId, "acceptDraw", responseMessage.getSender(), "");
+
 				Set<SessionPlayer> players = rooms.get(roomId);
 				Iterator<SessionPlayer> iterator = players.iterator();
 				SessionPlayer firstPlayer = iterator.next();
@@ -286,30 +353,29 @@ public class ChatWebsocket {
 				h.setWhiteId(firstPlayer.getUserId());
 				h.setBlackId(SecondPlayer.getUserId());
 				h.setCreateDate(new Date(System.currentTimeMillis()));
-				if (firstPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
-						h.setResult("lose");
-						h.setCreateBy(firstPlayer.getNameSession());
-						endGame.setContent(firstPlayer.getNameSession());
-						String jsonEndGame = gson.toJson(endGame);
-						for (Session client : clients) {
-							for (SessionPlayer player : players) {
-								if (client.equals(player.getSession())) {
-									client.getBasicRemote().sendText(jsonEndGame);
-								}
+				h.setResult("draw");
+				
+				if (firstPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
+					String jsonAcceptDraw = gson.toJson(acceptDraw);
+					h.setCreateBy(SecondPlayer.getNameSession());
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())) {
+								client.getBasicRemote().sendText(jsonAcceptDraw);
 							}
 						}
-				}else if (SecondPlayer.getUserId()==Long.parseLong(responseMessage.getSender())) {
-						h.setResult("win");
-						h.setCreateBy(SecondPlayer.getNameSession());
-						endGame.setContent(SecondPlayer.getNameSession());
-						String jsonEndGame = gson.toJson(endGame);
-						for (Session client : clients) {
-							for (SessionPlayer player : players) {
-								if (client.equals(player.getSession())) {
-									client.getBasicRemote().sendText(jsonEndGame);
-								}
+					}
+				} else if (SecondPlayer.getUserId() == Long.parseLong(responseMessage.getSender())) {
+					String jsonAcceptDraw = gson.toJson(acceptDraw);
+					h.setCreateBy(SecondPlayer.getNameSession());
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())) {
+								client.getBasicRemote().sendText(jsonAcceptDraw);
+
 							}
 						}
+					}
 				}
 				HistoryService.getInstance().insert(h);
 			}
