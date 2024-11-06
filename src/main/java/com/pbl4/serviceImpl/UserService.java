@@ -3,10 +3,13 @@ package com.pbl4.serviceImpl;
 import java.util.ArrayList;
 
 import com.pbl4.model.DAOImpl.UserDAO;
+import com.pbl4.model.DAOImpl.RankDAO;
+import com.pbl4.model.DAOImpl.ProfileDAO;
 import com.pbl4.model.bean.RankModel;
 import com.pbl4.model.bean.UserModel;
 import com.pbl4.service.IUserService;
 import org.mindrot.jbcrypt.BCrypt;
+
 
 public class UserService implements IUserService {
 
@@ -16,15 +19,15 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserModel findByUserNameAndPasswordAndStatus(String userName, String password) {
-		ArrayList<UserModel> userList = UserDAO.getInstance().findByUserName(userName);
-		if (userList == null)
-			return null;
-		for (UserModel user : userList) {
-			if (BCrypt.checkpw(password, user.getPassword())) {
-				return user;
-			}
-		}
-		return null;
+	    // Tìm người dùng theo username
+	    UserModel user = UserDAO.getInstance().findByUserName(userName);
+	    if (user == null) {
+	        return null; 
+	    }
+	    if (BCrypt.checkpw(password, user.getPassword())) {
+	        return user; 
+	    }
+	    return null; 
 	}
 
 	@Override
@@ -93,5 +96,19 @@ public class UserService implements IUserService {
 	public String hashPassword(String password) {
 		return BCrypt.hashpw(password, BCrypt.gensalt());
 	}
-
+	
+	@Override 
+	public void insert(String username, String password, String email) {
+		
+		String hashpass = hashPassword(password);
+	    UserDAO.getInstance().insert(username, hashpass);
+	    long userId = UserDAO.getInstance().findByUserName(username).getId();
+	    RankDAO.getInstance().insert(userId);
+	    ProfileDAO.getInstance().insert(userId, email); 
+	}
+	@Override
+	public boolean checkUserNameExists(String userName) {
+	    UserModel user = UserDAO.getInstance().findByUserName(userName);
+	    return user != null;
+	}
 }

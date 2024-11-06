@@ -11,4 +11,5 @@ public interface IRankDAO extends DAOInterface<RankModel> {
     double calculateRankPercentage(long userId);
     int updateElo(long userId, int eloAfterChange);
     int updateGames(long userId,int totalMatches,int win,int draws,int lose);
+    void insert(long userId);
 }

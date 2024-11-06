@@ -57,13 +57,21 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 	}
 	//de check mat khau nen username=?
 	@Override
-	public ArrayList<UserModel> findByUserName(String userName) {
-		StringBuilder sql = new StringBuilder("Select * from Userr U ");
-		sql.append(" inner join Rolee r on r.id=U.idRole");
-		sql.append(" where username=?");
+	public UserModel findByUserName(String userName) {
+	    StringBuilder sql = new StringBuilder("SELECT * FROM Userr U ");
+	    sql.append("INNER JOIN Rolee r ON r.id = U.idRole ");
+	    sql.append("WHERE username = ?");
+	    
 	    ArrayList<UserModel> userList = query(sql.toString(), new UserMapper(), userName);
-	    return userList.isEmpty() ? null : userList;
+	    return userList.isEmpty() ? null : userList.get(0); 
 	}
+	@Override
+	public void insert(String username, String password) {
+	    String sql = "INSERT INTO Userr (username, password, fullname, createdate, modifieddate, createby, modifiedby, idRole) " +
+	                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?, ?)";
+	    insert(sql, username, password, username, "Admin","Admin", 2);
+	}
+	
 }
 
 	

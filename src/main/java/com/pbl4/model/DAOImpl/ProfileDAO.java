@@ -24,4 +24,10 @@ public class ProfileDAO extends DAOimple<ProfileModel> implements IProfileDAO {
         return update(sql, profile.getImageOfUser(), profile.getDescription(), profile.getEmail(),
                       profile.getCreateDate(), profile.getModifiedDate(), profile.getCreateBy(), profile.getModifiedBy(), profile.getUserId()) > 0;
     }
+    @Override
+    public void insert(long userId, String email) {
+        String sql = "INSERT INTO Profile (userId, imageOfUser, description, email, createdate, modifieddate, createby, modifiedby) " +
+                     "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?)";
+        insert(sql, userId, null, null, email, "Admin", "Admin");
+    }
 }
