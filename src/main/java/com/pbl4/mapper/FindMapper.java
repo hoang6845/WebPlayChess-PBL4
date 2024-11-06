@@ -15,7 +15,7 @@ public class FindMapper implements RowMapper<FriendModel> {
 				Long idFriend = rs.getLong("id");
 				String namefriend = rs.getString("fullname");
 				String status = rs.getString("status");
-				t = new FriendModel(0, null, null, null, null, idFriend, status, namefriend);
+				t = new FriendModel(0, null, null, null, null,0, idFriend, status, namefriend);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

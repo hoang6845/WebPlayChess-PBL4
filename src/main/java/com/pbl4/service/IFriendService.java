@@ -10,4 +10,8 @@ public interface IFriendService extends IService{
 	ArrayList<FriendModel> getListSearchNewFr(Long Userid,String name);
 	
 	void addnewFriend(Long UserId, Long FriendId);
+	
+	void acceptFriend(Long UserId, Long FriendId);
+	
+	void deleteFriend(Long UserId, Long FriendId);
 }

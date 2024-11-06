@@ -2,10 +2,13 @@ package com.pbl4.model.DAOImpl;
 
 import java.util.ArrayList;
 
+import com.pbl4.SystemConstant.SystemConstant;
 import com.pbl4.mapper.FindMapper;
 import com.pbl4.mapper.FriendMapper;
+import com.pbl4.mapper.UserMapper;
 import com.pbl4.model.DAO.IFriendDAO;
 import com.pbl4.model.bean.FriendModel;
+import com.pbl4.model.bean.UserModel;
 
 public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 
@@ -13,13 +16,22 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 		return new FriendDAO();
 	}
 	
+	@Override 
+	public FriendModel findRelationshipById(Long userId, Long friendId) {
+		StringBuilder sql = new StringBuilder("Select * from friend_list f ");
+		sql.append(" inner join Userr on f.idFriend = USERr.id");
+		sql.append(" where idUser=? and idFriend=?");
+	    ArrayList<FriendModel> ar = query(sql.toString(), new FriendMapper(), userId, friendId);
+	    return ar.isEmpty() ? null : ar.get(0);
+	}
+
 	@Override
 	public ArrayList<FriendModel> getListFriend(Long id) {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder("Select * from friend_list f ");
 		sql.append(" inner join Userr on f.idFriend = USERr.id");
-		sql.append(" where idUser=? ");
-		ArrayList<FriendModel> ar= query(sql.toString(),new FriendMapper(), id);
+		sql.append(" where idUser=? and status=?");
+		ArrayList<FriendModel> ar= query(sql.toString(),new FriendMapper(), id,"accepted");
 		return ar.isEmpty()?null:ar;
 	}
 
@@ -40,6 +52,19 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 		StringBuilder sql2 = new StringBuilder("insert into friend_list(idUser,idfriend,status) values (?,?,'pending')");
 		update(sql1.toString(), Userid,FriendId);
 		update(sql2.toString(), FriendId,Userid);
+	}
+	@Override
+	public boolean updateFriend(FriendModel friend) {
+	    if (friend.getStatus() != null) {
+	        String sql = "UPDATE friend_list SET status = ?, createdate = ?, modifieddate = ?, createby = ?, modifiedby = ? "+
+	        "WHERE idUser = ? AND idFriend = ?";
+	        int rowsAffected = update(sql, friend.getStatus(),friend.getCreateDate(),friend.getModifiedDate(),friend.getCreateBy(),friend.getModifiedBy(), friend.getIdUser(), friend.getIdFriend());
+	        return rowsAffected > 0; 
+	    } else {
+	    	String sql = "DELETE FROM friend_list WHERE (idUser = ? AND idFriend = ?) OR (idUser = ? AND idFriend = ?)";
+	    	int result = update(sql, friend.getIdUser(), friend.getIdFriend(), friend.getIdFriend(), friend.getIdUser());
+	    	return result > 0;
+	    }
 	}
 
 }

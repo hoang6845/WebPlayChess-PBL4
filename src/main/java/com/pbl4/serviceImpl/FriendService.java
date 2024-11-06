@@ -30,6 +30,23 @@ public class FriendService implements IFriendService{
 		FriendDAO.getInstance().addNewFriend(UserId, FriendId);
 		
 	}
-	
+
+    @Override
+    public void deleteFriend(Long userId, Long friendId) {
+    	FriendModel friend = FriendDAO.getInstance().findRelationshipById(userId, friendId);
+    	friend.setStatus(null);
+    	FriendDAO.getInstance().updateFriend(friend);
+    }
+
+    @Override
+    public void acceptFriend(Long userId, Long friendId) {
+    	FriendModel friend1 = FriendDAO.getInstance().findRelationshipById(userId, friendId);
+    	FriendModel friend2 = FriendDAO.getInstance().findRelationshipById(friendId, userId);
+    	friend1.setStatus("accepted");
+    	friend2.setStatus("accepted");
+    	FriendDAO.getInstance().updateFriend(friend1);
+    	FriendDAO.getInstance().updateFriend(friend2);
+    }
+
 	
 }

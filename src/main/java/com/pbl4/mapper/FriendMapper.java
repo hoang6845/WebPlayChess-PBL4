@@ -15,7 +15,7 @@ public class FriendMapper implements RowMapper<FriendModel> {
 		FriendModel t = new FriendModel();
 		try {
 				long id = rs.getLong("id");
-				long idUser = rs.getLong("idUser"); //đang không dùng tới idUser sau này cần thì thêm vào
+				long idUser = rs.getLong("idUser"); 
 				long idFriend = rs.getLong("idFriend");
 				String status = rs.getString("status");
 				Date createDate = rs.getDate("createdate");
@@ -23,7 +23,7 @@ public class FriendMapper implements RowMapper<FriendModel> {
 				String createBy = rs.getString("createby");
 				String modifiedBy = rs.getString("modifiedby");
 				String namefriend= rs.getString("fullname");
-				t = new FriendModel(id, createDate, createBy, modifiedDate, modifiedBy, idFriend, status, namefriend);
+				t = new FriendModel(id, createDate, createBy, modifiedDate, modifiedBy,idUser, idFriend, status, namefriend);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
