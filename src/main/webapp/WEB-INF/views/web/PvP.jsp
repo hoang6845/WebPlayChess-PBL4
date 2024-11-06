@@ -242,7 +242,7 @@
 			class="bg-gray-500 p-8 rounded-lg shadow-xl max-w-md w-full relative hover-effect">
 			<div class="flex justify-center items-center mb-4">
 				<h2 class="text-2xl font-bold text-center text-white"
-					id="playerName">${USERMODEL.fullname }</h2>
+					id="playerName">Trận đấu đã kết thúc</h2>
 			</div>
 			<div class="flex items-center mb-4 justify-around">
 				<i class="fa-solid fa-trophy text-5xl text-yellow-400 "></i> <img
@@ -253,10 +253,10 @@
 				<i class="fa-solid fa-trophy text-5xl text-yellow-400 "></i>
 			</div>
 			<div class="flex justify-center items-center">
-				<p class="font-bold text-l text-yellow-400" id="eloChange">+30</p>
+				<p class="font-bold text-l text-yellow-400" id="eloChange"></p>
 			</div>
 			<div class="flex justify-center items-center mb-4">
-				<p class="font-bold text-3xl text-white" id="eloReal">${USERMODEL.elo}</p>
+				<p class="font-bold text-3xl text-white" id="eloReal"></p>
 			</div>
 			<button
 				class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect"
@@ -266,7 +266,7 @@
 				class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">
 				Xem lại ván đấu</button>
 			<button
-				class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">
+				class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect" id="btn_taiDau">
 				Tái đấu</button>
 
 		</div>
@@ -580,7 +580,47 @@
     				 
     			}
     		}else if (receivedMessage.type == "updateMove"){
-    			
+    			if (receivedMessage.room == RoomGame){
+    				updateBoardSquaresArrayFromServer(receivedMessage.pieceArr);
+    				
+    				//set whiteModelPlayer, BlackModelPlayer
+    				WhiteModelPlayer = receivedMessage.whiteModel;
+    				BlackModelPlayer = receivedMessage.blackModel;
+    				console.log(WhiteModelPlayer);
+    				//set info whitePlayer
+    				let whitePlayerInfo = document.getElementById('whitePlayerInfo');
+					whitePlayerInfo.innerHTML = `<p class="font-bold cursor-pointer hover:underline" id="whitePlayerName"
+						onclick="showPlayerInfo()">WhitePlayer</p>
+						<div class="flex items-center">
+							<p class="text-sm text-gray-400" id="whitePlayerRank">Rank: ?</p>
+							<span class="ml-2 text-yellow-500">🏆</span>
+						</div>`
+					let whitePlayerName = whitePlayerInfo.querySelector('#whitePlayerName');
+					let whitePlayerRank = whitePlayerInfo.querySelector('#whitePlayerRank');
+					console.log(whitePlayerName);
+					whitePlayerName.textContent = receivedMessage.whiteModel.fullname ;
+					whitePlayerRank.textContent = receivedMessage.whiteModel.elo ;
+					let whitePlayerContent = document.getElementById('whitePlayerContent');
+					console.log(whitePlayerContent);
+					whitePlayerContent.appendChild(whitePlayerInfo)
+    				
+					//set info backPlayer
+					let blackPlayerInfo = document.getElementById('blackPlayerInfo');
+					blackPlayerInfo.innerHTML = `<p class="font-bold cursor-pointer hover:underline" id="blackPlayerName"
+						onclick="showPlayerInfo()"></p>
+						<div class="flex items-center">
+							<p class="text-sm text-gray-400" id="blackPlayerRank">Rank: ?</p>
+							<span class="ml-2 text-yellow-500">🏆</span>
+						</div>`
+					let blackPlayerName = blackPlayerInfo.querySelector('#blackPlayerName');
+					let blackPlayerRank = blackPlayerInfo.querySelector('#blackPlayerRank');
+					console.log(blackPlayerName);
+					blackPlayerName.textContent = receivedMessage.blackModel.fullname ;
+					blackPlayerRank.textContent = receivedMessage.blackModel.elo ;
+					let blackPlayerContent = document.getElementById('blackPlayerContent');
+					console.log(blackPlayerContent);
+					blackPlayerContent.appendChild(blackPlayerInfo)
+    			}
     		}else if(receivedMessage.type == "restart"){
     			if (receivedMessage.room == RoomGame){
     				whitePlayerTime = 10 * 60; 
@@ -633,6 +673,18 @@
     					pEloChange.textContent = "-"+elo;
     					pEloChange.classList.add('text-red-400');
     					pEloReal.textContent = ${USERMODEL.elo}-elo;
+    				}else {
+    					let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+    					trophyIcon.forEach(item=>{
+    						item.classList.add('victory');
+    					})
+    					if (receivedMessage.sender==WhiteModelPlayer.id){
+    						pEloChange.textContent = "White win";
+    					}else if (receivedMessage.sender==BlackModelPlayer.id){
+    						pEloChange.textContent = "Black win";
+    					}
+    					let btn_taiDau = document.getElementById('btn_taiDau');
+    					btn_taiDau.classList.add('hidden');
     				}
     			}
     		}else if(receivedMessage.type == "lose"){

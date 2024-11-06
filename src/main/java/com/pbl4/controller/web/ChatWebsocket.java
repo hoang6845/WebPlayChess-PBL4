@@ -3,6 +3,7 @@ package com.pbl4.controller.web;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.Stack;
 
 import com.google.gson.Gson;
 import com.pbl4.GamePlay.GameModePvP;
+import com.pbl4.model.bean.ChessInfo;
 import com.pbl4.model.bean.HistoryModel;
 import com.pbl4.model.bean.Message;
 import com.pbl4.model.bean.SessionPlayer;
@@ -131,29 +133,24 @@ public class ChatWebsocket {
 					}
 				} else if (players.size() >= 3) {
 					GameModePvP G = roomsGame.get(roomId);
-					Stack<Undo> u = G.getU();
-					Undo[] historyMove = new Undo[u.size()];
-					u.copyInto(historyMove);
-					for (Undo undo : historyMove) {
-						System.out.println(undo.getI() + " " + undo.getBegin().getX() + "," + undo.getBegin().getY()
-								+ " " + undo.getEnd().getX() + "," + undo.getEnd().getY());
-						if (!undo.getBegin().equals(G.Pdie)) {
-							// nước đi hợp lệ
-							for (Session client : clients) {
-								for (SessionPlayer player : players) {
-									if (client.equals(player.getSession())
-											&& player.getUserId() == Long.parseLong(responseMessage.getSender())) {
-										// tạo message "updateHistoryMove"
-										// client.getBasicRemote().sendText("");
-									}
-								}
+					ChessInfo[] arr = new ChessInfo[32];
+					Iterator<SessionPlayer> iterator = players.iterator();
+					SessionPlayer firstPlayer = iterator.next();
+					SessionPlayer SecondPlayer = iterator.next();
+					UserModel whiteModel = UserService.getInstance().FindUserById(firstPlayer.getUserId());
+					UserModel blackModel = UserService.getInstance().FindUserById(SecondPlayer.getUserId());
+					for (int i=0;i<16;i++) {
+						arr[i] = ChessInfo.getInstance().convertChessToChessInfo(G.mgr.Player[i], i);
+						arr[i+16] = ChessInfo.getInstance().convertChessToChessInfo(G.mgr.Computer[i], i);
+					}
+					ArrayList<ChessInfo> data = new ArrayList<ChessInfo>(Arrays.asList(arr));
+					Message updateBoardForNew = new Message(roomId, "updateMove", responseMessage.getSender(), "", whiteModel, blackModel,data );
+					String jsonUpdate = gson.toJson(updateBoardForNew);
+					for (Session client : clients) {
+						for (SessionPlayer player : players) {
+							if (client.equals(player.getSession())&&player.getUserId()==Long.parseLong(responseMessage.getSender())) {
+								client.getBasicRemote().sendText(jsonUpdate);
 							}
-							// test code tương đương vòng for trên
-//							for (SessionPlayer player : players) {
-//								if (player.getUserId()==Long.parseLong(responseMessage.getSender())){
-//									player.getSession().getBasicRemote().sendText("");
-//								}
-//							}
 						}
 					}
 				}
@@ -268,6 +265,12 @@ public class ChatWebsocket {
 					} else {
 						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
 					}
+				}
+				Stack<Undo> u = G.getU();
+				System.out.println("History move:-----------------");
+				while (!u.isEmpty()) {
+					System.out.println(u.lastElement().getI()+" "+u.getLast().getPorC()+" :"+"begin: "+u.getLast().getBegin().getX()+" "+u.getLast().getBegin().getY()+"to "+u.getLast().getEnd().getX()+" "+u.getLast().getEnd().getY());
+					u.pop();
 				}
 				HistoryService.getInstance().insert(h);
 			} else if (responseMessage.getType().equals("lose")) {

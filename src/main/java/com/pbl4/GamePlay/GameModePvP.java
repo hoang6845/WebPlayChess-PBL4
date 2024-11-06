@@ -14,7 +14,7 @@ import com.pbl4.model.bean.Queen;
 import com.pbl4.model.bean.Undo;
 
 public class GameModePvP {
-	ManagePlayer mgr = new ManagePlayer();
+	public ManagePlayer mgr = new ManagePlayer();
 	Stack<Undo> U = new Stack<Undo>();
 	public Location Pdie = new Location();
 	boolean turn;
