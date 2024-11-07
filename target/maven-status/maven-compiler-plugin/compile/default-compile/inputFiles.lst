@@ -1,6 +1,7 @@
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAO\IProfileDAO.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\Undo.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAOImpl\test.java
+C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\controller\web\FriendWebsocket.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\SystemConstant\SystemConstant.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\Knight.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\Queen.java
@@ -9,10 +10,10 @@ C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\C
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\HistoryMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\RowMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\RoleModel.java
-C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\controller\web\ChatWebsocket.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAO\IHistoryDAO.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\UserMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAO\IFriendDAO.java
+C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\controller\web\PvPWebsocket.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\controller\web\testBanCo.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAOImpl\ProfileDAO.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\controller\web\RankController.java
@@ -41,6 +42,7 @@ C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\C
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\ProfileMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\ProfileModel.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAO\IUserDAO.java
+C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\ChessInfo.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\Bishop.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\Pawn.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\utils\HttpUtil.java

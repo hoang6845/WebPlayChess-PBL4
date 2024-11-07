@@ -21,4 +21,8 @@ public interface IUserService extends IService {
 	boolean updateName(long userId, String newName);
 	
 	String hashPassword(String password);
+	
+	void insert(String username, String password, String email);
+	
+	boolean checkUserNameExists(String userName) ;
 }

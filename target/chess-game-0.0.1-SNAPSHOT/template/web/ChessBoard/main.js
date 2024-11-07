@@ -58,6 +58,65 @@ function updateBoardSquaresArray(
   currentSquare.pieceType = "blank";
   currentSquare.pieceId = "blank";
 }
+//update ban co cho nguoi moi join
+function updateBoardSquaresArrayFromServer(pieceArr){
+  console.log(pieceArr);
+	boardSquaresArray.forEach((element,index)=>{
+    let currentSquare = pieceArr.find((element1)=> element1.squareId == element.squareId);
+    console.log("da toi");
+    console.log(currentSquare);
+    if (currentSquare !== undefined){
+      if (currentSquare.pieceColor=="whiteDie" || currentSquare.pieceColor=="blackDie"){
+        let arrayElement = {
+          squareId: element.squareId,
+          pieceColor: "blank",
+          pieceType: "blank",
+          pieceId:"blank"
+        };
+        boardSquaresArray[index] = arrayElement;
+      }else{
+        let arrayElement = {
+          squareId: element.squareId,
+          pieceColor: currentSquare.pieceColor,
+          pieceType: currentSquare.pieceType,
+          pieceId:currentSquare.pieceId
+        };
+        boardSquaresArray[index] = arrayElement;
+      }
+    }else{
+      let arrayElement = {
+        squareId: element.squareId,
+        pieceColor: "blank",
+        pieceType: "blank",
+        pieceId:"blank"
+      };
+      boardSquaresArray[index] = arrayElement;
+    }
+  });
+  console.log(boardSquaresArray);
+  updateBoardFromServer(pieceArr)
+}
+
+function updateBoardFromServer(pieceArr){
+  let newPieceArr= pieceArr.filter((element)=>{
+    if (element.pieceColor=="whiteDie"|| element.pieceColor=="blackDie"){
+      const deathPiece = document.getElementById(element.pieceId);
+      deathPiece.remove();
+      return false;
+    }
+    return true;
+  });
+  newPieceArr.forEach((element)=>{
+    let pieceItem = document.getElementById(element.pieceId);
+    let squareItem= pieceItem.parentElement;
+    if (element.squareId!=squareItem.id){
+      let squareUpdate = document.getElementById(element.squareId);
+      pieceItem.remove();
+      squareUpdate.appendChild(pieceItem);
+    }
+  });
+}
+//update ban co cho nguoi moi join
 
 function deepCopyArray(array) {
   let arrayCopy = array.map(element => {
