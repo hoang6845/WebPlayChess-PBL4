@@ -44,18 +44,18 @@
  
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="bg-secondary rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold text-primary mb-4 text-white">Friend Requests</h2>
-                <ul class="space-y-4 h-64 overflow-y-auto">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Friend Requests</h2>
+                <ul class="space-y-4 h-64 overflow-y-auto" id="friendRequests">
                 	<c:forEach var="item" items="${USERMODEL.getFriendList() }">
                 		<c:if test="${item.status == 'pending' }">
-                			<li class="flex items-center justify-between p-2 rounded-md transition duration-300 hover:bg-gray-600 cursor-pointer">
+                			<li class="flex items-center justify-between p-2 rounded-md transition duration-300 hover:bg-gray-600 cursor-pointer" id=${item.idFriend}>
                         <div class="flex items-center">
                             <img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Alice" class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
                             <span class="font-medium text-white">${item.getNameFriend()}</span>
                         </div>
                         <div>
-                            <button class="bg-green-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95" aria-label="Accept friend request from Alice">Accept</button>
-                            <button class="bg-red-400 text-white px-3 py-1 rounded-md hover:bg-red-500 transition duration-300 active:scale-95" aria-label="Reject friend request from Alice">Reject</button>
+                            <button class="bg-green-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95" onclick="acceptFriend(${USERMODEL.id},this)" value=${item.idFriend}>Accept</button>
+                            <button class="bg-red-400 text-white px-3 py-1 rounded-md hover:bg-red-500 transition duration-300 active:scale-95" onclick="rejectFriend(${USERMODEL.id},this)" value=${item.idFriend}>Reject</button>
                         </div>
                     </li>
                 		</c:if>
@@ -66,8 +66,8 @@
             </div>
             
             <div class="bg-secondary rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold text-primary mb-4 text-white">Friend List</h2>
-                <ul class="space-y-4 h-64 overflow-y-auto">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Friend List</h2>
+                <ul class="space-y-4 h-64 overflow-y-auto" id="friendList">
                 	<c:forEach var="item" items="${USERMODEL.getFriendList() }">
                 		<c:if test="${item.status == 'accepted' }">
                 			 <li class="flex items-center justify-between hover:bg-gray-600 p-2 rounded-md transition duration-300 cursor-pointer">
@@ -106,7 +106,6 @@
     <script>
     	$('#searchFriend').on('submit',function(e){
     	    e.preventDefault(); 
-    	    
     	    const friendNameSearch={dataStr: $('#friendSearch').val()};
     	    console.log(friendNameSearch);
     	    searchFriend(friendNameSearch);
@@ -122,6 +121,7 @@
             dataType: 'json',
             success: function (results) {
             	console.log(results);
+    			searchResults.innerHTML=``;
                 results.forEach(result => {
                 	console.log(result);
                 	console.log(typeof result.nameFriend); // In ra kiểu dữ liệu
@@ -138,45 +138,52 @@
                             
                         </div>                    
                     `;
+                    li.setAttribute('Id',result.idFriend);
                     if (result.status == null){
+                    	
                         li.innerHTML +=` 
-                    	<button /* onclick="addFriend('${result.nameFriend}', this)" */ class="bg-blue-400 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition duration-300">Add Friend</button>
+                    	<button  onclick="addFriend(${USERMODEL.id},this)"   class="bg-blue-400 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition duration-300">Add Friend</button>
 					`;
+						const btn = li.querySelector('button');
+						btn.value = result.idFriend;
                     }else if (result.status == 'pending'){
+                    	 
                     	 li.innerHTML +=` 
                     	 <div>
-                         	<button class="bg-green-400 text-white px-3 py-1 rounded-md hover:bg-green-600 transition duration-300">Chấp nhận</button>
-                         	<button class="bg-accent1 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300">Từ chối</button>
-     					<div>
+                         	<button class="bg-green-400 text-white px-3 py-1 rounded-md hover:bg-green-600 transition duration-300" onclick="acceptFriend(${USERMODEL.id},this)" id="btn_accept">Chấp nhận</button>
+                         	<button class="bg-accent1 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300" onclick="rejectFriend(${USERMODEL.id},this)" id="btn_reject">Từ chối</button>
+     					</div>
                          	`;
+	                    	const btn_accept = li.querySelector('#btn_accept');
+	                    	console.log(result.idFriend);
+	             			btn_accept.value = result.idFriend;
+	             			console.log(btn_accept);
+	             			
+	             			const btn_reject = li.querySelector('#btn_reject');
+	             			btn_reject.value = result.idFriend;
+                       
                     }else if (result.status == 'accepted'){
                     	 li.innerHTML +=`
                     	 <div>
                           	<button  class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300">Bạn bè  	<i class="fa-solid fa-user-group"></i></button>
                           	<button  class="bg-yellow-400 text-white px-3 py-1 rounded-md hover:bg-yellow-500 transition duration-300">Thách đấu</button>
-                       	 <div>
+                       	 </div>
                           	`;
                     }else if (result.status == 'pended'){
                     	 li.innerHTML +=` 
                     	 <div>
                          	<button class="bg-gray-500 text-white px-3 py-1 rounded-md transition duration-300 cursor-not-allowed" disables>Đã gửi lời mời kết bạn</button>
                          
-     					<div>
+     					</div>
                          	`;
                     }
                     const span = li.querySelector('span');
         			span.textContent = result.nameFriend;;
-        			
                     searchResults.appendChild(li); 
-                    /* var h2 = document.createElement("h2");	
-
-                    h2.innerHTML = result.nameFriend;
-                    searchResults.appendChild(h2);  */
                 });
             	
             },
             error: function (error) {
-            	//window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=error_system";
             	 console.log(error);
             }
         });
@@ -203,95 +210,92 @@
             closeUnfriendModal();
             // You might want to remove the friend from the list or update the UI here
         }
-        /* function searchFriends() {
-            const searchTerm = document.getElementById('friendSearch').value.toLowerCase();
-            const searchResults = document.getElementById('searchResults');
-            searchResults.innerHTML = '';
-       
-
-            const filteredResults = mockResults.filter(result => result.name.toLowerCase().includes(searchTerm));
-
-            filteredResults.forEach(result => {
-                const li = document.createElement('li');
-                li.className = 'flex items-center justify-between bg-secondary p-2 rounded-md border border-tertiary';
-                li.innerHTML = `
-                    <div class="flex items-center">
-                        <img src="${result.img}" alt="${result.name}" class="w-10 h-10 rounded-full mr-3">
-                        <span class="text-white">${result.name}</span>
-                    </div>
-                    <button onclick="addFriend('${result.name}', this)" class="bg-accent1 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300">Add Friend</button>
-                `;
-                searchResults.appendChild(li);
-            });
-
-            if (filteredResults.length === 0) {
-                searchResults.innerHTML = '<li class="text-center text-white">No results found</li>';
-            }
-        } */
-
-        function addFriend(name, button) {
-            console.log(`Friend request sent to ${name}`);
-            button.textContent = "Đã gửi lời mời kết bạn";
-            button.classList.remove("bg-blue-400", "hover:bg-blue-600");
-            button.classList.add("bg-gray-500", "cursor-not-allowed");
-            button.disabled = true;
-        }
-
         
-        document.getElementById('friendSearch').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const suggestions = document.getElementById('searchSuggestions');
-            suggestions.innerHTML = '';
+    	let ws = new WebSocket('ws://localhost:8080/chess-game/friend'); 
 
-            if (searchTerm.length > 0) {
-                const matches = friendSuggestions.filter(name => name.toLowerCase().startsWith(searchTerm));
-                if (matches.length > 0) {
-                    matches.forEach(name => {
-                        const li = document.createElement('li');
-                        li.textContent = name;
-                        li.className = 'p-2 hover:bg-tertiary cursor-pointer';
-                        li.onclick = function() {
-                            document.getElementById('friendSearch').value = name;
-                            suggestions.innerHTML = '';
-                            suggestions.classList.add('hidden');
-                            searchFriends();
-                        };
-                        suggestions.appendChild(li);
-                    });
-                    suggestions.classList.remove('hidden');
-                } else {
-                    suggestions.classList.add('hidden');
-                }
-            } else {
-                suggestions.classList.add('hidden');
-            }
-        });
-
-        document.addEventListener('click', function(e) {
-            if (e.target.id !== 'friendSearch') {
-                document.getElementById('searchSuggestions').classList.add('hidden');
-            }
-        });
-    </script>
-    
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#4b5563",
-                        secondary: "#5f6c80",
-                        tertiary: "#374151",
-                        quaternary: "#6b7280",
-                        background: "#e5e7eb",
-                        accent1: "#ef4444",
-                        accent2: "#fbbf24"
-                    }
-                }
-            }
+        class MessageFriend {
+        	constructor(content, userId, friendId){
+        		this.content = content;
+        		this.userId= userId;
+        		this.friendId=friendId;
+        	}
         }
+        
+        function addFriend(userId,btn) {
+            console.log(`Friend request sent to btn.value`);
+            btn.textContent = "Đã gửi lời mời kết bạn";
+            btn.classList.remove("bg-blue-400", "hover:bg-blue-600");
+            btn.classList.add("bg-gray-500", "cursor-not-allowed");
+            btn.disabled = true;
+            const message = new MessageFriend("add", userId, btn.value)
+            ws.send(JSON.stringify(message));
+        }
+        
+ 		function rejectFriend(userId, btn){
+ 			const message = new MessageFriend("reject", userId, btn.value)
+      		ws.send(JSON.stringify(message));
+ 		}
+
+      	function acceptFriend(userId, btn){
+    
+      		const message = new MessageFriend("accept", userId, btn.value)
+      		ws.send(JSON.stringify(message));
+      	}
+      	
+      	ws.onmessage = function(event){
+      		console.log(event.data)
+      		const receivedMessage = JSON.parse(event.data);
+      		
+      		console.log('Received message:', receivedMessage);
+      		if (receivedMessage.content == "reject"){
+      			if (${USERMODEL.id}==receivedMessage.userId){
+      				const ulElement = document.getElementById("searchResults");
+      				if (ulElement.children.length>0){
+      						console.log(ulElement.children.length);
+      					 let liElements = ulElement.getElementsByTagName('li');
+      					 for (let i=0;i<liElements.length;i++){
+      						 let li = liElements[i];
+      						 if (li.getAttribute('id') == receivedMessage.friendId){
+      							console.log(li);
+      							let divElements = li.getElementsByTagName('div');
+      							Array.from(divElements).forEach(function(div){
+      								let buttonElements = div.getElementsByTagName('button');
+      								if (buttonElements.length > 0){
+      									console.log(buttonElements);
+      									Array.from(buttonElements).forEach(function(btn){
+      										btn.remove();
+      									});
+      									let newButton = document.createElement('button');
+      								  	newButton.setAttribute('onclick', `addFriend(${USERMODEL.id}, this)`);
+      								  	newButton.classList.add('bg-blue-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-blue-600', 'transition', 'duration-300');
+      								  	newButton.textContent = 'Add Friend';
+      								  	newButton.value = receivedMessage.friendId;
+      								  	div.appendChild(newButton);
+      								};
+      								
+      							})
+      							
+      						 }
+      					 }
+      				}
+      				// xóa friend Request
+      				const ul = document.getElementById("friendRequests");
+      				let li = ul.getElementsByTagName('li');
+      				for (let i=0;i<li.length;i++){
+      					let liItem= li[i];
+      					if (liItem.getAttribute('id') == receivedMessage.friendId){
+      						liItem.remove();
+      						break;
+      					}
+      				}
+      			}
+      		}
+      	}
+       
     </script>
+    
+    
+ 
 
 
 </body>
