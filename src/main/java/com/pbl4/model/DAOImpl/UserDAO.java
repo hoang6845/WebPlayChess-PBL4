@@ -68,8 +68,8 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 	@Override
 	public void insert(String username, String password) {
 	    String sql = "INSERT INTO Userr (username, password, fullname, createdate, modifieddate, createby, modifiedby, idRole) " +
-	                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?, ?)";
-	    insert(sql, username, password, username, "Admin","Admin", 2);
+	                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?)";
+	    insert(sql, username, password, username, null ,null, null, 2);
 	}
 	
 }

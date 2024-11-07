@@ -22,7 +22,6 @@ public interface IUserService extends IService {
 	
 	String hashPassword(String password);
 	
-	void insert(String username, String password, String email);
-	
-	boolean checkUserNameExists(String userName) ;
+	boolean insert(String username, String password, String email);
+
 }

@@ -19,8 +19,8 @@ public class test {
     public static void main(String[] args) {
         FriendService friendService = FriendService.getInstance();
         UserService u = UserService.getInstance();
-//        u.insert("alo123123", "123456", "12312@");
-        System.out.print(u.checkUserNameExists("alo1231234"));
+       System.out.println(u.insert("havadat", "123456", "12312@"));
+        
 //        // Test getListFriend
 //        Long testUserId = 1L;
 //        ArrayList<FriendModel> friendsList = friendService.getListFriend(testUserId);

@@ -98,17 +98,15 @@ public class UserService implements IUserService {
 	}
 	
 	@Override 
-	public void insert(String username, String password, String email) {
-		
+	public boolean insert(String username, String password, String email) {
+		UserModel user = UserDAO.getInstance().findByUserName(username);
+		if(user != null) return false;
 		String hashpass = hashPassword(password);
 	    UserDAO.getInstance().insert(username, hashpass);
 	    long userId = UserDAO.getInstance().findByUserName(username).getId();
 	    RankDAO.getInstance().insert(userId);
-	    ProfileDAO.getInstance().insert(userId, email); 
+	    ProfileDAO.getInstance().insert(userId, email);
+	    return true;
 	}
-	@Override
-	public boolean checkUserNameExists(String userName) {
-	    UserModel user = UserDAO.getInstance().findByUserName(userName);
-	    return user != null;
-	}
+
 }
