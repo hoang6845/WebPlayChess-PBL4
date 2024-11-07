@@ -10,6 +10,25 @@ public class Message {
 	private UserModel whiteModel;
 	private UserModel blackModel;
 	private ArrayList<ChessInfo> pieceArr;
+	
+	//friend
+	private long userId;
+	private long friendId;
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public long getFriendId() {
+		return friendId;
+	}
+
+	public void setFriendId(long friendId) {
+		this.friendId = friendId;
+	}
 	public Message(String room, String type, String sender, String content) {
 		super();
 		this.room = room;
@@ -39,7 +58,12 @@ public class Message {
 		this.pieceArr = pieceArr;
 	}
 
-
+	public Message(String content, long userId, long friendId) {
+		super();
+		this.content = content;
+		this.userId = userId;
+		this.friendId = friendId;
+	}
 
 	public Message() {
 		

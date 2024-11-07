@@ -30,8 +30,8 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder("Select * from friend_list f ");
 		sql.append(" inner join Userr on f.idFriend = USERr.id");
-		sql.append(" where idUser=? and status=?");
-		ArrayList<FriendModel> ar= query(sql.toString(),new FriendMapper(), id,"accepted");
+		sql.append(" where idUser=?");
+		ArrayList<FriendModel> ar= query(sql.toString(),new FriendMapper(), id);
 		return ar.isEmpty()?null:ar;
 	}
 

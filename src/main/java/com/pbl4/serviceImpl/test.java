@@ -51,12 +51,13 @@ public class test {
 //        }
 
         // Test acceptFriend
-        ArrayList<FriendModel> friendsList = friendService.getListFriend(2l);
+        ArrayList<FriendModel> friendsList = friendService.getListFriend(1l);
         if (friendsList != null && !friendsList.isEmpty()) {
             System.out.println("getListFriend test passed. Number of friends: " + friendsList.size());
             for (FriendModel friend : friendsList) {
                 System.out.println("Friend ID: " + friend.getIdFriend());
                 System.out.println("Friend Name: " + friend.getNameFriend());
+                System.out.println("Friend status: " + friend.getStatus());
             }
         }
         ArrayList<FriendModel> a = friendService.getListSearchNewFr(2l,"G");

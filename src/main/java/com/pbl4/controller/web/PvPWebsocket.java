@@ -37,8 +37,8 @@ import jakarta.websocket.server.ServerEndpoint;
 import jakarta.websocket.server.ServerEndpointConfig;
 import jakarta.websocket.server.ServerEndpointConfig.Configurator;
 
-@ServerEndpoint(value = "/PvP", configurator = ChatWebsocket.SessionConfigurator.class)
-public class ChatWebsocket {
+@ServerEndpoint(value = "/PvP", configurator = PvPWebsocket.SessionConfigurator.class)
+public class PvPWebsocket {
 	private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
 	private static Map<String, Set<SessionPlayer>> rooms = new HashMap<String, Set<SessionPlayer>>();
@@ -70,7 +70,6 @@ public class ChatWebsocket {
 		// Chuyển đổi đối tượng thành chuỗi JSON
 		String jsonResponse = gson.toJson(responseMessage);
 		System.out.println(jsonResponse);
-		System.out.println(mess.getContent());
 		// Gửi tin nhắn đến tất cả các client khác
 		synchronized (clients) {
 			if (responseMessage.getType().equals("join")) {
