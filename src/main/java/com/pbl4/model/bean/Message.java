@@ -14,21 +14,9 @@ public class Message {
 	//friend
 	private long userId;
 	private long friendId;
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
-	public long getFriendId() {
-		return friendId;
-	}
-
-	public void setFriendId(long friendId) {
-		this.friendId = friendId;
-	}
+	private String friendName;
+	private String userName;
+	
 	public Message(String room, String type, String sender, String content) {
 		super();
 		this.room = room;
@@ -65,9 +53,52 @@ public class Message {
 		this.friendId = friendId;
 	}
 
+	
+	
+	public Message(String content, long userId, long friendId,  String userName,String friendName) {
+		super();
+		this.content = content;
+		this.userId = userId;
+		this.friendId = friendId;
+		this.friendName = friendName;
+		this.userName = userName;
+	}
+
 	public Message() {
 		
 	}
+	public String getFriendName() {
+		return friendName;
+	}
+
+	public void setFriendName(String friendName) {
+		this.friendName = friendName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public long getFriendId() {
+		return friendId;
+	}
+
+	public void setFriendId(long friendId) {
+		this.friendId = friendId;
+	}
+	
 	
 	public String getRoom() {
 		return room;

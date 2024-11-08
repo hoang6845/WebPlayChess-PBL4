@@ -12,7 +12,7 @@ public interface IUserDAO extends DAOInterface<UserModel> {
 	
 	ArrayList<UserModel> findUserByName(String mname);
 	
-	String findUserNameById(long id);
+	String findFullnameById(long id);
 	
 	boolean updateUser(UserModel user);
 	

@@ -17,7 +17,7 @@ public class HistoryService implements IHistoryService {
         ArrayList<HistoryModel> result= HistoryDAO.getInstance().findAllByPlayerId(playerId);
         for (HistoryModel item: result) {
         	item.setEloChange(item.calculateEloChange(playerId));
-        	item.setOpponentName(UserService.getInstance().findUserNameById(item.getOpId(playerId)));
+        	item.setOpponentName(UserService.getInstance().findFullnameById(item.getOpId(playerId)));
         }
         return result;
     }

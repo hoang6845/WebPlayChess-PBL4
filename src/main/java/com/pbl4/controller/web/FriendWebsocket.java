@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.pbl4.model.bean.Message;
 import com.pbl4.model.bean.SessionPlayer;
 import com.pbl4.serviceImpl.FriendService;
+import com.pbl4.serviceImpl.UserService;
 
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -36,7 +37,11 @@ public class FriendWebsocket {
 				FriendService.getInstance().addnewFriend(responseMessage.getUserId(), responseMessage.getFriendId());
 			}else if (responseMessage.getContent().equals("accept")) {
 				FriendService.getInstance().acceptFriend(responseMessage.getUserId(), responseMessage.getFriendId());
-				
+				Message acceptSuccess = new Message("accept", responseMessage.getUserId(), responseMessage.getFriendId(),UserService.getInstance().findFullnameById(responseMessage.getUserId()),UserService.getInstance().findFullnameById(responseMessage.getFriendId()));
+				String jsonAccept = gson.toJson(acceptSuccess);
+				for (Session client : clients) {
+							client.getBasicRemote().sendText(jsonAccept);
+				}
 			}else if (responseMessage.getContent().equals("reject")) {
 				FriendService.getInstance().deleteFriend(responseMessage.getUserId(), responseMessage.getFriendId());
 				Message rejectSuccess = new Message("reject", responseMessage.getUserId(), responseMessage.getFriendId());

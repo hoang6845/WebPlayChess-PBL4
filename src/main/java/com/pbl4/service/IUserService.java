@@ -11,7 +11,7 @@ public interface IUserService extends IService {
 
 	ArrayList<UserModel> findUserByName(String mname);
 	
-	String findUserNameById(long id);
+	String findFullnameById(long id);
 	
 	UserModel FindUserById(long id);
 	

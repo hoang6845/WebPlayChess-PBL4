@@ -77,7 +77,7 @@ public class PvPWebsocket {
 				rooms.putIfAbsent(roomId, new LinkedHashSet<SessionPlayer>());
 				Set<SessionPlayer> players = rooms.get(roomId);
 				String senderName = UserService.getInstance()
-						.findUserNameById(Long.parseLong(responseMessage.getSender()));
+						.findFullnameById(Long.parseLong(responseMessage.getSender()));
 				SessionPlayer newPlayer = new SessionPlayer(session, senderName,
 						Long.parseLong(responseMessage.getSender()));
 				players.add(newPlayer);
@@ -155,7 +155,7 @@ public class PvPWebsocket {
 				}
 			} else if (responseMessage.getType().equals("chat")) {
 				String senderName = UserService.getInstance()
-						.findUserNameById(Long.parseLong(responseMessage.getSender()));
+						.findFullnameById(Long.parseLong(responseMessage.getSender()));
 				String roomId = responseMessage.getRoom();
 				Set<SessionPlayer> players = rooms.get(roomId);
 				Message chatMessage = new Message(roomId, "chat", senderName, responseMessage.getContent());
@@ -171,7 +171,7 @@ public class PvPWebsocket {
 
 			} else if (responseMessage.getType().equals("out")) {
 				String senderName = UserService.getInstance()
-						.findUserNameById(Long.parseLong(responseMessage.getSender()));
+						.findFullnameById(Long.parseLong(responseMessage.getSender()));
 				String roomId = responseMessage.getRoom();
 				Set<SessionPlayer> players = rooms.get(roomId);
 				for (SessionPlayer player : players) {

@@ -43,9 +43,9 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public String findUserNameById(long id) {
+	public String findFullnameById(long id) {
 		// TODO Auto-generated method stub
-		return UserDAO.getInstance().findUserNameById(id);
+		return UserDAO.getInstance().findFullnameById(id);
 	}
 
 	@Override

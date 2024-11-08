@@ -30,7 +30,7 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 	}
 
 	@Override
-	public String findUserNameById(long id) {
+	public String findFullnameById(long id) {
 		StringBuilder sql =  new StringBuilder("Select * from Userr U");
 		sql.append(" inner join Rolee r on r.id=U.idRole");
 		sql.append(" Where U.id = ? and codeRole=?");
