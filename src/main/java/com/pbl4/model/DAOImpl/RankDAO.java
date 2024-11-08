@@ -39,7 +39,11 @@ public class RankDAO extends DAOimple<RankModel> implements IRankDAO {
         int mytopRank = findRankPosition(userId);
         String sql = "SELECT COUNT(*) FROM rank WHERE userId IN (SELECT id FROM userr WHERE idRole = 2)";
         long allRank = countItems(sql);
-        return (double) mytopRank / allRank * 100;
+        System.out.println("mytiorank "+mytopRank+" "+allRank );
+        String formatted = String.format("%.2f", (double) mytopRank / allRank * 100);
+        formatted = formatted.replace(",", "."); 
+        return Double.parseDouble(formatted);
+
     }
 
 	@Override

@@ -92,7 +92,9 @@ public class RankModel extends AbstractModel<RankModel> {
 	}
 
 	public double getWinRate() {
-        return (double) (this.win) / totalMatches * 100; 
+		String formatted = String.format("%.2f", (double) (this.win) / totalMatches * 100);
+		formatted = formatted.replace(",", ".");
+		return Double.parseDouble(formatted);
     }
 
 }

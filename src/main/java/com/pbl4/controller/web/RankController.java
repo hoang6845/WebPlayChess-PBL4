@@ -29,7 +29,7 @@ public class RankController extends HttpServlet {
 				RankModel MyRankModel = RankService.getInstance().findByUserId(model.getId());
 				MyRankModel.setRankPosition(RankService.getInstance().findRankPosition(model.getId()));
 				System.out.println(MyRankModel.getRankPosition());
-				MyRankModel.setRankPositionPercentage(model.getId());
+				MyRankModel.setRankPositionPercentage(RankService.getInstance().calculateRankPercentage(model.getId()));
 				req.setAttribute("RANKMODEL",MyRankModel);
 				
 				ArrayList<UserModel> PlayerRanking = UserService.getInstance().getTop10UserRanks();
