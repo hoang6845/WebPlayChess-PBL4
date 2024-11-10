@@ -246,7 +246,7 @@
             // You might want to remove the friend from the list or update the UI here
         }
         
-    	let ws = new WebSocket('ws://localhost:8080/chess-game/friend'); 
+    	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/friend'); 
 
         class MessageFriend {
         	constructor(content, userId, friendId){
