@@ -32,7 +32,6 @@ public class HomeController extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("GetHomeControllerWeb");
 		System.out.println(req.getSession());
-		SessionUtil.getInstance().setSession(req);
 		String action = req.getParameter("action");
 		String page = req.getParameter("page");
 		UserModel modal= (UserModel)SessionUtil.getInstance().getValue(req, "USERMODEL");
@@ -56,6 +55,7 @@ public class HomeController extends HttpServlet {
 			rd.forward(req, resp);
 		}else if (action!=null && action.equals("logout")) {
 			SessionUtil.getInstance().removeValue(req, "USERMODEL");
+			SessionUtil.getInstance().removeValue(req, "listMove");
 			resp.sendRedirect(req.getContextPath()+"/trang-chu");
 		}else {
 			System.out.print("vao roi");

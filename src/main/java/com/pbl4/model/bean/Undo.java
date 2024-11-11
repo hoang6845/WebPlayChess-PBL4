@@ -18,6 +18,13 @@ public class Undo {
 	public Undo() {
 		
 	}
+	public Undo(Undo u) {
+		this.i = u.getI();
+		PorC = u.getPorC();
+		this.begin = u.getBegin();
+		this.end = u.getEnd();
+		this.checkQueen = u.checkQueen;
+	}
 	public int getI() {
 		return i;
 	}

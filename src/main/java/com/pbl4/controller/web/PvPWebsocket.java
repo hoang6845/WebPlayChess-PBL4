@@ -12,17 +12,20 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.pbl4.GamePlay.GameModePvP;
 import com.pbl4.model.bean.ChessInfo;
 import com.pbl4.model.bean.HistoryModel;
+import com.pbl4.model.bean.HistoryMoveOfGame;
 import com.pbl4.model.bean.Message;
 import com.pbl4.model.bean.SessionPlayer;
 import com.pbl4.model.bean.Undo;
 import com.pbl4.model.bean.UserModel;
 import com.pbl4.serviceImpl.HistoryService;
 import com.pbl4.serviceImpl.UserService;
+import com.pbl4.utils.SessionUtil;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.EndpointConfig;
@@ -58,7 +61,9 @@ public class PvPWebsocket {
 	public void onOpen(Session session, EndpointConfig config) {
 		clients.add(session);
 		System.out.println("New connection: " + session.getId());
+		//lấy httpsession từ websocket và truyền làm thuộc tính của session
 		httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+		session.getUserProperties().put("httpSession", httpSession);
 	}
 
 	@OnMessage
@@ -180,16 +185,17 @@ public class PvPWebsocket {
 				String roomId = responseMessage.getRoom();
 				Set<SessionPlayer> players = rooms.get(roomId);
 			
-				
-				Message outMessage = new Message(roomId, "out", responseMessage.getSender(),
-						String.valueOf(players.size()-1));
-				String jsonoutMessage = gson.toJson(outMessage);
-				for (Session client : clients) {
-					
-					if (client!=session) {
-						client.getBasicRemote().sendText(jsonoutMessage);						
-					}else {
-						System.out.println("Session " + session.getId()+ ": m out r không gửi");
+				if (players!=null) {				
+					Message outMessage = new Message(roomId, "out", responseMessage.getSender(),
+							String.valueOf(players.size()-1));
+					String jsonoutMessage = gson.toJson(outMessage);
+					for (Session client : clients) {
+						
+						if (client!=session) {
+							client.getBasicRemote().sendText(jsonoutMessage);						
+						}else {
+							System.out.println("Session " + session.getId()+ ": m out r không gửi");
+						}
 					}
 				}
 				
@@ -200,7 +206,7 @@ public class PvPWebsocket {
 				 * : clients) { client.getBasicRemote().sendText(jsonRestartMessage); } }
 				 */
 
-				if (players.size()>=2) {
+				if (players!=null&&players.size()>=2) {
 					Iterator<SessionPlayer> iterator = players.iterator();
 					SessionPlayer whitePlayer = iterator.next();
 					SessionPlayer blackPlayer = iterator.next();
@@ -213,6 +219,17 @@ public class PvPWebsocket {
 						Message endGame = new Message(roomId, "lose", responseMessage.getSender(), "");
 						endGame.setContent(whitePlayer.getNameSession());
 						String jsonEndGame = gson.toJson(endGame);
+						if (players!=null) {			
+							for (SessionPlayer player : players) {
+								if (player.getId().equals(session.getId())) {
+									players.remove(player);
+									break;
+								}
+							}
+							System.out.println("Session " + session.getId() + " Player " + senderName + " out room: " + roomId);
+							System.out.println("Room " + roomId + " có " + players.size() + " Player");
+							
+						}
 						for (Session client : clients) {
 							for (SessionPlayer player : players) {
 								if (client.equals(player.getSession())) {
@@ -220,9 +237,10 @@ public class PvPWebsocket {
 								}
 							}
 						}
-						HistoryService.getInstance().insert(h);
-						roomsGame.remove(roomId);
-						rooms.remove(roomId);
+//						HistoryService.getInstance().insert(h);
+//						roomsGame.remove(roomId);
+//						rooms.remove(roomId);
+						GameEnd(h,roomId);
 					} else if (Long.parseLong(responseMessage.getSender()) == blackPlayer.getUserId()) {
 						HistoryModel h = new HistoryModel();
 						h.setWhiteId(whitePlayer.getUserId());
@@ -232,6 +250,17 @@ public class PvPWebsocket {
 						Message endGame = new Message(roomId, "lose", responseMessage.getSender(), "");
 						endGame.setContent(blackPlayer.getNameSession());
 						String jsonEndGame = gson.toJson(endGame);
+						if (players!=null) {			
+							for (SessionPlayer player : players) {
+								if (player.getId().equals(session.getId())) {
+									players.remove(player);
+									break;
+								}
+							}
+							System.out.println("Session " + session.getId() + " Player " + senderName + " out room: " + roomId);
+							System.out.println("Room " + roomId + " có " + players.size() + " Player");
+							
+						}
 						for (Session client : clients) {
 							for (SessionPlayer player : players) {
 								if (client.equals(player.getSession())) {
@@ -239,25 +268,24 @@ public class PvPWebsocket {
 								}
 							}
 						}
-						HistoryService.getInstance().insert(h);
-						roomsGame.remove(roomId);
-						rooms.remove(roomId);
+//						HistoryService.getInstance().insert(h);
+//						roomsGame.remove(roomId);
+//						rooms.remove(roomId);
+						GameEnd(h, roomId);
 					}
 				}
-				for (SessionPlayer player : players) {
-					if (player.getId().equals(session.getId())) {
-						players.remove(player);
-						break;
+				else if (players!=null) {			
+					for (SessionPlayer player : players) {
+						if (player.getId().equals(session.getId())) {
+							players.remove(player);
+							break;
+						}
 					}
+					System.out.println("Session " + session.getId() + " Player " + senderName + " out room: " + roomId);
+					System.out.println("Room " + roomId + " có " + players.size() + " Player");
+					
 				}
-				System.out.println("Session " + session.getId() + " Player " + senderName + " out room: " + roomId);
-				System.out.println("Room " + roomId + " có " + players.size() + " Player");
-				
-				if (players.size()==0) {
-					rooms.remove(roomId);
-					System.out.println("Đã xóa phòng "+ roomId);
-				}
-				System.out.println("Đã chạy xong out");
+	
 			} else if (responseMessage.getType().equals("move")) {
 				String roomId = responseMessage.getRoom();
 				String content = responseMessage.getContent();
@@ -325,7 +353,11 @@ public class PvPWebsocket {
 						System.out.println("!!!!!!!!!!Lỗi chưa tìm được người chiến thắng");
 					}
 				}
-				Stack<Undo> u = G.getU();
+
+				Stack<Undo> u = new Stack<>();
+				for (Undo undo : G.getU()) {
+				    u.push(new Undo(undo));  
+				}
 				System.out.println("History move:-----------------");
 				while (!u.isEmpty()) {
 					System.out.println(u.lastElement().getI() + " " + u.getLast().getPorC() + " :" + "begin: "
@@ -333,9 +365,10 @@ public class PvPWebsocket {
 							+ u.getLast().getEnd().getX() + " " + u.getLast().getEnd().getY());
 					u.pop();
 				}
-				HistoryService.getInstance().insert(h);
-				roomsGame.remove(roomId);
-				rooms.remove(roomId);
+//				HistoryService.getInstance().insert(h);
+//				roomsGame.remove(roomId);
+//				rooms.remove(roomId);
+				GameEnd(h, roomId);
 			} else if (responseMessage.getType().equals("lose")) {
 				String roomId = responseMessage.getRoom();
 				GameModePvP G = roomsGame.get(roomId);
@@ -375,9 +408,10 @@ public class PvPWebsocket {
 						}
 					}
 				}
-				HistoryService.getInstance().insert(h);
-				roomsGame.remove(roomId);
-				rooms.remove(roomId);
+//				HistoryService.getInstance().insert(h);
+//				roomsGame.remove(roomId);
+//				rooms.remove(roomId);
+				GameEnd(h, roomId);
 			} else if (responseMessage.getType().equals("draw")) {
 				String roomId = responseMessage.getRoom();
 				Message wantDraw = new Message(roomId, "draw", responseMessage.getSender(), "");
@@ -445,9 +479,10 @@ public class PvPWebsocket {
 						}
 					}
 				}
-				HistoryService.getInstance().insert(h);
-				roomsGame.remove(roomId);
-				rooms.remove(roomId);
+//				HistoryService.getInstance().insert(h);
+//				roomsGame.remove(roomId);
+//				rooms.remove(roomId);
+				GameEnd(h, roomId);
 			}
 		}
 	}
@@ -466,6 +501,21 @@ public class PvPWebsocket {
 		} else { // Ghi lại các lỗi khác
 			throwable.printStackTrace();
 		}
+	}
+	
+	public void GameEnd(HistoryModel h, String roomId) {
+		HistoryService.getInstance().insert(h);
+		String whiteName = UserService.getInstance().findFullnameById(h.getWhiteId());
+		String blackName = UserService.getInstance().findFullnameById(h.getBlackId());
+		Stack<Undo> listMove = roomsGame.get(roomId).getU();
+		HistoryMoveOfGame hmg = new HistoryMoveOfGame(UUID.randomUUID().toString(), listMove, whiteName, blackName);
+		hmg.setResult(h.getResult());
+		Set<SessionPlayer> players = rooms.get(roomId);
+		for (SessionPlayer player:players) {
+			SessionUtil.getInstance().putValueBySession((HttpSession)player.getSession().getUserProperties().get("httpSession"),"HistoryMoveOfGame", hmg);
+		}
+		roomsGame.remove(roomId);
+		rooms.remove(roomId);
 	}
 
 	public ArrayList<Integer> ConvertChessBoardToBoard(String chessMove, String moveTo) {

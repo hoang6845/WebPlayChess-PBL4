@@ -257,7 +257,8 @@
 				onclick="goHome()">
 				Home</button>
 			<button
-				class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">
+				class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect"
+				onclick="goHistoryMove()">
 				Xem lại ván đấu</button>
 			<button
 				class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect" id="btn_taiDau">
@@ -388,6 +389,10 @@
     	};
     	
     	document.getElementById("btn_leaveRoom").addEventListener('click',goHome);
+    	
+    	function goHistoryMove(){
+    		 window.location.assign("/chess-game/historyMove");
+    	}
     	
     	function goHome(){
     		outRoom();
