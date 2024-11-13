@@ -962,6 +962,6 @@
 
     </script>
 
-	<script src="<c:url value='template/web/ChessBoard/main.js' />"></script>
+	<script src="<c:url value='/template/web/ChessBoard/main.js' />"></script>
 </body>
 </html>

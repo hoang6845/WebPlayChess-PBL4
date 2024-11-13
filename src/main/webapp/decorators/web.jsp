@@ -51,23 +51,7 @@ body, html {
       //       	 this.blackModel = blackModel? new Model(blackModel.id, blackModel.fullname, blackModel.elo, blackModel.totalMatches):null;
              }
          }
-		  function dropSendToServer(pieceId,destinationSquareId){
-	        	const room = "${room}";
-	            console.log(room);
-	            const username = "${USERMODEL.id}";
-	        	const message = new Message(room,"move",username,pieceId+"|"+destinationSquareId);
-	        	console.log(message);
-	        	ws.send(JSON.stringify(message));
-	        }
-		  
-		  function endGameToServer(){
-			  	const room = "${room}";
-	            console.log(room);
-	            const userId = "${USERMODEL.id}";
-	            const message = new Message(room,"win",userId,"");
-	            console.log(message);
-	        	ws.send(JSON.stringify(message));
-		  }
+
 		</script>
 
 

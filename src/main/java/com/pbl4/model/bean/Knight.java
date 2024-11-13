@@ -15,31 +15,34 @@ public class Knight extends Chess {
 	}
 	@Override
 	public void PositiveMove(int[][] Board) {
-		int k = this.getIndex();
-		if ((P.x + 2 < 8) && (P.y + 1 < 8)
-				&& (Board[P.x + 2][P.y + 1] == 0 || this.getIndex() * Board[P.x + 2][P.y + 1] < 0))
-			this.updatePnew(P.x + 2, P.y + 1);
-		if ((P.x + 1 < 8) && (P.y + 2 < 8)
-				&& (Board[P.x + 1][P.y + 2] == 0 || this.getIndex() * Board[P.x + 1][P.y + 2] < 0))
-			this.updatePnew(P.x + 1, P.y + 2);
-		if ((P.x - 1 >= 0) && (P.y - 2 >= 0)
-				&& (Board[P.x - 1][P.y - 2] == 0 || this.getIndex() * Board[P.x - 1][P.y - 2] < 0))
-			this.updatePnew(P.x - 1, P.y - 2);
-		if ((P.x - 2 >= 0) && (P.y - 1 >= 0)
-				&& (Board[P.x - 2][P.y - 1] == 0 || this.getIndex() * Board[P.x - 2][P.y - 1] < 0))
-			this.updatePnew(P.x - 2, P.y - 1);
-		if ((P.x + 1 < 8) && (P.y - 2 >= 0)
-				&& (Board[P.x + 1][P.y - 2] == 0 || this.getIndex() * Board[P.x + 1][P.y - 2] < 0))
-			this.updatePnew(P.x + 1, P.y - 2);
-		if ((P.x - 1 >= 0) && (P.y + 2 < 8)
-				&& (Board[P.x - 1][P.y + 2] == 0 || this.getIndex() * Board[P.x - 1][P.y + 2] < 0))
-			this.updatePnew(P.x - 1, P.y + 2);
-		if ((P.x - 2 >= 0) && (P.y + 1 < 8)
-				&& (Board[P.x - 2][P.y + 1] == 0 || this.getIndex() * Board[P.x - 2][P.y + 1] < 0))
-			this.updatePnew(P.x - 2, P.y + 1);
-		if ((P.x + 2 < 8) && (P.y - 1 >= 0)
-				&& (Board[P.x + 2][P.y - 1] == 0 || this.getIndex() * Board[P.x + 2][P.y - 1] < 0))
-			this.updatePnew(P.x + 2, P.y - 1);
+		if (this.value==30) {
+			int k = this.getIndex();
+			if ((P.x + 2 < 8) && (P.y + 1 < 8)
+					&& (Board[P.x + 2][P.y + 1] == 0 || this.getIndex() * Board[P.x + 2][P.y + 1] < 0))
+				this.updatePnew(P.x + 2, P.y + 1);
+			if ((P.x + 1 < 8) && (P.y + 2 < 8)
+					&& (Board[P.x + 1][P.y + 2] == 0 || this.getIndex() * Board[P.x + 1][P.y + 2] < 0))
+				this.updatePnew(P.x + 1, P.y + 2);
+			if ((P.x - 1 >= 0) && (P.y - 2 >= 0)
+					&& (Board[P.x - 1][P.y - 2] == 0 || this.getIndex() * Board[P.x - 1][P.y - 2] < 0))
+				this.updatePnew(P.x - 1, P.y - 2);
+			if ((P.x - 2 >= 0) && (P.y - 1 >= 0)
+					&& (Board[P.x - 2][P.y - 1] == 0 || this.getIndex() * Board[P.x - 2][P.y - 1] < 0))
+				this.updatePnew(P.x - 2, P.y - 1);
+			if ((P.x + 1 < 8) && (P.y - 2 >= 0)
+					&& (Board[P.x + 1][P.y - 2] == 0 || this.getIndex() * Board[P.x + 1][P.y - 2] < 0))
+				this.updatePnew(P.x + 1, P.y - 2);
+			if ((P.x - 1 >= 0) && (P.y + 2 < 8)
+					&& (Board[P.x - 1][P.y + 2] == 0 || this.getIndex() * Board[P.x - 1][P.y + 2] < 0))
+				this.updatePnew(P.x - 1, P.y + 2);
+			if ((P.x - 2 >= 0) && (P.y + 1 < 8)
+					&& (Board[P.x - 2][P.y + 1] == 0 || this.getIndex() * Board[P.x - 2][P.y + 1] < 0))
+				this.updatePnew(P.x - 2, P.y + 1);
+			if ((P.x + 2 < 8) && (P.y - 1 >= 0)
+					&& (Board[P.x + 2][P.y - 1] == 0 || this.getIndex() * Board[P.x + 2][P.y - 1] < 0))
+				this.updatePnew(P.x + 2, P.y - 1);
+			
+		}
 	}
 //	public static void main(String ar[]) {
 //	Chess p = new Knight();

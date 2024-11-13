@@ -15,74 +15,77 @@ public class Queen extends Chess {
 	}
 	@Override
 	public void PositiveMove(int[][] Board) {
-		int k = this.getIndex();
-		for (int i = P.x + 1; i < 8; i++) {
-			if (Board[i][P.y] != 0) {
-				if (Board[i][P.y] * k < 0)
-					this.updatePnew(i, P.y);
-				break;
+		if (this.value==90) {
+			
+			int k = this.getIndex();
+			for (int i = P.x + 1; i < 8; i++) {
+				if (Board[i][P.y] != 0) {
+					if (Board[i][P.y] * k < 0)
+						this.updatePnew(i, P.y);
+					break;
+				}
+				this.updatePnew(i, P.y);
 			}
-			this.updatePnew(i, P.y);
-		}
-		for (int i = P.x - 1; i >= 0; i--) {
-			if (Board[i][P.y] != 0) {
-				if (Board[i][P.y] * k < 0)
-					this.updatePnew(i, P.y);
-				break;
+			for (int i = P.x - 1; i >= 0; i--) {
+				if (Board[i][P.y] != 0) {
+					if (Board[i][P.y] * k < 0)
+						this.updatePnew(i, P.y);
+					break;
+				}
+				this.updatePnew(i, P.y);
 			}
-			this.updatePnew(i, P.y);
-		}
-		for (int i = P.y + 1; i < 8; i++) {
-			if (Board[P.x][i] != 0) {
-				if (Board[P.x][i] * k < 0)
-					this.updatePnew(P.x, i);
-				break;
+			for (int i = P.y + 1; i < 8; i++) {
+				if (Board[P.x][i] != 0) {
+					if (Board[P.x][i] * k < 0)
+						this.updatePnew(P.x, i);
+					break;
+				}
+				this.updatePnew(P.x, i);
 			}
-			this.updatePnew(P.x, i);
-		}
-		for (int i = P.y - 1; i >= 0; i--) {
-			if (Board[P.x][i] != 0) {
-				if (Board[P.x][i] * k < 0)
-					this.updatePnew(P.x, i);
-				break;
+			for (int i = P.y - 1; i >= 0; i--) {
+				if (Board[P.x][i] != 0) {
+					if (Board[P.x][i] * k < 0)
+						this.updatePnew(P.x, i);
+					break;
+				}
+				this.updatePnew(P.x, i);
 			}
-			this.updatePnew(P.x, i);
-		}
-		for (int i = P.x + 1, j = P.y + 1; (i < 8 && j < 8); i++, j++) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x + 1, j = P.y + 1; (i < 8 && j < 8); i++, j++) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
-		}
-		for (int i = P.x + 1, j = P.y - 1; (i < 8 && j >= 0); i++, j--) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x + 1, j = P.y - 1; (i < 8 && j >= 0); i++, j--) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
-		}
-		for (int i = P.x - 1, j = P.y - 1; (i >= 0 && j >= 0); i--, j--) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x - 1, j = P.y - 1; (i >= 0 && j >= 0); i--, j--) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
-		}
-		for (int i = P.x - 1, j = P.y + 1; (i >= 0 && j < 8); i--, j++) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x - 1, j = P.y + 1; (i >= 0 && j < 8); i--, j++) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
 		}
 	}
 

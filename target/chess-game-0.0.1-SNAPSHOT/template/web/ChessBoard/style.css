@@ -117,5 +117,12 @@
 .draw{
 	animation: drawsEffect 1.5s ease-in-out infinite alternate;
 }
+.hover-effect {
+	transition: all 0.3s ease;
+}
 
+.hover-effect:hover {
+	transform: scale(1.05);
+	box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
 

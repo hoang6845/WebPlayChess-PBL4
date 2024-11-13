@@ -314,7 +314,7 @@
         		}else if(i==14){
         			pieceId="queend8";
         		}else if (i==15){
-        			pieceId=="kinge8"
+        			pieceId="kinge8"
         		}
         	}
         	else if(index == -1){
@@ -341,7 +341,7 @@
         		}else if(i==14){
         			pieceId="queend1";
         		}else if (i==15){
-        			pieceId=="kinge1"
+        			pieceId="kinge1"
         		}
         	}
         	return pieceId;

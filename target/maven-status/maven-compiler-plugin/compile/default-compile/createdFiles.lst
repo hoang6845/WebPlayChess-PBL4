@@ -19,7 +19,10 @@ com\pbl4\utils\FormUtil.class
 com\pbl4\model\bean\Message.class
 com\pbl4\serviceImpl\ProfileService.class
 com\pbl4\model\DAO\IProfileDAO.class
+com\pbl4\controller\web\HistoryMoveController.class
 com\pbl4\model\DAOImpl\UserDAO.class
+com\pbl4\controller\web\HomeController$1.class
+com\pbl4\controller\web\ProfileController$1.class
 com\pbl4\model\bean\RoleModel.class
 com\pbl4\controller\web\FriendController.class
 com\pbl4\model\bean\dataString.class
@@ -32,7 +35,6 @@ com\pbl4\model\bean\Queen.class
 com\pbl4\serviceImpl\FriendService.class
 com\pbl4\controller\admin\HomeController.class
 com\pbl4\model\DAO\IRankDAO.class
-com\pbl4\controller\web\PlayChessController.class
 com\pbl4\mapper\UserMapper.class
 com\pbl4\model\bean\AbstractModel.class
 com\pbl4\model\bean\HistoryModel.class
@@ -47,9 +49,11 @@ com\pbl4\mapper\RowMapper.class
 com\pbl4\model\bean\SessionPlayer.class
 com\pbl4\model\DAOImpl\ProfileDAO.class
 com\pbl4\model\DAOImpl\test.class
+com\pbl4\model\bean\HistoryMoveOfGame.class
 com\pbl4\controller\web\RankController.class
 com\pbl4\controller\web\PvPWebsocket$SessionConfigurator.class
 com\pbl4\service\IProfileService.class
+com\pbl4\controller\web\PvPController.class
 com\pbl4\model\DAOImpl\RankDAO.class
 com\pbl4\model\bean\ProfileModel.class
 com\pbl4\model\bean\ChessInfo.class
@@ -63,9 +67,11 @@ com\pbl4\model\bean\Knight.class
 com\pbl4\utils\SessionUtil.class
 com\pbl4\SystemConstant\SystemConstant.class
 com\pbl4\model\bean\RankModel.class
+com\pbl4\mapper\HistoryMapperAndName.class
 com\pbl4\model\DAOImpl\HistoryDAO.class
 com\pbl4\database\connectDatabase.class
 com\pbl4\model\bean\Pawn.class
 com\pbl4\model\DAO\IUserDAO.class
+com\pbl4\controller\web\PvCController.class
 com\pbl4\service\IHistoryService.class
 com\pbl4\model\DAO\DAOInterface.class

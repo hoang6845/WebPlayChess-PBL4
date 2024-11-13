@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="Friendurl" value="/friend"/>
+<c:url var="Friendurl" value="/friend" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +9,8 @@
 <title>Friend</title>
 </head>
 <body class="bg-background text-white">
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -28,82 +28,117 @@
         }
     </script>
 
- <div class="container mx-auto px-4 py-8">
- <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-white mb-4">Find Friends</h2>
-            <div class="relative">
-            	<form action='<c:url value='/friend'></c:url>' method="POST" id="searchFriend">
-            	<input type=hidden name="page" value="friend">
-                <input type="text" id="friendSearch" name="friendName" placeholder="Enter friend's name" class="w-full p-2 rounded-md border-2 border-tertiary focus:outline-none focus:ring-2 focus:ring-tertiary bg-quaternary text-white placeholder-gray-300">
-                <input type="submit" class="absolute right-0 top-0 bottom-0 bg-accent1 text-white px-4 py-2 rounded-r-md hover:bg-red-600 transition duration-300" value="Search"></input>            	
-            	</form>
-            </div>
-            <ul id="searchSuggestions" class="mt-2 bg-quaternary rounded-md shadow-lg hidden"></ul>
-            <ul id="searchResults" class="mt-4 space-y-2 max-h-48 overflow-y-auto bg-secondary rounded-md p-3 text-base"></ul>
-        </div>
- 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-secondary rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4 text-white">Friend Requests</h2>
-                <ul class="space-y-4 h-64 overflow-y-auto" id="friendRequests">
-                	<c:forEach var="item" items="${USERMODEL.getFriendList() }">
-                		<c:if test="${item.status == 'pending' }">
-                			<li class="flex items-center justify-between p-2 rounded-md transition duration-300 hover:bg-gray-600 cursor-pointer" id=${item.idFriend}>
-                        <div class="flex items-center">
-                            <img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Alice" class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
-                            <span class="font-medium text-white">${item.getNameFriend()}</span>
-                        </div>
-                        <div>
-                            <button class="bg-green-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95" onclick="acceptFriend(${USERMODEL.id},this)" value=${item.idFriend}>Accept</button>
-                            <button class="bg-red-400 text-white px-3 py-1 rounded-md hover:bg-red-500 transition duration-300 active:scale-95" onclick="rejectFriend(${USERMODEL.id},this)" value=${item.idFriend}>Reject</button>
-                        </div>
-                    </li>
-                		</c:if>
-                	</c:forEach>
-                    
-                    <!-- Add more friend requests here to test scrolling -->
-                </ul>
-            </div>
-            
-            <div class="bg-secondary rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4 text-white">Friend List</h2>
-                <ul class="space-y-4 h-64 overflow-y-auto" id="friendList">
-                	<c:forEach var="item" items="${USERMODEL.getFriendList() }">
-                		<c:if test="${item.status == 'accepted' }">
-                			 <li class="flex items-center justify-between hover:bg-gray-600 p-2 rounded-md transition duration-300 cursor-pointer">
-                        <div class="flex items-center">
-                            <img src="https://images.unsplash.com/photo-1645378999013-95abebf5f3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Charlie" class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
-                            <span class="font-medium text-white">${item.getNameFriend()}</span>
-                        </div>
-                        <div>
-                            <button class="bg-green-300 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95" aria-label="View Charlie's profile">Profile</button>
-                            <button class="bg-yellow-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-yellow-500 transition duration-300 active:scale-95" aria-label="Challenge Charlie to a game">Challenge</button>
-                            <button class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300 active:scale-95" aria-label="Unfriend Charlie" onclick="showUnfriendConfirmation('Charlie')">Unfriend</button>
-                        </div>
-                    </li>
-                		</c:if>
-                	</c:forEach>
-                	
-                   
-                    <!-- Add more friends here to test scrolling -->
-                </ul>
-            </div>
-        </div>
-    </div>
+	<div class="container mx-auto px-4 py-8">
+		<div class="mb-8">
+			<h2 class="text-2xl font-semibold text-white mb-4">Find Friends</h2>
+			<div class="relative">
+				<form action='<c:url value='/friend'></c:url>' method="POST"
+					id="searchFriend">
+					<input type=hidden name="page" value="friend"> <input
+						type="text" id="friendSearch" name="friendName"
+						placeholder="Enter friend's name"
+						class="w-full p-2 rounded-md border-2 border-tertiary focus:outline-none focus:ring-2 focus:ring-tertiary bg-quaternary text-white placeholder-gray-300">
+					<input type="submit"
+						class="absolute right-0 top-0 bottom-0 bg-accent1 text-white px-4 py-2 rounded-r-md hover:bg-red-600 transition duration-300"
+						value="Search"></input>
+				</form>
+			</div>
+			<ul id="searchSuggestions"
+				class="mt-2 bg-quaternary rounded-md shadow-lg hidden"></ul>
+			<ul id="searchResults"
+				class="mt-4 space-y-2 max-h-48 overflow-y-auto bg-secondary rounded-md p-3 text-base"></ul>
+		</div>
 
-    <!-- Unfriend Confirmation Modal -->
-    <div id="unfriendModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white p-6 rounded-lg shadow-xl">
-            <h3 class="text-xl font-bold text-gray-900 mb-4">Xác nhận xóa bạn</h3>
-            <p class="text-gray-700 mb-4">Bạn có chắc muốn xóa <span id="friendName" class="font-semibold"></span> khỏi danh sách bạn bè?</p>
-            <div class="flex justify-end space-x-4">
-                <button onclick="closeUnfriendModal()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition duration-300">Không</button>
-                <button onclick="unfriendConfirmed()" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300">Có, xóa bạn</button>
-            </div>
-        </div>
-    </div>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+			<div class="bg-secondary rounded-lg shadow-md p-6">
+				<h2 class="text-2xl font-semibold mb-4 text-white">Friend
+					Requests</h2>
+				<ul class="space-y-4 h-64 overflow-y-auto" id="friendRequests">
+					<c:forEach var="item" items="${USERMODEL.getFriendList() }">
+						<c:if test="${item.status == 'pending' }">
+							<li
+								class="flex items-center justify-between p-2 rounded-md transition duration-300 hover:bg-gray-600 cursor-pointer"
+								id=${item.idFriend}>
+								<div class="flex items-center">
+									<img
+										src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
+										class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
+									<span class="font-medium text-white">${item.getNameFriend()}</span>
+								</div>
+								<div>
+									<button
+										class="bg-green-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95"
+										onclick="acceptFriend(${USERMODEL.id},this)"
+										value=${item.idFriend}>Accept</button>
+									<button
+										class="bg-red-400 text-white px-3 py-1 rounded-md hover:bg-red-500 transition duration-300 active:scale-95"
+										onclick="rejectFriend(${USERMODEL.id},this)"
+										value=${item.idFriend}>Reject</button>
+								</div>
+							</li>
+						</c:if>
+					</c:forEach>
 
-    <script>
+					<!-- Add more friend requests here to test scrolling -->
+				</ul>
+			</div>
+
+			<div class="bg-secondary rounded-lg shadow-md p-6">
+				<h2 class="text-2xl font-semibold mb-4 text-white">Friend List</h2>
+				<ul class="space-y-4 h-64 overflow-y-auto" id="friendList">
+					<c:forEach var="item" items="${USERMODEL.getFriendList() }">
+						<c:if test="${item.status == 'accepted' }">
+							<li
+								class="flex items-center justify-between hover:bg-gray-600 p-2 rounded-md transition duration-300 cursor-pointer" id=${item.idFriend}>
+								<div class="flex items-center">
+									<img
+										src="https://images.unsplash.com/photo-1645378999013-95abebf5f3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
+										class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
+									<span class="font-medium text-white">${item.getNameFriend()}</span>
+								</div>
+								<div>
+									<button
+										class="bg-green-300 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95"
+										>Profile</button>
+									<button
+										class="bg-yellow-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-yellow-500 transition duration-300 active:scale-95"
+										>Challenge</button>
+									<button
+										class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300 active:scale-95"
+										onclick="showUnfriendConfirmation('${item.getNameFriend()}')">Unfriend</button>
+								</div>
+							</li>
+						</c:if>
+					</c:forEach>
+
+
+					<!-- Add more friends here to test scrolling -->
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- Unfriend Confirmation Modal -->
+	<div id="unfriendModal"
+		class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+		<div class="bg-white p-6 rounded-lg shadow-xl">
+			<h3 class="text-xl font-bold text-gray-900 mb-4">Xác nhận xóa
+				bạn</h3>
+			<p class="text-gray-700 mb-4">
+				Bạn có chắc muốn xóa <span id="friendName" class="font-semibold"></span>
+				khỏi danh sách bạn bè?
+			</p>
+			<div class="flex justify-end space-x-4">
+				<button onclick="closeUnfriendModal()"
+					class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition duration-300">Không</button>
+				<button onclick="unfriendConfirmed()"
+					class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300">Có,
+					xóa bạn</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
     	$('#searchFriend').on('submit',function(e){
     	    e.preventDefault(); 
     	    const friendNameSearch={dataStr: $('#friendSearch').val()};
@@ -211,7 +246,7 @@
             // You might want to remove the friend from the list or update the UI here
         }
         
-    	let ws = new WebSocket('ws://localhost:8080/chess-game/friend'); 
+    	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/friend'); 
 
         class MessageFriend {
         	constructor(content, userId, friendId){
@@ -289,13 +324,172 @@
       					}
       				}
       			}
+      		}else if (receivedMessage.content == "accept"){
+      			if (${USERMODEL.id}==receivedMessage.userId){
+      				const ulElement = document.getElementById("searchResults");
+     				if (ulElement.children.length>0){
+  						console.log(ulElement.children.length);
+  					 let liElements = ulElement.getElementsByTagName('li');
+  					 for (let i=0;i<liElements.length;i++){
+  						 let li = liElements[i];
+  						 if (li.getAttribute('id') == receivedMessage.friendId){
+  							console.log(li);
+  							let divElements = li.getElementsByTagName('div');
+  							Array.from(divElements).forEach(function(div){
+  								let buttonElements = div.getElementsByTagName('button');
+  								if (buttonElements.length > 0){
+  									console.log(buttonElements);
+  									Array.from(buttonElements).forEach(function(btn){
+  										btn.remove();
+  									});
+
+  									let friendButton = document.createElement('button');
+  									friendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300');
+  									friendButton.innerHTML = 'Bạn bè <i class="fa-solid fa-user-group"></i>';
+  								  	div.appendChild(friendButton);
+  								  	let challengeButton = document.createElement('button');
+  						//			challengeButton.setAttribute('onclick', `challengeFriend(${USERMODEL.id}, this)`);
+  									challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-yellow-500', 'transition', 'duration-300');
+  									challengeButton.textContent = 'Thách đấu';
+  									div.appendChild(challengeButton);
+  									};
+  								
+  								});
+  							
+  						 	}
+  					 	}
+      				}
+     				// xóa friend Request
+      				const ul = document.getElementById("friendRequests");
+      				let li = ul.getElementsByTagName('li');
+      				for (let i=0;i<li.length;i++){
+      					let liItem= li[i];
+      					if (liItem.getAttribute('id') == receivedMessage.friendId){
+      						liItem.remove();
+      					// thêm friend List
+      	      				let ulfl = document.getElementById("friendList");
+      						ulfl.appendChild(liItem);
+      						break;
+      					}
+      				}
+      				const ulfl = document.getElementById("friendList");
+      				let lifl = ulfl.getElementsByTagName('li');
+      				for (let i=0;i<lifl.length;i++){
+      					let liflItem= lifl[i];
+      					if (liflItem.getAttribute('id') == receivedMessage.friendId){
+      						let divElements = liflItem.getElementsByTagName('div');
+      						let name;
+      						Array.from(divElements).forEach(function(div){
+      							let buttonElements = div.getElementsByTagName('button');
+      							if (buttonElements.length<=0){
+      								let span = div.getElementsByTagName('span');
+      								name=span[0].textContent;
+      								console.log(name);
+      							}
+      							else if (buttonElements.length>0){
+      								Array.from(buttonElements).forEach(function(btn){
+  										btn.remove();
+  									});
+      								let profileButton = document.createElement('button');
+      								profileButton.classList.add('bg-green-300', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-opacity-80', 'transition', 'duration-300', 'active:scale-95');
+      								profileButton.textContent = 'Profile';
+      								
+      								let challengeButton = document.createElement('button');
+      								challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-yellow-500', 'transition', 'duration-300', 'active:scale-95');
+      								challengeButton.textContent = 'Challenge';
+      								
+      								let unfriendButton = document.createElement('button');
+      								console.log(name);
+      								unfriendButton.setAttribute('onclick', `showUnfriendConfirmation(name)`);
+      								unfriendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300', 'active:scale-95');
+      								unfriendButton.textContent = 'Unfriend';
+      								div.appendChild(profileButton);
+      								div.appendChild(challengeButton);
+      								div.appendChild(unfriendButton);
+      							}
+      						});
+      					}
+      				}
+      			}else if (${USERMODEL.id}==receivedMessage.friendId){
+      				const ulElement = document.getElementById("searchResults");
+      				if (ulElement.children.length>0){
+      						console.log(ulElement.children.length);
+      					 let liElements = ulElement.getElementsByTagName('li');
+      					 for (let i=0;i<liElements.length;i++){
+      						 let li = liElements[i];
+      						 if (li.getAttribute('id') == receivedMessage.userId){
+      							console.log(li);
+      							let divElements = li.getElementsByTagName('div');
+      							Array.from(divElements).forEach(function(div){
+      								let buttonElements = div.getElementsByTagName('button');
+      								if (buttonElements.length > 0){
+      									console.log(buttonElements);
+      									Array.from(buttonElements).forEach(function(btn){
+      										btn.remove();
+      									});
+      									let friendButton = document.createElement('button');
+      									friendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300');
+      									friendButton.innerHTML = 'Bạn bè <i class="fa-solid fa-user-group"></i>';
+      								  	div.appendChild(friendButton);
+      								  	let challengeButton = document.createElement('button');
+      						//			challengeButton.setAttribute('onclick', `challengeFriend(${USERMODEL.id}, this)`);
+      									challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-yellow-500', 'transition', 'duration-300');
+      									challengeButton.textContent = 'Thách đấu';
+      									div.appendChild(challengeButton);
+      								};
+      							});
+      						
+      						 }
+      					 }
+      				}
+      				// them vao friendList của người được accept
+						let ulfl = document.getElementById("friendList");
+						console.log(ulfl);
+						let lifl = document.createElement('li');
+						console.log(lifl);
+						lifl.classList.add('flex', 'items-center', 'justify-between', 'hover:bg-gray-600', 'p-2', 'rounded-md', 'transition', 'duration-300', 'cursor-pointer');
+						lifl.setAttribute('id', receivedMessage.userId);
+						console.log(lifl);
+						let div1 = document.createElement('div');
+						div1.classList.add('flex','items-center');
+						let img = document.createElement('img');
+						img.src = "https://images.unsplash.com/photo-1645378999013-95abebf5f3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80";
+					 	img.classList.add("w-12", "h-12", "rounded-full", "mr-4", "transition-transform", "duration-300", "hover:scale-110");
+					 	let span = document.createElement('span');
+					 	span.classList.add("font-medium","text-white");
+					 	span.textContent = receivedMessage.userName;
+					 	div1.appendChild(img);
+					 	div1.appendChild(span);
+						console.log(div1);
+					 	let div2 = document.createElement('div');
+					 	
+						let profileButton = document.createElement('button');
+						profileButton.classList.add('bg-green-300', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-opacity-80', 'transition', 'duration-300', 'active:scale-95');
+						profileButton.textContent = 'Profile';
+						
+						let challengeButton = document.createElement('button');
+						challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-yellow-500', 'transition', 'duration-300', 'active:scale-95');
+						challengeButton.textContent = 'Challenge';
+						
+						let unfriendButton = document.createElement('button');
+						unfriendButton.setAttribute('onclick', `showUnfriendConfirmation(receivedMessage.userName)`);
+						unfriendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300', 'active:scale-95');
+						unfriendButton.textContent = 'Unfriend';
+						div2.appendChild(profileButton);
+						div2.appendChild(challengeButton);
+						div2.appendChild(unfriendButton);
+					 	console.log(div2);
+						lifl.appendChild(div1);
+						lifl.appendChild(div2);
+						
+						ulfl.appendChild(lifl);
+      			}
       		}
       	}
-       
     </script>
-    
-    
- 
+
+
+
 
 
 </body>

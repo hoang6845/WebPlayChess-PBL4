@@ -19,42 +19,45 @@ public class Bishop extends Chess {
 
 	@Override
 	public void PositiveMove(int[][] Board) {
-		int k = this.getIndex();
-		for (int i = P.x + 1, j = P.y + 1; (i < 8 && j < 8); i++, j++) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+		if (this.value==35) {
+			
+			int k = this.getIndex();
+			for (int i = P.x + 1, j = P.y + 1; (i < 8 && j < 8); i++, j++) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
-		}
-		for (int i = P.x + 1, j = P.y - 1; (i < 8 && j >= 0); i++, j--) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x + 1, j = P.y - 1; (i < 8 && j >= 0); i++, j--) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
-		}
-		for (int i = P.x - 1, j = P.y - 1; (i >= 0 && j >= 0); i--, j--) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x - 1, j = P.y - 1; (i >= 0 && j >= 0); i--, j--) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
-		}
-		for (int i = P.x - 1, j = P.y + 1; (i >= 0 && j < 8); i--, j++) {
-
-			if (Board[i][j] != 0) {
-				if (Board[i][j] * k < 0)
-					this.updatePnew(i, j);
-				break;
+			for (int i = P.x - 1, j = P.y + 1; (i >= 0 && j < 8); i--, j++) {
+				
+				if (Board[i][j] != 0) {
+					if (Board[i][j] * k < 0)
+						this.updatePnew(i, j);
+					break;
+				}
+				this.updatePnew(i, j);
 			}
-			this.updatePnew(i, j);
 		}
 	}
 

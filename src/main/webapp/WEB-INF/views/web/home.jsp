@@ -21,21 +21,21 @@
                 </h2>
                 <p class="mb-4 text-gray-600 relative z-10">Choose your difficulty:</p>
                 <div class="flex flex-col space-y-4 relative z-10">
-                    <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
+                    <button onclick="chuyenTrang('<c:url value="/PvC?type=easy"></c:url>')" class="flex items-center justify-between bg-gray-100 p-3 rounded-lg cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
                         <span class="text-lg font-semibold">Easy</span>
                         <div class="flex items-center">
                             <i class="fas fa-star text-yellow-400 text-3xl"></i>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
+                    </button>
+                    <button onclick="chuyenTrang('<c:url value="/PvC?type=medium"></c:url>')" class="flex items-center justify-between bg-gray-100 p-3 rounded-lg cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
                         <span class="text-lg font-semibold">Medium</span>
                         <div class="flex items-center">
                             <i class="fas fa-star text-yellow-400 text-3xl mr-1"></i>
                             <i class="fas fa-star text-yellow-400 text-3xl mr-1"></i>
                             <i class="fas fa-star text-yellow-400 text-3xl"></i>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
+                    </button>
+                    <button onclick="chuyenTrang('<c:url value="/PvC?type=hard"></c:url>')" class="flex items-center justify-between bg-gray-100 p-3 rounded-lg cursor-pointer transform transition duration-300 hover:bg-gray-200 hover:shadow-md">
                         <span class="text-lg font-semibold">Hard</span>
                         <div class="flex items-center">
                             <i class="fas fa-star text-yellow-400 text-3xl mr-1"></i>
@@ -44,7 +44,7 @@
                             <i class="fas fa-star text-yellow-400 text-3xl mr-1"></i>
                             <i class="fas fa-star text-yellow-400 text-3xl"></i>
                         </div>
-                    </div>
+                    </button>
                 </div>
             </div>
 

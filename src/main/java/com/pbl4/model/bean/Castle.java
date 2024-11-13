@@ -17,38 +17,41 @@ public class Castle extends Chess {
 	}
 	@Override
 	public void PositiveMove(int[][] Board) {
-		int k = this.getIndex();
-		for (int i = P.x + 1; i < 8; i++) {
-			if (Board[i][P.y] != 0) {
-				if (Board[i][P.y] * k < 0)
-					this.updatePnew(i, P.y);
-				break;
+		if (this.value==50) {
+			int k = this.getIndex();
+			for (int i = P.x + 1; i < 8; i++) {
+				if (Board[i][P.y] != 0) {
+					if (Board[i][P.y] * k < 0)
+						this.updatePnew(i, P.y);
+					break;
+				}
+				this.updatePnew(i, P.y);
 			}
-			this.updatePnew(i, P.y);
-		}
-		for (int i = P.x - 1; i >= 0; i--) {
-			if (Board[i][P.y] != 0) {
-				if (Board[i][P.y] * k < 0)
-					this.updatePnew(i, P.y);
-				break;
+			for (int i = P.x - 1; i >= 0; i--) {
+				if (Board[i][P.y] != 0) {
+					if (Board[i][P.y] * k < 0)
+						this.updatePnew(i, P.y);
+					break;
+				}
+				this.updatePnew(i, P.y);
 			}
-			this.updatePnew(i, P.y);
-		}
-		for (int i = P.y + 1; i < 8; i++) {
-			if (Board[P.x][i] != 0) {
-				if (Board[P.x][i] * k < 0)
-					this.updatePnew(P.x, i);
-				break;
+			for (int i = P.y + 1; i < 8; i++) {
+				if (Board[P.x][i] != 0) {
+					if (Board[P.x][i] * k < 0)
+						this.updatePnew(P.x, i);
+					break;
+				}
+				this.updatePnew(P.x, i);
 			}
-			this.updatePnew(P.x, i);
-		}
-		for (int i = P.y - 1; i >= 0; i--) {
-			if (Board[P.x][i] != 0) {
-				if (Board[P.x][i] * k < 0)
-					this.updatePnew(P.x, i);
-				break;
+			for (int i = P.y - 1; i >= 0; i--) {
+				if (Board[P.x][i] != 0) {
+					if (Board[P.x][i] * k < 0)
+						this.updatePnew(P.x, i);
+					break;
+				}
+				this.updatePnew(P.x, i);
 			}
-			this.updatePnew(P.x, i);
+			
 		}
 	}
 //	public static void main(String ar[]) {

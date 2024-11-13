@@ -15,14 +15,14 @@ import com.pbl4.model.bean.Queen;
 import com.pbl4.model.bean.Undo;
 
 public class GameModeAI {
-	ManagePlayer mgr = new ManagePlayer();
-	Stack<Undo> U = new Stack<Undo>();
+	public ManagePlayer mgr = new ManagePlayer();
+	public Stack<Undo> U = new Stack<Undo>();
 	Location Pdie = new Location();
-	int[][] Board = { { 50, 10, 0, 0, 0, 0, -10, -50 }, { 30, 10, 0, 0, 0, 0, -10, -30 },
+	public int[][] Board = { { 50, 10, 0, 0, 0, 0, -10, -50 }, { 30, 10, 0, 0, 0, 0, -10, -30 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 90, 10, 0, 0, 0, 0, -10, -90 }, { 1000, 10, 0, 0, 0, 0, -10, -1000 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 30, 10, 0, 0, 0, 0, -10, -30 }, { 50, 10, 0, 0, 0, 0, -10, -50 } };
 
-	void begin() {
+	public void begin() {
 		int[][] board = { { 50, 10, 0, 0, 0, 0, -10, -50 }, { 30, 10, 0, 0, 0, 0, -10, -30 },
 				{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 90, 10, 0, 0, 0, 0, -10, -90 },
 				{ 1000, 10, 0, 0, 0, 0, -10, -1000 }, { 35, 10, 0, 0, 0, 0, -10, -35 },
@@ -39,7 +39,7 @@ public class GameModeAI {
 
 	}
 
-	void banco() {
+	public void banco() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (Board[j][i] == 10)
@@ -73,7 +73,7 @@ public class GameModeAI {
 		}
 	}
 
-	int valueCal(int arr[][]) {
+	public int valueCal(int arr[][]) {
 		int sum = 0;
 
 		for (int i = 0; i < 8; i++) {
@@ -86,7 +86,7 @@ public class GameModeAI {
 		return sum;
 	}
 
-	void CopyMang(int begin[][], int end[][]) {
+	public void CopyMang(int begin[][], int end[][]) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				end[i][j] = begin[i][j];
@@ -95,7 +95,7 @@ public class GameModeAI {
 	}
 
 
-	void CopyChess(Chess begin[], Chess end[]) {
+	public void CopyChess(Chess begin[], Chess end[]) {
 	    for (int i = 0; i < 16; i++) {
 	        if (begin[i] instanceof Pawn) {
 	            end[i] = new Pawn((Pawn) begin[i]);
@@ -116,7 +116,7 @@ public class GameModeAI {
 	}
 
 
-	int moveOder(int arr[][], int alpha, int beta, int depth, int selectDepth, boolean turn,  Chess Computer[],
+	public int moveOder(int arr[][], int alpha, int beta, int depth, int selectDepth, boolean turn,  Chess Computer[],
 			Chess Player[]) {
 		if ((depth == 0) || (Computer[15].value == -1) || (Player[15].value == -1)) {
 			return valueCal(arr);
@@ -218,7 +218,7 @@ public class GameModeAI {
 		}
 	}
 	
-    void AiEat()
+    public void AiEat()
     {
         for (int i = 0; i < 16; i++)
         {
@@ -237,7 +237,7 @@ public class GameModeAI {
         }
     }
     
-    int MoveB(int j, int x1, int y1)
+    public int MoveB(int j, int x1, int y1)
     {
 //        Stack<Location> P = mgr.Player[j].ValidMove(Board);
 //        for (int i = 0; i < P.size(); i++)
@@ -289,7 +289,7 @@ public class GameModeAI {
         return -1;
     }
     
-    int MoveA()
+    public int MoveA()
     {
     	System.out.println("\nMáy đi đến:"+ mgr.MoveOderCurent+" "+mgr.MoveOderNext.getX()+","+mgr.MoveOderNext.getY());
     	System.out.println("\nvalue:"+mgr.Computer[mgr.MoveOderCurent].getValue());
@@ -320,7 +320,7 @@ public class GameModeAI {
 
     }
     
-    void undo() {
+    public void undo() {
     	boolean y = true;
         Undo R;
 
@@ -378,7 +378,7 @@ public class GameModeAI {
 
     }
 
-	void canGo(Chess N) {
+	public void canGo(Chess N) {
 		Stack<Location> P = N.ValidMove(Board);
 		for (int i = 0; i < P.size(); i++) {
 			System.out.print(P.get(i).getX() + ", " + P.get(i).getY() + "\n");

@@ -130,15 +130,9 @@
 						aria-label="Exit" id="btn_leaveRoom">Exit</button>
 					<div
 						class="h-48 overflow-y-auto mb-4 bg-gray-700 p-2 rounded hover-effect">
-						<ul class="list-decimal pl-5">
-							<li>e4 e5</li>
-							<li>Nf3 Nc6</li>
-							<li>Bb5 a6</li>
-							<li>Ba4 Nf6</li>
-							<li>O-O Be7</li>
-							<li>Re1 b5</li>
-							<li>Bb3 d6</li>
-							<li>c3 O-O</li>
+						<ul class="list-decimal pl-5" id="MoveHistoryBoard">
+							<!--'♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜', '♟', ''  -->
+			
 						</ul>
 					</div>
 
@@ -263,7 +257,8 @@
 				onclick="goHome()">
 				Home</button>
 			<button
-				class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect">
+				class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect"
+				onclick="goHistoryMove()">
 				Xem lại ván đấu</button>
 			<button
 				class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect" id="btn_taiDau">
@@ -361,7 +356,7 @@
     	
     	var RoomGame = '${room}';
     	var checkTypePlayer ="";
-    	let ws = new WebSocket('ws://localhost:8080/chess-game/PvP'); 
+    	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/PvP'); 
 
     	var WhiteModelPlayer;
     	var BlackModelPlayer;
@@ -388,9 +383,16 @@
     	let numberInRoom = 0;
     	window.onbeforeunload = function(){
     		outRoom();
+    		if (webSocket.readyState === WebSocket.OPEN) {
+    	        webSocket.close();
+    	    }
     	};
     	
     	document.getElementById("btn_leaveRoom").addEventListener('click',goHome);
+    	
+    	function goHistoryMove(){
+    		 window.location.assign("/chess-game/historyMove");
+    	}
     	
     	function goHome(){
     		outRoom();
@@ -574,6 +576,39 @@
     				          }
     				 }
     				 console.log(piece);
+    				 let moveHistoryBoard = document.getElementById('MoveHistoryBoard');
+    		        	let li = document.createElement('li');
+    		        	//♔♕♗♘♙♖
+    		        	if (pieceId.endsWith('7') || pieceId.endsWith('8')){
+    			        	if (pieceId.startsWith('pawn')) {
+    						    li.textContent = '♟ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('rook')) {
+    						    li.textContent = '♜ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('knight')) {
+    						    li.textContent = '♞ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('bishop')) {
+    						    li.textContent = '♝ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('queen')) {
+    						    li.textContent = '♛ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('king')) {
+    						    li.textContent = '♚ ' + destinationSquareId;
+    						}        		
+    		        	}else {
+    		        		if (pieceId.startsWith('pawn')) {
+    						    li.textContent = '♙ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('rook')) {
+    						    li.textContent = '♖ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('knight')) {
+    						    li.textContent = '♘ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('bishop')) {
+    						    li.textContent = '♗ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('queen')) {
+    						    li.textContent = '♕ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('king')) {
+    						    li.textContent = '♔ ' + destinationSquareId;
+    						}
+    		        	}
+    		        	moveHistoryBoard.appendChild(li);
     				 drag({target: piece, dataTransfer:dataTransfer},1);
     				 console.log(dataTransfer);
     			     drop({currentTarget:destinationSquare, dataTransfer: dataTransfer},1);
@@ -714,6 +749,18 @@
     					pEloChange.textContent = "+"+elo;
     					pEloChange.classList.add('text-green-400');
     					pEloReal.textContent = ${USERMODEL.elo}+elo;
+    				}else {
+    					let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+    					trophyIcon.forEach(item=>{
+    						item.classList.add('victory');
+    					})
+    					if (receivedMessage.sender==WhiteModelPlayer.id){
+    						pEloChange.textContent = "Black win";
+    					}else if (receivedMessage.sender==BlackModelPlayer.id){
+    						pEloChange.textContent = "White win";
+    					}
+    					let btn_taiDau = document.getElementById('btn_taiDau');
+    					btn_taiDau.classList.add('hidden');
     				}
     			}
     		}else if((receivedMessage.type == "draw")){
@@ -776,6 +823,40 @@
         }
         
         function dropSendToServer(pieceId,destinationSquareId){
+        	let moveHistoryBoard = document.getElementById('MoveHistoryBoard');
+        	let li = document.createElement('li');
+        	//'♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜', '♟', ''
+        	if (pieceId.endsWith('7') || pieceId.endsWith('8')){
+	        	if (pieceId.startsWith('pawn')) {
+				    li.textContent = '♟ ' + destinationSquareId;
+				} else if (pieceId.startsWith('rook')) {
+				    li.textContent = '♜ ' + destinationSquareId;
+				} else if (pieceId.startsWith('knight')) {
+				    li.textContent = '♞ ' + destinationSquareId;
+				} else if (pieceId.startsWith('bishop')) {
+				    li.textContent = '♝ ' + destinationSquareId;
+				} else if (pieceId.startsWith('queen')) {
+				    li.textContent = '♛ ' + destinationSquareId;
+				} else if (pieceId.startsWith('king')) {
+				    li.textContent = '♚ ' + destinationSquareId;
+				}        		
+        	}else {
+        		if (pieceId.startsWith('pawn')) {
+				    li.textContent = '♙ ' + destinationSquareId;
+				} else if (pieceId.startsWith('rook')) {
+				    li.textContent = '♖ ' + destinationSquareId;
+				} else if (pieceId.startsWith('knight')) {
+				    li.textContent = '♘ ' + destinationSquareId;
+				} else if (pieceId.startsWith('bishop')) {
+				    li.textContent = '♗ ' + destinationSquareId;
+				} else if (pieceId.startsWith('queen')) {
+				    li.textContent = '♕ ' + destinationSquareId;
+				} else if (pieceId.startsWith('king')) {
+				    li.textContent = '♔ ' + destinationSquareId;
+				}
+        	}
+        	
+        	moveHistoryBoard.appendChild(li);
         	const room = "${room}";
             console.log(room);
             const username = "${USERMODEL.id}";
@@ -881,6 +962,6 @@
 
     </script>
 
-	<script src="<c:url value='template/web/ChessBoard/main.js' />"></script>
+	<script src="<c:url value='/template/web/ChessBoard/main.js' />"></script>
 </body>
 </html>
