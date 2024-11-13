@@ -2,6 +2,7 @@ package com.pbl4.model.DAOImpl;
 
 import java.util.ArrayList;
 import com.pbl4.mapper.HistoryMapper;
+import com.pbl4.mapper.HistoryMapperAndName;
 import com.pbl4.model.DAO.IHistoryDAO;
 import com.pbl4.model.bean.HistoryModel;
 
@@ -12,8 +13,8 @@ public class HistoryDAO extends DAOimple<HistoryModel> implements IHistoryDAO {
     }
     @Override
     public ArrayList<HistoryModel> findAllByPlayerId(long playerId) {
-        String sql = "SELECT * FROM history WHERE whiteId = ? OR blackId = ? ORDER BY createdate DESC";
-        return query(sql, new HistoryMapper(), playerId, playerId);
+        String sql = "SELECT history.*,userr.fullname FROM history inner join userr on history.blackId=userr.id WHERE whiteId = ? OR blackId = ? ORDER BY history.createdate DESC";
+        return query(sql, new HistoryMapperAndName(), playerId, playerId);
     }
     @Override
     public void insert(HistoryModel history) {

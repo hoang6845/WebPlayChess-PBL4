@@ -59,9 +59,9 @@ public class RankDAO extends DAOimple<RankModel> implements IRankDAO {
 	}
 	@Override
 	public void insert(long userId) {
-	    String sql = "INSERT INTO Rank (userId, elo, totalMatches, win, draws, lose, createdate, modifieddate, createby, modifiedby) " +
-	                 "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)";
-	    insert(sql, userId, 1200, 0, 0, 0, 0, null,null,null);
+	    String sql = "INSERT INTO Rank (userId, elo, totalMatches, win, draws, lose, createdate) " +
+	                 "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+	    insert(sql, userId, 1200, 0, 0, 0, 0);
 	}
 
 }

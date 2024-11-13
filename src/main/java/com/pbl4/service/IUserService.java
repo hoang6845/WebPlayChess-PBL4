@@ -16,7 +16,7 @@ public interface IUserService extends IService {
 	UserModel FindUserById(long id);
 	
 	ArrayList<UserModel> getTop10UserRanks();
-	boolean updatePassword(long userId, String newPassword);
+	boolean updatePassword(long userId,String oldPass , String newPassword);
 	
 	boolean updateName(long userId, String newName);
 	

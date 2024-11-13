@@ -1,5 +1,6 @@
 package com.pbl4.serviceImpl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import com.pbl4.model.DAOImpl.HistoryDAO;
 import com.pbl4.model.DAOImpl.RankDAO;
@@ -17,7 +18,7 @@ public class HistoryService implements IHistoryService {
         ArrayList<HistoryModel> result= HistoryDAO.getInstance().findAllByPlayerId(playerId);
         for (HistoryModel item: result) {
         	item.setEloChange(item.calculateEloChange(playerId));
-        	item.setOpponentName(UserService.getInstance().findFullnameById(item.getOpId(playerId)));
+        	
         }
         return result;
     }
@@ -48,6 +49,7 @@ public class HistoryService implements IHistoryService {
     		history.setEloChange(0);
     		RankService.getInstance().UpdateAfterGames(history.getWhiteId(), history.getBlackId(), history.getResult(), elo);
     	}
+    	history.setCreateDate(new Date(System.currentTimeMillis()));
     	HistoryDAO.getInstance().insert(history); // Gọi phương thức chèn từ HistoryDAO
     }
 }

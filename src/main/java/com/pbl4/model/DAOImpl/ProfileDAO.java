@@ -26,8 +26,8 @@ public class ProfileDAO extends DAOimple<ProfileModel> implements IProfileDAO {
     }
     @Override
     public void insert(long userId, String email) {
-        String sql = "INSERT INTO Profile (userId, imageOfUser, description, email, createdate, modifieddate, createby, modifiedby) " +
-                     "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)";
-        insert(sql, userId, null, null, email, null, null, null);
+        String sql = "INSERT INTO Profile (userId, imageOfUser, description, email, createdate) " +
+                     "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        insert(sql, userId, null, null, email);
     }
 }

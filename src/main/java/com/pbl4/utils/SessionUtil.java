@@ -1,9 +1,7 @@
 package com.pbl4.utils;
 
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.Session;
 
 public class SessionUtil {
 
@@ -25,8 +23,10 @@ public class SessionUtil {
 	}
 	
 	public void removeValue(HttpServletRequest req, String key) {
-		if (req.getAttribute(key)!=null) {
+		if (req.getSession().getAttribute(key)!=null) {
 			req.getSession().removeAttribute(key);	
+		}else {
+			System.out.println("SESSIONUNTIL removeValue lỗi");
 		}
 	}
 	

@@ -1,10 +1,14 @@
 package com.pbl4.controller.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pbl4.SystemConstant.SystemConstant;
 import com.pbl4.model.bean.UserModel;
 import com.pbl4.serviceImpl.RankService;
@@ -22,7 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class HomeController
  */
-@WebServlet(urlPatterns = {"/trang-chu","/dang-nhap"})
+@WebServlet(urlPatterns = {"/trang-chu","/dang-nhap","/dang-ky"})
 public class HomeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -54,8 +58,10 @@ public class HomeController extends HttpServlet {
 			RequestDispatcher rd= req.getRequestDispatcher("/WEB-INF/views/login.jsp");
 			rd.forward(req, resp);
 		}else if (action!=null && action.equals("logout")) {
+			System.out.println("out");
 			SessionUtil.getInstance().removeValue(req, "USERMODEL");
 			SessionUtil.getInstance().removeValue(req, "listMove");
+			System.out.println("đã log out");
 			resp.sendRedirect(req.getContextPath()+"/trang-chu");
 		}else {
 			System.out.print("vao roi");
@@ -77,6 +83,7 @@ public class HomeController extends HttpServlet {
 		System.out.print("dang nhap thanh cong");
 		System.out.println(req.getSession());
 		String action = req.getParameter("action");
+		System.out.println(action);
 		Map<String, String[]> parameterMap = req.getParameterMap();
 		for (String key : parameterMap.keySet()) {
 		    System.out.println("Key: " + key + ", Value: " + Arrays.toString(parameterMap.get(key)));
@@ -99,6 +106,41 @@ public class HomeController extends HttpServlet {
 				}
 			}else {
 				resp.sendRedirect(req.getContextPath()+"/dang-nhap?action=login&message=username_password_invalid&alert=danger");
+			}
+		}else {
+//		Cách 1:
+//			String email = req.getParameter("email");
+//			System.out.println(email);
+//		Cách 2:	
+//			Map<String, String[]> data = req.getParameterMap();
+//			System.out.println((data.get("username"))[0] );
+//			String username = data.get("username")[0];
+//			String password = data.get("password")[0];
+//			String email = data.get("email")[0];
+		// 2 cách trên sử dụng cho form post thông thường
+			req.setCharacterEncoding("UTF-8");
+			resp.setContentType("application/json");
+			BufferedReader reader = req.getReader();
+			StringBuilder sb = new StringBuilder();
+			String line= new String();
+			while ((line=reader.readLine())!=null) {
+				sb.append(line);
+			}
+			ObjectMapper obj = new ObjectMapper();
+			Map<String, String> data = obj.readValue(sb.toString(), new TypeReference<Map<String, String>>(){});
+			String type = data.get("type");
+			if (type.equals("register")) {
+				String username = data.get("username");
+				String password = data.get("password");
+				String email = data.get("email");
+				Map<String, String> dataResp= new HashMap<String, String>();
+				dataResp.put("type", "register");
+				if (UserService.getInstance().insert(username, password, email)) {
+					dataResp.put("result", "success");
+				}else {
+					dataResp.put("result", "fail");
+				}
+				obj.writeValue(resp.getOutputStream(), dataResp);
 			}
 		}
 	}

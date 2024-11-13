@@ -72,9 +72,12 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public boolean updatePassword(long userId, String newPassword) {
+	public boolean updatePassword(long userId,String oldPassword, String newPassword) {
 		UserModel user = FindUserById(userId);
 		if (user != null) {
+			if (!BCrypt.checkpw(oldPassword, user.getPassword())) {
+				return false;
+			}
 			String hashedPassword = hashPassword(newPassword);
 			user.setPassword(hashedPassword);
 			return UserDAO.getInstance().updateUser(user);

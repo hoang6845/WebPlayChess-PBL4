@@ -1,13 +1,61 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
+<c:url var="ProfileUrl" value="/profile?page=profile"/>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Profile</title>
+	<meta charset="UTF-8">
+	<title>Profile</title>
 </head>
 <body>
+	<style>
+		.alert {
+		    position: relative;
+		    padding: 10px 84px 10px 24px;
+		    margin-bottom: 1rem;
+		    border: 4px solid transparent;
+		    border-radius: 4px;
+		}
+		.alert-danger{
+			color: #000;
+			background-color: #fff;
+			border-left: 6px red solid;
+
+		}
+		.alert-success{
+			color: #000;
+			background-color: #fff;
+			border-left: 6px #5dee5d solid;
+
+		}
+		.bem{
+		    position: absolute !important;
+			top: 80px;
+		    right: 40px;
+		    animation:SlideInLeft ease 0.6s, FadeOut linear 3.5s 0.4s forwards; */
+		    font-size: 22px
+		}
+		
+		@keyframes SlideInLeft {
+		    from {
+		        opacity: 0;
+		        transform: translateX(calc(100% + 15px));
+		        display: none;
+		    }
+		    to {
+		        display: flex;
+		        opacity: 1;
+		        transform: translateX(0);
+		    }
+		}
+		
+		@keyframes FadeOut{
+		    to {
+		        opacity: 0;
+		    }
+		}
+	</style>
 	<div
 		class="bg-gradient-to-br from-gray-600 to-gray-700 h-877 w-1920 overflow-hidden text-white">
 		<div class="p-8 h-full w-full overflow-y-auto">
@@ -36,7 +84,7 @@
 							accept="image/*">
 					</div>
 					<div class="flex items-center justify-center space-x-2">
-						<h2 id="username" class="text-3xl font-semibold text-primary">ChessMaster2000</h2>
+						<h2 id="username" class="text-3xl font-semibold text-primary">${USERMODEL.fullname}</h2>
 						<button class="edit-btn" onclick="editField('username')">
 							<svg xmlns="http://www.w3.org/2000/svg"
 								class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24"
@@ -48,10 +96,11 @@
 						</button>
 					</div>
 					<div
-						class="flex items-center justify-center space-x-2 p-4 bg-gray-50 rounded-lg shadow-md">
-						<p id="bio" class="text-center text-lg text-stone-950 flex-grow">Chess
-							Grandmaster with a passion for strategic gameplay.</p>
-						<button class="edit-btn" onclick="editField('bio')">
+						class="flex items-center justify-center space-x-2 p-4 bg-gray-50 rounded-lg shadow-md min-w-[500px]">
+						<p id="description" class="text-center text-lg text-stone-950 flex-grow">
+							${MYPRF.description}
+						</p>
+						<button class="edit-btn" onclick="editField('description')">
 							<svg xmlns="http://www.w3.org/2000/svg"
 								class="h-6 w-6 text-stone-950" fill="none" viewBox="0 0 24 24"
 								stroke="currentColor">
@@ -73,7 +122,7 @@
 									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
 							<span id="join-date" class="text-lg text-gray-700 ">Joined:
-								January 1, 2023</span>
+								${USERMODEL.createDate}</span>
 						</div>
 					</div>
 					<div class="flex items-center bg-gray-100 p-3 rounded-md">
@@ -84,12 +133,12 @@
 								stroke-linejoin="round" stroke-width="2"
 								d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-						<span id="email" class="text-lg text-stone-950">chessmaster@example.com</span>
+						<span id="email" class="text-lg text-stone-950">${MYPRF.email}</span>
 					</div>
 					<div class="mt-8">
 						<button onclick="showChangePasswordModal()"
-							class="w-full px-6 py-3 bg-primary text-white font-semibold rounded-md shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 bg-gray-500">Change
-							Password</button>
+							class="w-full px-6 py-3 bg-primary text-white font-semibold rounded-md shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 bg-gray-500">
+							Change Password</button>
 					</div>
 				</div>
 			</div>
@@ -138,27 +187,22 @@
 		class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
 		<div
 			class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-			<div class="mt-3 text-center">
+			<div class="mt-3 text-center relative">
 				<h3 class="text-lg leading-6 font-medium text-gray-900">Change
 					Password</h3>
 				<div class="mt-2 px-7 py-3">
-					<input type="password" id="current-password"
-						placeholder="Current Password"
+				<form action='<c:url value="/profile"></c:url>' method="post">
+					<input type="password" id="current-password" name="oldPassword"
+						placeholder="Current Password" 
 						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
-					<input type="password" id="new-password" placeholder="New Password"
+					<input type="password" id="new-password" placeholder="New Password" name="newPassword"
 						class="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
 					<input type="password" id="confirm-password"
-						placeholder="Confirm New Password"
+						placeholder="Confirm New Password" 
 						class="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
-				</div>
-				<div class="items-center px-4 py-3">
-					<button id="changePasswordBtn"
-						class="px-4 py-2 bg-primary text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">Change
-						Password</button>
-				</div>
-				<div class="items-center px-4 py-3">
-					<button id="cancelBtn" onclick="hideChangePasswordModal()"
-						class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300">Cancel</button>
+						<i class="fa-solid fa-x absolute hidden" id="password-error" style="top: 134px; right: 8px;"></i>
+					<input type="submit" id="changePasswordBtn" class="mt-4 px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" value="Change Password">
+				</form>
 				</div>
 			</div>
 		</div>
@@ -171,6 +215,7 @@
 			const input = document.createElement('input');
 			input.value = currentValue;
 			input.className = element.className;
+			input.classList.add('text-black');
 			element.replaceWith(input);
 			input.focus();
 
@@ -181,8 +226,58 @@
 				newElement.innerText = newValue;
 				newElement.className = element.className;
 				input.replaceWith(newElement);
+				$.ajax({
+					url: '${ProfileUrl}',
+					type:'POST',
+					contentType:'application/json',
+					data: JSON.stringify({
+						type: fieldId,
+						newValue: newValue
+					}),
+					dataType: 'json',
+		            success: function (result) {
+		            	console.log(result);
+		            	if (result.type =="username"){
+		            		if (result.result=="success"){
+		            			$('body').append('<div class="alert alert-success bem" role="alert">Your name changed successfully</div>');
+		            			hideChangePasswordModal();
+		            		}
+		            		else{
+		            			$('body').append('<div class="alert alert-danger bem" role="alert">Failed to change your name</div>');
+		            			hideChangePasswordModal();
+		            		}
+		            	}else if (result.type =="description"){
+		             		if (result.result=="success"){
+		            			$('body').append('<div class="alert alert-success bem" role="alert">description changed successfully</div>');
+		            			hideChangePasswordModal();
+		            		}
+		            		else{
+		            			$('body').append('<div class="alert alert-danger bem" role="alert">Failed to change description</div>');
+		            			hideChangePasswordModal();
+		            		}
+		            	}
+		            	
+		            },
+		            error: function (error) {
+		            	 console.log("error");
+		            	 hideChangePasswordModal();
+		            }
+				})
 			});
 		}
+		
+		$(document).ready(function(){
+			console.log("đã chạy");
+			$('#confirm-password').on('input',function(){
+				var newPass = $('#new-password').val();
+				var confirmPass = $(this).val();
+				if (newPass != confirmPass){
+					$('#password-error').attr('class','fa-solid fa-x absolute text-red-600');
+				}else{
+					$('#password-error').attr('class','fa-solid fa-check absolute text-green-600');
+				}
+			});
+		});
 
 		function showChangePasswordModal() {
 			document.getElementById('changePasswordModal').classList
@@ -194,31 +289,44 @@
 					.add('hidden');
 		}
 
-		document.getElementById('changePasswordBtn')
-				.addEventListener(
-						'click',
-						function() {
-							const currentPassword = document
-									.getElementById('current-password').value;
-							const newPassword = document
-									.getElementById('new-password').value;
-							const confirmPassword = document
-									.getElementById('confirm-password').value;
-
-							if (currentPassword === '') {
-								alert('Please enter your current password!');
-								return;
-							}
-
-							if (newPassword !== confirmPassword) {
-								alert('New passwords do not match!');
-								return;
-							}
-
-							// Here you would typically send a request to your server to change the password
-							// For this example, we'll just show an alert
-							alert('Password changed successfully!');
-							hideChangePasswordModal();
-						});
+		$('#changePasswordBtn').click(function(event){
+			event.preventDefault(); //ngăn form submit theo cách thông thường
+			console.log("vao day roi");
+			if ($('#new-password').val()==$('#new-password').val()){
+				$.ajax({
+			      	url: '${ProfileUrl}',
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify({
+		            	type: "ChangePassword",
+		                oldPassword: $('#current-password').val(),
+		                newPassword: $('#new-password').val(),
+		                confirmPassword: $('#confirm-password').val()
+		            }),
+		            dataType: 'json',
+		            success: function (result) {
+		            	console.log(result);
+		            	if (result.type =="ChangePassword"){
+		            		if (result.result=="success"){
+		            			$('body').append('<div class="alert alert-success bem" role="alert">Password changed successfully</div>');
+		            			hideChangePasswordModal();
+		            		}
+		            		else{
+		            			$('body').append('<div class="alert alert-danger bem" role="alert">Failed to change password</div>');
+		            			hideChangePasswordModal();
+		            		}
+		            	}
+		            	
+		            },
+		            error: function (error) {
+		            	 console.log("error");
+		            	 hideChangePasswordModal();
+		            }
+				});
+				
+			}
+		});
+		
 	</script>
 </body>
+</html>
