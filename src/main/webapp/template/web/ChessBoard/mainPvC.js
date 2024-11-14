@@ -9,6 +9,7 @@ const pieces = document.getElementsByClassName("piece");
 const piecesImages = document.getElementsByTagName("img");
 
 function fillBoardSquaresArray() {
+  boardSquaresArray = [];
   const boardSquares = document.getElementsByClassName("square");
   for (let i = 0; i < boardSquares.length; i++) {
     let row = 8 - Math.floor(i / 8);
@@ -242,7 +243,9 @@ function drop(ev,MoveToClient=0) {
     console.log(children);
     for (let i = 0; i < children.length; i++) {
         if (!children[i].classList.contains('coordinate')) {
+		  let c=children[i];
           destinationSquare.removeChild(children[i]);
+          document.getElementById('deadPlace').appendChild(c);
         }
     }
     // while (destinationSquare.firstChild) {
@@ -871,10 +874,9 @@ function checkForCheckMate(MoveToClient = 0) {
   let message="";
   isWhiteTurn  ? (message="Black Wins") : (message="White Wins");
   if (MoveToClient == 0){
-	console.log("da chayyyy");
-	endGameToServer();
+	endGameToServer("win");
   }else {
-	console.log("khong chayyy");
+	endGameToServer("lose");
   }
   console.log(message);
 }

@@ -18,6 +18,15 @@ public class GameModeAI {
 	public ManagePlayer mgr = new ManagePlayer();
 	public Stack<Undo> U = new Stack<Undo>();
 	Location Pdie = new Location();
+	
+	public Stack<Undo> getU() {
+		return U;
+	}
+
+	public void setU(Stack<Undo> u) {
+		U = u;
+	}
+
 	public int[][] Board = { { 50, 10, 0, 0, 0, 0, -10, -50 }, { 30, 10, 0, 0, 0, 0, -10, -30 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 90, 10, 0, 0, 0, 0, -10, -90 }, { 1000, 10, 0, 0, 0, 0, -10, -1000 },
 			{ 35, 10, 0, 0, 0, 0, -10, -35 }, { 30, 10, 0, 0, 0, 0, -10, -30 }, { 50, 10, 0, 0, 0, 0, -10, -50 } };
@@ -320,9 +329,10 @@ public class GameModeAI {
 
     }
     
-    public void undo() {
+    public Stack<Undo> undo() {
     	boolean y = true;
         Undo R;
+        Stack<Undo> result = new Stack<Undo>();
 
         while (y == true && !U.isEmpty()) {
             R = U.lastElement();
@@ -337,6 +347,7 @@ public class GameModeAI {
                     mgr.Computer[R.getI()].setValue();
                     Board[R.getBegin().getX()][R.getBegin().getY()] = mgr.Computer[R.getI()].getValue();
                 }
+                result.push(R);
                 U.pop();
                 y = true;
 
@@ -360,6 +371,7 @@ public class GameModeAI {
                     mgr.Player[R.getI()].setValue();
                     Board[R.getBegin().getX()][R.getBegin().getY()] = mgr.Player[R.getI()].getValue();
                 }
+                result.push(R);
                 U.pop();
                 if (y == false && !U.isEmpty())
                 {
@@ -369,13 +381,14 @@ public class GameModeAI {
                     if (R.getEnd().getX() == Pdie.getX()) {
                         mgr.Computer[R.getI()].alive();
                         Board[mgr.Computer[R.getI()].getP().getX()][mgr.Computer[R.getI()].getP().getY()] = mgr.Computer[R.getI()].getValue();
+                        result.push(R);
                         U.pop();
 
                     }
                 }
             }
         }
-
+        return result;
     }
 
 	public void canGo(Chess N) {

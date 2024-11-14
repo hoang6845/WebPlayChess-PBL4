@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pbl4.GamePlay.GameModeAI;
 import com.pbl4.model.bean.Chess;
+import com.pbl4.model.bean.HistoryMoveOfGame;
 import com.pbl4.model.bean.UserModel;
 import com.pbl4.utils.SessionUtil;
 
@@ -57,6 +58,7 @@ public class PvCController extends HttpServlet {
 		while ((line=reader.readLine())!=null) {
 			sb.append(line);
 		}
+		System.out.println(sb);
 		ObjectMapper obj = new ObjectMapper();
 		Map<String, String> data = obj.readValue(sb.toString(), new TypeReference<Map<String, String>>(){});
 		String type = data.get("type");
@@ -98,6 +100,16 @@ public class PvCController extends HttpServlet {
 //			}
 			aiGame.MoveA();
 //			aiGame.banco();
+			SessionUtil.getInstance().putValue(req, "AIGame", aiGame);
+		}else if (type.equals("acceptLose")) {
+			HistoryMoveOfGame hmg = new HistoryMoveOfGame("0", aiGame.getU(), "acceptLose");
+			SessionUtil.getInstance().putValue(req, "HistoryMoveOfGame", hmg);
+			SessionUtil.getInstance().removeValue(req, "AIGame");
+			Map<String, String> dataResp = new HashMap<String, String>();
+			dataResp.put("type", "acceptLose");
+			obj.writeValue(resp.getOutputStream(), dataResp);
+		}else if (type.equals("undo")) {
+			obj.writeValue(resp.getOutputStream(), aiGame.undo());
 			SessionUtil.getInstance().putValue(req, "AIGame", aiGame);
 		}
 	}

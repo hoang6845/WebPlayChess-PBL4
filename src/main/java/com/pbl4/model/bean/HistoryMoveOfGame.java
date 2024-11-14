@@ -21,6 +21,13 @@ public class HistoryMoveOfGame {
 		this.whiteName = whiteName;
 		this.blackName = blackName;
 	}
+	
+	public HistoryMoveOfGame(String id, Stack<Undo> u, String result) {
+		super();
+		this.id = id;
+		this.u = u;
+		this.result = result;
+	}
 	public String getWhiteName() {
 		return whiteName;
 	}

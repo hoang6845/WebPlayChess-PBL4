@@ -12,8 +12,13 @@
         <div class="bg-gray-800 rounded-lg shadow-lg">
             <div class="border-b border-gray-200 p-4">
                 <div class="flex justify-center items-center">
-                    <div class="text-center">
-                        <h2 class="text-2xl font-bold text-white">${HistoryMoveOfGame.whiteName} vs ${HistoryMoveOfGame.blackName}</h2>
+                    <div class="text-center">                  
+                        <c:if test="${not empty HistoryMoveOfGame.whiteName || HistoryMoveOfGame.whiteName != ''}">
+    						<h2 class="text-2xl font-bold text-white">${USERMODEL.fullname} vs COM</h2>       
+						</c:if>
+						<c:if test="${not empty HistoryMoveOfGame.whiteName}">
+   							 <h2 class="text-2xl font-bold text-white">${HistoryMoveOfGame.whiteName} vs ${HistoryMoveOfGame.blackName}</h2>     
+						</c:if>
                         <p class="text-md text-white mt-2">Classical</p>
                     </div>
                 </div>
@@ -207,6 +212,8 @@
                     		alert("white win!");
                     	}else if(result=="lose"){
                     		alert("black win!");
+                    	}else if ("acceptLose"){
+                    		alert("Lose");
                     	}else {
                     		alert("draw");
                     	}

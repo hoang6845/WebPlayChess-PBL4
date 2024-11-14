@@ -99,6 +99,7 @@
 						class="w-full max-w-[500px] aspect-square relative mb-4 mx-auto"
 						id="board">
 						<%@ include file="/common/chessBoard/chessBoard.jsp"%>
+						<div class="hidden" id="deadPlace"></div>
 					</div>
 
 					<div class="flex justify-between items-center w-full"
@@ -140,33 +141,14 @@
 					</div>
 
 					<div class="flex justify-center gap-4 mb-4">
-						<div
-							class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out relative cursor-not-allowed"
-							id="showDrawChooseButton"
-							aria-label="Draw">Draw
-								<div class="hidden" id="drawModel">
-									<div class="bg-gray-500 p-4 rounded-lg shadow-xl max-w-md w-48 absolute flex flex-col left-0 -translate-x-1/2 top-0 -translate-y-full cursor-default">									
-										<p class="inline">You want to draw?</p>
-										<div class="flex justify-center">
-											<button class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect mr-4" onclick="drawToServer(event)">Yes</button>
-											<button class="bg-gray-600  text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect" onclick="closeDrawChoose(event)">No</button>								
-										</div>
-									</div>
-								</div>
-								
-								<div class="hidden" id="acceptDrawModel">
-									<div class="bg-gray-500 p-4 rounded-lg shadow-xl max-w-md w-48 absolute flex flex-col left-0 -translate-x-1/2  top-full  cursor-default z-10">									
-										<p class="inline">Your Opponent want to draw</p>
-										<div class="flex justify-center">
-											<button class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect mr-4" onclick="acceptDrawToServer(event)">Accept</button>
-											<button class="bg-gray-600  text-white font-bold py-1 px-3 rounded transition duration-300 ease-in-out hover-effect" onclick="closeAcceptDrawChoose(event)">No</button>								
-										</div>
-									</div>
-								</div>
-							</div>
+						<button
+							class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out relative"
+							id="UndoBtn" onclick="undo()"
+							aria-label="Undo">Undo
+							</button>
 							
 						<div
-							class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out relative cursor-not-allowed"
+							class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out relative cursor-pointer"
 							id="showAcceptLossChooseButton"
 							aria-label="Accept Loss">Accept Loss
 								<div class="hidden" id="acceptLossModel">
@@ -237,11 +219,8 @@
 					class="w-20 h-20 rounded-full mr-4 hover-effect" > 
 				<i class="fa-solid fa-trophy text-5xl text-yellow-400 "></i>
 			</div>
-			<div class="flex justify-center items-center">
-				<p class="font-bold text-l text-yellow-400" id="eloChange"></p>
-			</div>
 			<div class="flex justify-center items-center mb-4">
-				<p class="font-bold text-3xl text-white" id="eloReal"></p>
+				<p class="font-bold text-3xl text-white" id="result"></p>
 			</div>
 			<button
 				class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect"
@@ -281,6 +260,45 @@
         	console.log("da chay");
 		}
         
+        function acceptLossToServer(event){
+        	event.stopPropagation();
+         	document.getElementById('acceptLossModel').classList.add("hidden");
+         	$.ajax({
+         		url: '${PvCUrl}',
+         		type: 'POST',
+         		contentType: 'application/json',
+         		data: JSON.stringify({
+         			type: 'acceptLose'
+         		}),
+         		dataType: 'json',
+         		success: function(result){
+         			console.log(result);
+         			if (result.type=='acceptLose'){
+         				document.getElementById("result").innerHTML = 'Bạn đã đầu hàng';
+         				let endGameModal = document.getElementById('EndGameModal');
+         				endGameModal.classList.remove('hidden');
+         				let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+    					trophyIcon.forEach(item=>{
+    						item.classList.add('lose');
+    					})
+         			}
+         		},
+         		error: function(error){
+         			console.log(result);
+         		}
+         		
+         	});
+         	
+        }
+        
+    	function goHistoryMove(){
+   			window.location.assign("/chess-game/historyMove");
+   		}
+   	
+	   	function goHome(){
+	   	    window.location.assign("/chess-game/trang-chu?page=home");
+	   	}
+        
         function startBlackPlayerClock(){
         	document.getElementById('blackPlayerClock').classList.add("bg-white");
         	document.getElementById('whitePlayerClock').classList.remove("bg-white");
@@ -290,7 +308,59 @@
         	document.getElementById('whitePlayerClock').classList.add("bg-white");
         }
         
+        function endGameToServer(result){
+        	$.ajax({
+        		url: '${PvCUrl}',
+        		type: 'POST',
+        		contentType: 'application/json',
+        		data: JSON.stringify({
+        			type: result,
+        		}),
+        		dataType: 'json',
+        		success: function(result){
+        			console.log(result);
+        		},
+        		error: function(error){
+        			console.log(error);
+        		}
+        	});
+        }
+        
         function dropSendToServer(pieceId,destinationSquareId){
+        	let moveHistoryBoard = document.getElementById('MoveHistoryBoard');
+        	let li = document.createElement('li');
+        	//'♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜', '♟', ''
+        	if (pieceId.endsWith('7') || pieceId.endsWith('8')){
+	        	if (pieceId.startsWith('pawn')) {
+				    li.textContent = '♟ ' + destinationSquareId;
+				} else if (pieceId.startsWith('rook')) {
+				    li.textContent = '♜ ' + destinationSquareId;
+				} else if (pieceId.startsWith('knight')) {
+				    li.textContent = '♞ ' + destinationSquareId;
+				} else if (pieceId.startsWith('bishop')) {
+				    li.textContent = '♝ ' + destinationSquareId;
+				} else if (pieceId.startsWith('queen')) {
+				    li.textContent = '♛ ' + destinationSquareId;
+				} else if (pieceId.startsWith('king')) {
+				    li.textContent = '♚ ' + destinationSquareId;
+				}        		
+        	}else {
+        		if (pieceId.startsWith('pawn')) {
+				    li.textContent = '♙ ' + destinationSquareId;
+				} else if (pieceId.startsWith('rook')) {
+				    li.textContent = '♖ ' + destinationSquareId;
+				} else if (pieceId.startsWith('knight')) {
+				    li.textContent = '♘ ' + destinationSquareId;
+				} else if (pieceId.startsWith('bishop')) {
+				    li.textContent = '♗ ' + destinationSquareId;
+				} else if (pieceId.startsWith('queen')) {
+				    li.textContent = '♕ ' + destinationSquareId;
+				} else if (pieceId.startsWith('king')) {
+				    li.textContent = '♔ ' + destinationSquareId;
+				}
+        	}
+        	
+        	moveHistoryBoard.appendChild(li);
 			$.ajax({
 				url: '${PvCUrl}',
 				type: 'POST',
@@ -307,7 +377,7 @@
 	            	if (result.type ==100){
 	            		console.log("vao day");
 	            		checkTypePlayer="black";
-	            		let pieceId = findPieceId(result.Chess);
+	            		let pieceId = findPieceId(1,result.Chess);
 	            		const piece = document.getElementById(pieceId);
 	            		destinationSquareId = (String.fromCharCode(97 + result.toX)+""+(8-result.toY));
 	            		const destinationSquare = document.getElementById(destinationSquareId);
@@ -320,6 +390,39 @@
 	    				            return this.data[type];
 	    				          }
 	    				}
+	    				let moveHistoryBoard = document.getElementById('MoveHistoryBoard');
+    		        	let li = document.createElement('li');
+    		        	//♔♕♗♘♙♖
+    		        	if (pieceId.endsWith('7') || pieceId.endsWith('8')){
+    			        	if (pieceId.startsWith('pawn')) {
+    						    li.textContent = '♟ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('rook')) {
+    						    li.textContent = '♜ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('knight')) {
+    						    li.textContent = '♞ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('bishop')) {
+    						    li.textContent = '♝ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('queen')) {
+    						    li.textContent = '♛ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('king')) {
+    						    li.textContent = '♚ ' + destinationSquareId;
+    						}        		
+    		        	}else {
+    		        		if (pieceId.startsWith('pawn')) {
+    						    li.textContent = '♙ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('rook')) {
+    						    li.textContent = '♖ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('knight')) {
+    						    li.textContent = '♘ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('bishop')) {
+    						    li.textContent = '♗ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('queen')) {
+    						    li.textContent = '♕ ' + destinationSquareId;
+    						} else if (pieceId.startsWith('king')) {
+    						    li.textContent = '♔ ' + destinationSquareId;
+    						}
+    		        	}
+    		        	moveHistoryBoard.appendChild(li);
 	    				drag({target: piece, dataTransfer:dataTransfer},1);
 	    				console.log(dataTransfer);
 	    			    drop({currentTarget:destinationSquare, dataTransfer: dataTransfer},1);
@@ -334,8 +437,55 @@
         	
         }
         
-        function findPieceId(i){
+        function undo(){
+        	$.ajax({
+        		url: '${PvCUrl}',
+        		type: 'POST',
+        		contentType: 'application/json',
+        		data: JSON.stringify({
+        			type: 'undo'
+        		}),
+        		dataType: 'json',
+        		success: function(result){
+        			console.log(result);
+        			result.forEach((element)=>{
+        				if (element.end.x!=-100){
+        				let squareId = (String.fromCharCode(97 + element.end.x)+(8-element.end.y));
+        				let currentSquare = document.getElementById(squareId);
+        				let piece = currentSquare.children;
+        				for (let i = piece.length-1; i >= 0; i--) {
+                			if (!piece[i].classList.contains('coordinate')){
+                		    	console.log(piece[i]);
+                				pieceItem = document.getElementById(piece[i].id);
+                			}   
+                		}
+        				pieceItem.remove();
+        				let backSquareId = (String.fromCharCode(97 + element.begin.x)+(8-element.begin.y));
+        				document.getElementById(backSquareId).appendChild(pieceItem);        					
+        				}else {
+        					let pieceId = findPieceId(element.porC, element.i);
+        					console.log(element.porC);
+        					console.log(pieceId);
+        					let piece =  document.getElementById(pieceId);
+        					piece.remove();
+        					let backSquareId = (String.fromCharCode(97 + element.begin.x)+(8-element.begin.y));
+            				document.getElementById(backSquareId).appendChild(piece);        					
+        				}
+        				fillBoardSquaresArray();
+        			});
+        			let list = document.querySelectorAll('#MoveHistoryBoard li'); 
+        			list[list.length - 1].remove(); 
+        			list[list.length - 2].remove(); 
+        		},
+        		error: function(error){
+        			console.log(error);
+        		}
+        	});
+        }
+        
+        function findPieceId(index, i){
         	let pieceId;
+        	if (index==1){
         		if (i<=7&&i>=0){
         			pieceId="pawn"+ (String.fromCharCode(97 + i)+"7");
         		}else if (i==8||i==9){
@@ -361,6 +511,34 @@
         		}else if (i==15){
         			pieceId="kinge8"
         		}
+        	}
+        	else if(index == -1){
+        		if (i<=7&&i>=0){
+        			pieceId="pawn"+ (String.fromCharCode(97 + i)+"2");
+        		}else if (i==8||i==9){
+        			if (i==8){
+        				pieceId="rooka1";
+        			}else {
+        				pieceId="rookh1";
+        			}
+        		}else if (i==10||i==11){
+        			if (i==10){
+        				pieceId="knightb1";
+        			}else{
+        				pieceId="knightg1";
+        			}
+        		}else if (i==12||i==13){
+        			if (i==12){
+        				pieceId="bishopc1";
+        			}else{
+        				pieceId="bishopf1";
+        			}
+        		}else if(i==14){
+        			pieceId="queend1";
+        		}else if (i==15){
+        			pieceId="kinge1"
+        		}
+        	}
         	return pieceId;
         }
 
