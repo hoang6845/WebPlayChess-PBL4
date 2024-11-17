@@ -264,6 +264,9 @@
         			}   
         		}
         		pieceItem.remove();
+        		if (move.checkQueen==true){
+        			pieceItem.children[0].src= move.PorC==-1?'template/web/ChessBoard/img/wq.png':'template/web/ChessBoard/img/bq.png';
+        		}
         		squareEnd.appendChild(pieceItem);
         		
         	}
@@ -291,6 +294,9 @@
         		let SquareBack = document.getElementById(SquareBackId);
         	
         		pieceItem.remove();
+        		if (move.checkQueen==true){
+        			pieceItem.children[0].src= move.PorC==-1?'template/web/ChessBoard/img/wp.png':'template/web/ChessBoard/img/bp.png';
+        		}
         		SquareBack.appendChild(pieceItem);
         	}
         }

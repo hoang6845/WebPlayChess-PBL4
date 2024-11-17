@@ -4,6 +4,7 @@ import com.pbl4.model.bean.HistoryModel;
 import java.util.ArrayList;
 
 public interface IHistoryDAO extends DAOInterface<HistoryModel> {
-    ArrayList<HistoryModel> findAllByPlayerId(long playerId); 
+    ArrayList<HistoryModel> findAllByWhiteId(long playerId); 
+    ArrayList<HistoryModel> findAllByBlackId(long playerId); 
     void insert(HistoryModel history);
 }

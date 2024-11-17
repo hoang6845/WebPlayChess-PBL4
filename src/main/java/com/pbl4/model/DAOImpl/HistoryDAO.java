@@ -12,9 +12,14 @@ public class HistoryDAO extends DAOimple<HistoryModel> implements IHistoryDAO {
         return new HistoryDAO();
     }
     @Override
-    public ArrayList<HistoryModel> findAllByPlayerId(long playerId) {
-        String sql = "SELECT history.*,userr.fullname FROM history inner join userr on history.blackId=userr.id WHERE whiteId = ? OR blackId = ? ORDER BY history.createdate DESC";
-        return query(sql, new HistoryMapperAndName(), playerId, playerId);
+    public ArrayList<HistoryModel> findAllByWhiteId(long playerId) {
+        String sql = "SELECT history.*,userr.fullname FROM history inner join userr on history.blackId=userr.id WHERE whiteId = ? ORDER BY history.createdate DESC,history.id DESC";
+        return query(sql, new HistoryMapperAndName(), playerId);
+    }
+    @Override
+    public ArrayList<HistoryModel> findAllByBlackId(long playerId) {
+        String sql = "SELECT history.*,userr.fullname FROM history inner join userr on history.whiteId=userr.id WHERE blackId = ? ORDER BY history.createdate DESC,history.id DESC";
+        return query(sql, new HistoryMapperAndName(), playerId);
     }
     @Override
     public void insert(HistoryModel history) {

@@ -111,6 +111,12 @@ public class PvCController extends HttpServlet {
 		}else if (type.equals("undo")) {
 			obj.writeValue(resp.getOutputStream(), aiGame.undo());
 			SessionUtil.getInstance().putValue(req, "AIGame", aiGame);
+		}else if (type.equals("win")||type.equals("lose")) {
+			HistoryMoveOfGame hmg = new HistoryMoveOfGame("0", aiGame.getU(), type);
+			SessionUtil.getInstance().putValue(req, "HistoryMoveOfGame", hmg);
+			SessionUtil.getInstance().removeValue(req, "AIGame");
+			Map<String, String> dataResp = new HashMap<String, String>();
+			dataResp.put("type", type);
 		}
 	}
 	

@@ -2,8 +2,7 @@ package com.pbl4.model.bean;
 
 import java.sql.Date;
 
-public class HistoryModel extends AbstractModel<HistoryModel> {
-    private long id;               
+public class HistoryModel extends AbstractModel<HistoryModel> {           
     private long whiteId;         
     private long blackId;      
     private String result;         
@@ -45,16 +44,6 @@ public class HistoryModel extends AbstractModel<HistoryModel> {
         this.result = result;
         this.eloChange = eloChange; 
     }
-
-    // Getters and Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
 
     public String getResult() {
         return result;

@@ -60,6 +60,7 @@ com\pbl4\model\bean\ChessInfo.class
 com\pbl4\mapper\HistoryMapper.class
 com\pbl4\model\bean\Chess.class
 com\pbl4\model\bean\Bishop.class
+com\pbl4\controller\web\PvCController$1.class
 com\pbl4\controller\web\ProfileController.class
 com\pbl4\model\bean\Undo.class
 com\pbl4\utils\HttpUtil.class

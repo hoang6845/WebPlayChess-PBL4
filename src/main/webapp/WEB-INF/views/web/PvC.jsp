@@ -318,7 +318,13 @@
         		}),
         		dataType: 'json',
         		success: function(result){
-        			console.log(result);
+        			document.getElementById("result").innerHTML = 'Bạn '+ result.type;
+     				let endGameModal = document.getElementById('EndGameModal');
+     				endGameModal.classList.remove('hidden');
+     				let trophyIcon = endGameModal.querySelectorAll('.fa-trophy');
+					trophyIcon.forEach(item=>{
+						item.classList.add(result.type);
+					})
         		},
         		error: function(error){
         			console.log(error);
@@ -460,6 +466,11 @@
                 			}   
                 		}
         				pieceItem.remove();
+    					if (element.checkQueen==true){
+    						console.log('undo phong hau');
+    						pieceItem.classList.replace('queen','pawn');
+    						pieceItem.children[0].src= element.porC==-1?'template/web/ChessBoard/img/wp.png':'template/web/ChessBoard/img/bp.png';
+    					}
         				let backSquareId = (String.fromCharCode(97 + element.begin.x)+(8-element.begin.y));
         				document.getElementById(backSquareId).appendChild(pieceItem);        					
         				}else {

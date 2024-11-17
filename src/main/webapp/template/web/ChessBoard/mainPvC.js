@@ -59,7 +59,20 @@ function updateBoardSquaresArray(
   currentSquare.pieceId = "blank";
 }
 
-
+//phong hậu
+function pawnToQueen(pieceType, destinationSquareId, pieceId){
+  if (pieceType=='pawn'&&(destinationSquareId.charAt(1)=='1'||destinationSquareId.charAt(1)=='8')){
+    let destinationSquareElement = boardSquaresArray.find(
+      (element) => element.squareId === destinationSquareId
+    );
+    destinationSquareElement.pieceType = "queen";
+    let pawnToQueen=  document.getElementById(pieceId);
+    pawnToQueen.classList.replace('pawn','queen');
+    if (destinationSquareElement.pieceColor=='white') document.getElementById(pieceId).children[0].src='template/web/ChessBoard/img/wq.png';
+    else if (destinationSquareElement.pieceColor=='black') document.getElementById(pieceId).children[0].src='template/web/ChessBoard/img/bq.png';
+    console.log(boardSquaresArray);
+  }
+}
 
 function deepCopyArray(array) {
   let arrayCopy = array.map(element => {
@@ -123,6 +136,16 @@ function handleMouseEnter(event) {
 //   // Xóa màu sắc từ các ô
 
 // }
+function LastMove(startingSquareId,destinationSquareId){
+	console.log("last move:")
+	console.log(startingSquareId);
+	document.querySelectorAll('.lastMove').forEach(element=>{
+		element.classList.remove('lastMove');
+	});
+	document.getElementById(startingSquareId).classList.add('lastMove');
+	console.log(destinationSquareId);
+		document.getElementById(destinationSquareId).classList.add('lastMove');
+}
 
 
 function setupPieces() {
@@ -232,6 +255,8 @@ function drop(ev,MoveToClient=0) {
 		console.log("dropsend");
 	    dropSendToServer(pieceId,destinationSquareId);
 	}
+	LastMove(startingSquareId,destinationSquareId);
+	pawnToQueen(pieceType, destinationSquareId, pieceId);
     checkForCheckMate(MoveToClient);
     return;
   }
@@ -268,6 +293,8 @@ function drop(ev,MoveToClient=0) {
 		console.log("dropsend");
 	    dropSendToServer(pieceId,destinationSquareId);
 	}
+	LastMove(startingSquareId,destinationSquareId);
+	pawnToQueen(pieceType, destinationSquareId, pieceId);
     checkForCheckMate(MoveToClient);
     return;
   }
@@ -401,7 +428,7 @@ function checkPawnForwardMoves(
   let squareContent = currentSquare.pieceColor;
   if (squareContent != "blank") return legalSquares;
   legalSquares.push(currentSquareId);
-  if (rankNumber != 2 && rankNumber != 7) return legalSquares;
+  if ((rankNumber != 2 && rankNumber != 7)||(rankNumber==2&&direction==-1)||(rankNumber==7&&direction==1)) return legalSquares;
   currentRank += direction;
   currentSquareId = currentFile + currentRank;
   currentSquare = boardSquaresArray.find(
