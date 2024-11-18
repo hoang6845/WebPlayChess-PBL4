@@ -20,6 +20,7 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 	public FriendModel findRelationshipById(Long userId, Long friendId) {
 		StringBuilder sql = new StringBuilder("Select * from friend_list f ");
 		sql.append(" inner join Userr on f.idFriend = USERr.id");
+		sql.append(" inner join profile on USERr.id=profile.userId");
 		sql.append(" where idUser=? and idFriend=?");
 	    ArrayList<FriendModel> ar = query(sql.toString(), new FriendMapper(), userId, friendId);
 	    return ar.isEmpty() ? null : ar.get(0);
@@ -30,6 +31,7 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder("Select * from friend_list f ");
 		sql.append(" inner join Userr on f.idFriend = USERr.id");
+		sql.append(" inner join profile on USERr.id=profile.userId");
 		sql.append(" where idUser=?");
 		ArrayList<FriendModel> ar= query(sql.toString(),new FriendMapper(), id);
 		return ar.isEmpty()?null:ar;

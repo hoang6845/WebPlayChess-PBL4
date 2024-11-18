@@ -61,7 +61,7 @@
 								id=${item.idFriend}>
 								<div class="flex items-center">
 									<img
-										src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
+										src="${item.avatarFriend }"
 										class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
 									<span class="font-medium text-white">${item.getNameFriend()}</span>
 								</div>
@@ -92,7 +92,7 @@
 								class="flex items-center justify-between hover:bg-gray-600 p-2 rounded-md transition duration-300 cursor-pointer" id=${item.idFriend}>
 								<div class="flex items-center">
 									<img
-										src="https://images.unsplash.com/photo-1645378999013-95abebf5f3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
+										src="${item.avatarFriend }"
 										class="w-12 h-12 rounded-full mr-4 transition-transform duration-300 hover:scale-110">
 									<span class="font-medium text-white">${item.getNameFriend()}</span>
 								</div>
@@ -173,6 +173,7 @@
                             
                         </div>                    
                     `;
+                    li.querySelector('img').src=result.avatarFriend ;
                     li.setAttribute('Id',result.idFriend);
                     if (result.status == null){
                     	
@@ -250,10 +251,11 @@
     	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/friend'); 
 
         class MessageFriend {
-        	constructor(content, userId, friendId){
+        	constructor(content, userId, friendId, img=""){
         		this.content = content;
         		this.userId= userId;
         		this.friendId=friendId;
+        		this.img = img;
         	}
         }
         
@@ -273,8 +275,8 @@
  		}
 
       	function acceptFriend(userId, btn){
-    
-      		const message = new MessageFriend("accept", userId, btn.value)
+    		let img = "${USERMODEL.avatar}";
+      		const message = new MessageFriend("accept", userId, btn.value, img);
       		ws.send(JSON.stringify(message));
       	}
       	
@@ -456,7 +458,7 @@
 						let div1 = document.createElement('div');
 						div1.classList.add('flex','items-center');
 						let img = document.createElement('img');
-						img.src = "https://images.unsplash.com/photo-1645378999013-95abebf5f3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80";
+						img.src = receivedMessage.img;
 					 	img.classList.add("w-12", "h-12", "rounded-full", "mr-4", "transition-transform", "duration-300", "hover:scale-110");
 					 	let span = document.createElement('span');
 					 	span.classList.add("font-medium","text-white");

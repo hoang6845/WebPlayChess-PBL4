@@ -23,7 +23,9 @@ public class FriendMapper implements RowMapper<FriendModel> {
 				String createBy = rs.getString("createby");
 				String modifiedBy = rs.getString("modifiedby");
 				String namefriend= rs.getString("fullname");
+				String avatar = rs.getString("ImageOfUser");
 				t = new FriendModel(id, createDate, createBy, modifiedDate, modifiedBy,idUser, idFriend, status, namefriend);
+				t.setAvatarFriend(avatar);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

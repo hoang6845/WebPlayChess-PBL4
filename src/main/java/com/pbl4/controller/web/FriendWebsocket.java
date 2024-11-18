@@ -31,13 +31,19 @@ public class FriendWebsocket {
 		System.out.println("Received: " + message + " from "+ session.getId());
 		Gson gson = new Gson();
 		Message mess = gson.fromJson(message, Message.class);
-		Message responseMessage = new Message(mess.getContent(), mess.getUserId(), mess.getFriendId());
+		Message responseMessage = new Message();
+		if (mess.getContent().equals("accept")) {
+			responseMessage = new Message(mess.getContent(), mess.getUserId(), mess.getFriendId(), mess.getImg());
+		}else {
+			responseMessage = new Message(mess.getContent(), mess.getUserId(), mess.getFriendId());	
+		}
 		synchronized (clients) {
 			if (responseMessage.getContent().equals("add")) {
 				FriendService.getInstance().addnewFriend(responseMessage.getUserId(), responseMessage.getFriendId());
 			}else if (responseMessage.getContent().equals("accept")) {
 				FriendService.getInstance().acceptFriend(responseMessage.getUserId(), responseMessage.getFriendId());
-				Message acceptSuccess = new Message("accept", responseMessage.getUserId(), responseMessage.getFriendId(),UserService.getInstance().findFullnameById(responseMessage.getUserId()),UserService.getInstance().findFullnameById(responseMessage.getFriendId()));
+				System.out.println(responseMessage.getImg());
+				Message acceptSuccess = new Message("accept", responseMessage.getUserId(), responseMessage.getFriendId(),UserService.getInstance().findFullnameById(responseMessage.getUserId()),UserService.getInstance().findFullnameById(responseMessage.getFriendId()),responseMessage.getImg());
 				String jsonAccept = gson.toJson(acceptSuccess);
 				for (Session client : clients) {
 							client.getBasicRemote().sendText(jsonAccept);

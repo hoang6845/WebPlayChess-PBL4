@@ -11,12 +11,23 @@ public class Message {
 	private UserModel blackModel;
 	private ArrayList<ChessInfo> pieceArr;
 	
+	
 	//friend
 	private long userId;
 	private long friendId;
 	private String friendName;
 	private String userName;
 	
+	private String img;
+	
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	public Message(String room, String type, String sender, String content) {
 		super();
 		this.room = room;
@@ -52,6 +63,14 @@ public class Message {
 		this.userId = userId;
 		this.friendId = friendId;
 	}
+	
+	public Message(String content, long userId, long friendId, String img) {
+		super();
+		this.content = content;
+		this.userId = userId;
+		this.friendId = friendId;
+		this.img = img;
+	}
 
 	
 	
@@ -62,6 +81,16 @@ public class Message {
 		this.friendId = friendId;
 		this.friendName = friendName;
 		this.userName = userName;
+	}
+	
+	public Message(String content, long userId, long friendId,  String userName,String friendName, String img) {
+		super();
+		this.content = content;
+		this.userId = userId;
+		this.friendId = friendId;
+		this.friendName = friendName;
+		this.userName = userName;
+		this.img = img;
 	}
 
 	public Message() {

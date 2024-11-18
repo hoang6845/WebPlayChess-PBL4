@@ -8,14 +8,15 @@
   <title><dec:title default="Đăng nhập" /></title>
     <script src='<c:url value='/template/web/bootstrap/js/3.4.5'></c:url>'></script>
     <link href='<c:url value='template/login/login.css'></c:url>' rel="stylesheet" type="text/css">
+	<script src='<c:url value='template/web/jquery/jquery.min.js'></c:url>'></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link href='<c:url value='template/web/css/style.css'></c:url>' rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" type="text/css" media="all"
+	href="<c:url value='/template/fontawesome-free-6.6.0-web/css/all.min.css'/>">
     <style>
         body {
-            background-image: url("https://images.pexels.com/photos/131616/pexels-photo-131616.jpeg");
+            background-image: url("http://res.cloudinary.com/dgubksrvu/image/upload/v1731930003/xduszbog8gteypm4rmww.jpg");
             background-size: cover;
             background-repeat: no-repeat;
         }

@@ -8,7 +8,7 @@ public class test {
 		// TODO Auto-generated method stub
         System.out.println(CloudinaryConfig.getApiKey());
 		CloudinaryUploader upload = new CloudinaryUploader();
-		String img="C:\\Users\\ASUS-PR0\\Downloads\\defaultAvatar.png";
+		String img="C:\\Users\\ASUS-PR0\\Downloads\\loginBackground.jpeg";
 		String imgurl= upload.uploadImage(new File(img));
 		if (imgurl != null) {
             System.out.println("Image uploaded successfully! URL: " + imgurl);
