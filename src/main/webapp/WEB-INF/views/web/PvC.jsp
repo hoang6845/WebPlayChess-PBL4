@@ -86,9 +86,16 @@
 						<div class="flex items-center hover-effect cursor-pointer rounded"
 							id="blackPlayerContent" style="padding: 2px 8px;">
 							<img
-								src='<c:url value='template/web/ChessBoard/img/avatarNoPeople.jpg'></c:url>'
+								src='http://res.cloudinary.com/dgubksrvu/image/upload/v1731951923/oenjmvrht54equtrcmgs.webp'
 								alt="Black Player img" class="w-10 h-10 rounded-full mr-2">
-							<div id="blackPlayerInfo"></div>
+							<div id="blackPlayerInfo">
+								<p class="font-bold cursor-pointer hover:underline" id="whitePlayerName"
+									onclick="showPlayerInfo()">AI MODEL </p>
+								<div class="flex items-center">
+									<p class="text-sm text-gray-400" id="whitePlayerRank">Rank: ???</p>
+									<span class="ml-2 text-yellow-500">🏆</span>
+								</div>
+							</div>
 						</div>
 						<div
 							class="text-3xl font-bold bg-gray-700 px-4 py-2 rounded hover-effect text-transparent"
@@ -107,7 +114,7 @@
 						<div class="flex items-center hover-effect cursor-pointer rounded"
 							id="whitePlayerContent" style="padding: 2px 8px;">
 							<img
-								src='<c:url value='template/web/ChessBoard/img/avatarNoPeople.jpg'></c:url>'
+								src=${USERMODEL.avatar }
 								alt="Black Player" class="w-10 h-10 rounded-full mr-2">
 							<div id="whitePlayerInfo">
 								<p class="font-bold cursor-pointer hover:underline" id="whitePlayerName"

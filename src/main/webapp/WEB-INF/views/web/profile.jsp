@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
 <c:url var="ProfileUrl" value="/profile?page=profile"/>
+<c:url var="uploadFileUrl" value="/uploadFile"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,9 +70,9 @@
 							alt="Profile Avatar"
 							class="w-48 h-48 rounded-full mx-auto object-cover transition-all duration-300 group-hover:opacity-75">
 						<label for="avatar-upload"
-							class="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+							class="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-black">
 							<svg xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24"
+								class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24"
 								stroke="currentColor">
                                 <path stroke-linecap="round"
 									stroke-linejoin="round" stroke-width="2"
@@ -80,8 +81,9 @@
 									stroke-linejoin="round" stroke-width="2"
 									d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-						</label> <input type="file" id="avatar-upload" class="hidden"
+						</label> <input type="file" id="avatar-upload" class="hidden" name="avatar"
 							accept="image/*">
+							
 					</div>
 					<div class="flex items-center justify-center space-x-2">
 						<h2 id="username" class="text-3xl font-semibold text-primary">${USERMODEL.fullname}</h2>
@@ -209,6 +211,38 @@
 	</div>
 
 	<script>
+	document.getElementById("avatar-upload").addEventListener("change", function(event) {
+	    const file = event.target.files[0];
+	    if (!file) {
+	      alert("Chưa chọn ảnh");
+	      return;
+	    }
+
+	    console.log("Selected file:", file.name);
+	    console.log(file);
+
+	    const formData = new FormData();
+	    formData.append("avatar", file);
+	    formData.append("type", 'ChangeImage');
+
+		$.ajax({
+			url: '${uploadFileUrl}',
+			type:'POST',
+			data: formData,
+			dataType: 'json',
+			processData: false,  // Đảm bảo jQuery không xử lý dữ liệu (không chuyển processData thành chuỗi)
+			contentType: false,  // Đảm bảo jQuery không đặt contentType vì FormData sẽ tự động làm việc này
+            success: function (result) {
+            	 window.location.href = "${ProfileURL}";
+            	
+            },
+            error: function (error) {
+            	 console.log(error);
+            }
+		});
+	    
+	  });
+	
 		function editField(fieldId) {
 			const element = document.getElementById(fieldId);
 			const currentValue = element.innerText;

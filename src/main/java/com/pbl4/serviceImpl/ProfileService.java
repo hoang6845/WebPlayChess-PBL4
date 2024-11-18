@@ -27,7 +27,17 @@ public class ProfileService implements IProfileService {
             profile.setDescription(newScription);
             return ProfileDAO.getInstance().updateProfile(profile);
         }
-        return true;
+        return false;
     }
+
+	@Override
+	public boolean updateImg(long userId, String newImg) {
+		ProfileModel profile = findByUserId(userId);
+        if (profile != null) {
+            profile.setImageOfUser(newImg);
+            return ProfileDAO.getInstance().updateProfile(profile);
+        }
+        return false;
+	}
 
 }
