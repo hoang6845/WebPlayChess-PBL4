@@ -38,9 +38,10 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 	@Override
 	public ArrayList<FriendModel> getListSearchNewFr(Long Userid, String name) {
 		// TODO Auto-generated method stub
-		StringBuilder sql = new StringBuilder("Select u2.id,u2.fullname,T.status from");
+		StringBuilder sql = new StringBuilder("Select u2.id,u2.fullname,T.status,Profile.imageOfUser from");
 		sql.append("( select u.id,u.idRole,f.idUser,f.idFriend,f.status from userr u inner join friend_list f on u.id=f.idUser where u.id=?) as T ");
 		sql.append(" right join  userr u2 on T.idfriend=u2.id");
+		sql.append(" inner join Profile on u2.id=Profile.userId");
 		sql.append(" where u2.idrole=? and u2.id != ? and u2.fullname like ?");
 		ArrayList<FriendModel> ar = query(sql.toString(),new FindMapper(),Userid,2,Userid,"%"+name+"%");
 		return ar.isEmpty()?null:ar;

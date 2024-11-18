@@ -7,7 +7,7 @@
 			<c:if test="${ empty USERMODEL }">
 				<div class="flex items-center space-x-4">
 				<img
-					src="https://media.istockphoto.com/id/1017466636/vi/vec-to/bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-avatar-ng%C6%B0%E1%BB%9Di-d%C3%B9ng-d%E1%BA%A5u-hi%E1%BB%87u-bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-h%E1%BB%93-s%C6%A1.jpg?s=1024x1024&w=is&k=20&c=EpZRRKOqygEUNZ9aXhRzgalQoFPBuuGJAeiYydMC6ek="
+					src="http://res.cloudinary.com/dgubksrvu/image/upload/v1731922639/mi7dp33mgsuga8dyxibj.jpg"
 					alt="User avatar"
 					class="h-12 w-12 rounded-full border-2 border-white"> <span
 					class="text-sm font-medium text-white">Who are you</span>
@@ -17,7 +17,7 @@
 			<c:if test="${not empty USERMODEL }">
 				<div class="flex items-center space-x-4">
 				<img
-					src="https://png.pngtree.com/png-clipart/20190920/original/pngtree-user-flat-character-avatar-png-png-image_4643588.jpg"
+					src='${USERMODEL.avatar}'
 					alt="User avatar"
 					class="h-12 w-12 rounded-full border-2 border-white"> <span
 					class="text-sm font-medium text-white">${USERMODEL.fullname}</span>

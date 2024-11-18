@@ -65,7 +65,7 @@
 				<div class="space-y-6">
 					<div class="relative group">
 						<img id="avatar"
-							src="https://images.unsplash.com/photo-1533237264985-ee62f6d342bb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+							src="${USERMODEL.avatar}"
 							alt="Profile Avatar"
 							class="w-48 h-48 rounded-full mx-auto object-cover transition-all duration-300 group-hover:opacity-75">
 						<label for="avatar-upload"

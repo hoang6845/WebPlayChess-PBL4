@@ -10,6 +10,7 @@ C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\C
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\HistoryMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\RowMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\RoleModel.java
+C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\Cloudinary\test.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAO\IHistoryDAO.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\UserMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAO\IFriendDAO.java
@@ -33,9 +34,11 @@ C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\C
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\RankMapper.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\DAOImpl\FriendDAO.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\King.java
+C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\Cloudinary\CloudinaryConfig.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\ManagePlayer.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\serviceImpl\RankService.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\model\bean\AbstractModel.java
+C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\Cloudinary\CloudinaryUploader.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\service\IService.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\controller\web\HistoryMoveController.java
 C:\Users\ASUS-PR0\OneDrive - The University of Technology\Desktop\Java_Project\ChessGame\src\main\java\com\pbl4\mapper\FriendMapper.java

@@ -117,7 +117,8 @@ public class PvCController extends HttpServlet {
 			SessionUtil.getInstance().removeValue(req, "AIGame");
 			Map<String, String> dataResp = new HashMap<String, String>();
 			dataResp.put("type", type);
-		}
+			obj.writeValue(resp.getOutputStream(), dataResp);
+		} 
 	}
 	
 	public ArrayList<Integer> ConvertChessBoardToBoard(String chessMove, String moveTo) {

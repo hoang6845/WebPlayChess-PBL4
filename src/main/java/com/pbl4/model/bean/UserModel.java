@@ -8,6 +8,15 @@ public class UserModel extends AbstractModel<UserModel> {
 	private String username;
 	private String password;
 	private RoleModel Role;
+	private String avatar;
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	private ArrayList<FriendModel> FriendList;
 	private int elo;
 	private int totalMatches;

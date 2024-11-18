@@ -49,6 +49,13 @@ public class FriendWebsocket {
 				for (Session client : clients) {
 							client.getBasicRemote().sendText(jsonReject);
 				}
+			}else if(responseMessage.getContent().equals("unFriend")) {
+				FriendService.getInstance().deleteFriend(responseMessage.getUserId(), responseMessage.getFriendId());
+				Message rejectSuccess = new Message("unFriend", responseMessage.getUserId(), responseMessage.getFriendId());
+				String jsonReject = gson.toJson(rejectSuccess);
+				for (Session client : clients) {
+							client.getBasicRemote().sendText(jsonReject);
+				}
 			}
 		}
 	}

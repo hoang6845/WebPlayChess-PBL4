@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pbl4.SystemConstant.SystemConstant;
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.serviceImpl.ProfileService;
 import com.pbl4.serviceImpl.RankService;
 import com.pbl4.serviceImpl.UserService;
 import com.pbl4.utils.FormUtil;
@@ -97,6 +98,7 @@ public class HomeController extends HttpServlet {
 			if (model!=null) {
 				if (model.getRole().getCodeRole().equals(SystemConstant.PLAYER))
 					model.setElo(RankService.getInstance().findByUserId(model.getId()).getElo());
+				model.setAvatar(ProfileService.getInstance().findByUserId(model.getId()).getImageOfUser());
 				SessionUtil.getInstance().putValue(req, "USERMODEL", model);
 				if (model.getRole().getCodeRole().equals(SystemConstant.PLAYER)) {
 					resp.sendRedirect(req.getContextPath()+"/trang-chu?page=home");

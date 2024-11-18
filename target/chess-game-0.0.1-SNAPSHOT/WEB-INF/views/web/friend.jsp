@@ -99,13 +99,13 @@
 								<div>
 									<button
 										class="bg-green-300 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95"
-										>Profile</button>
+										value="${item.idFriend}" >Profile</button>
 									<button
 										class="bg-yellow-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-yellow-500 transition duration-300 active:scale-95"
-										>Challenge</button>
+										value="${item.idFriend}">Challenge</button>
 									<button
-										class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300 active:scale-95"
-										onclick="showUnfriendConfirmation('${item.getNameFriend()}')">Unfriend</button>
+										class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300 active:scale-95" value="${item.idFriend}"
+										onclick="showUnfriendConfirmation('${item.getNameFriend()}',this)">Unfriend</button>
 								</div>
 							</li>
 						</c:if>
@@ -131,8 +131,8 @@
 			<div class="flex justify-end space-x-4">
 				<button onclick="closeUnfriendModal()"
 					class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition duration-300">Không</button>
-				<button onclick="unfriendConfirmed()"
-					class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300">Có,
+				<button onclick="unfriendConfirmed(${USERMODEL.id},this)"
+					class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300" id="btn_confirmUnfriend">Có,
 					xóa bạn</button>
 			</div>
 		</div>
@@ -226,24 +226,25 @@
     
         let currentFriend = '';
 
-        function showUnfriendConfirmation(friendName) {
+        function showUnfriendConfirmation(friendName,btn) {
             currentFriend = friendName;
             document.getElementById('friendName').textContent = friendName;
             document.getElementById('unfriendModal').classList.remove('hidden');
             document.getElementById('unfriendModal').classList.add('flex');
+            document.getElementById('btn_confirmUnfriend').setAttribute('idFr', btn.getAttribute('value'));
         }
 
         function closeUnfriendModal() {
             document.getElementById('unfriendModal').classList.add('hidden');
             document.getElementById('unfriendModal').classList.remove('flex');
+            document.getElementById('btn_confirmUnfriend').removeAttribute('idFr');
         }
 
-        function unfriendConfirmed() {
-            // Here you would typically make an API call to unfriend the user
-            console.log(`Unfriended ${currentFriend}`);
-            // For demonstration, let's just close the modal
+        function unfriendConfirmed(userId,btn) {
+            let id = btn.getAttribute('idFr');    
+            const message = new MessageFriend("unFriend", userId, id)
+            ws.send(JSON.stringify(message));
             closeUnfriendModal();
-            // You might want to remove the friend from the list or update the UI here
         }
         
     	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/friend'); 
@@ -393,16 +394,18 @@
       								let profileButton = document.createElement('button');
       								profileButton.classList.add('bg-green-300', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-opacity-80', 'transition', 'duration-300', 'active:scale-95');
       								profileButton.textContent = 'Profile';
+      								profileButton.setAttribute('value',liflItem.getAttribute('id'));
       								
       								let challengeButton = document.createElement('button');
       								challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-yellow-500', 'transition', 'duration-300', 'active:scale-95');
       								challengeButton.textContent = 'Challenge';
-      								
+      								challengeButton.setAttribute('value',liflItem.getAttribute('id'));
       								let unfriendButton = document.createElement('button');
       								console.log(name);
-      								unfriendButton.setAttribute('onclick', `showUnfriendConfirmation(name)`);
+      								unfriendButton.setAttribute('onclick', `showUnfriendConfirmation('${name}',this)`);
       								unfriendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300', 'active:scale-95');
       								unfriendButton.textContent = 'Unfriend';
+      								unfriendButton.setAttribute('value',liflItem.getAttribute('id'));
       								div.appendChild(profileButton);
       								div.appendChild(challengeButton);
       								div.appendChild(unfriendButton);
@@ -466,15 +469,17 @@
 						let profileButton = document.createElement('button');
 						profileButton.classList.add('bg-green-300', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-opacity-80', 'transition', 'duration-300', 'active:scale-95');
 						profileButton.textContent = 'Profile';
-						
+						profileButton.setAttribute('value',receivedMessage.userId);
 						let challengeButton = document.createElement('button');
 						challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-yellow-500', 'transition', 'duration-300', 'active:scale-95');
 						challengeButton.textContent = 'Challenge';
-						
+						challengeButton.setAttribute('value',receivedMessage.userId);
 						let unfriendButton = document.createElement('button');
-						unfriendButton.setAttribute('onclick', `showUnfriendConfirmation(receivedMessage.userName)`);
+						unfriendButton.setAttribute('onclick', `showUnfriendConfirmation(receivedMessage.userName,this)`);
 						unfriendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300', 'active:scale-95');
 						unfriendButton.textContent = 'Unfriend';
+						unfriendButton.setAttribute('value',receivedMessage.userId);
+						
 						div2.appendChild(profileButton);
 						div2.appendChild(challengeButton);
 						div2.appendChild(unfriendButton);
@@ -483,6 +488,28 @@
 						lifl.appendChild(div2);
 						
 						ulfl.appendChild(lifl);
+      			}
+      		}else if (receivedMessage.content=='unFriend'){
+      			if (${USERMODEL.id}==receivedMessage.userId){
+      				const ulElement = document.getElementById("searchResults");
+     				if (ulElement.children.length>0){
+  						console.log(ulElement.children.length);
+  					 	let liElements = ulElement.getElementsByTagName('li');
+  					 	for (let i=0;i<liElements.length;i++){
+  						 let li = liElements[i];
+  							if (li.getAttribute('id') == receivedMessage.friendId){
+  							li.remove();
+  							}
+  						 }
+      				}
+     				const ulFl = document.getElementById('friendList');
+     				let lifl = ulFl.getElementsByTagName('li');
+     				for (let i=0;i<lifl.length;i++){
+     					let liflItem= lifl[i];
+      					if (liflItem.getAttribute('id') == receivedMessage.friendId){
+      						liflItem.remove();
+      					}
+     				}
       			}
       		}
       	}

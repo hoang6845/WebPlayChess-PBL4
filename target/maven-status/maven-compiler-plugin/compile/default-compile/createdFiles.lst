@@ -7,6 +7,7 @@ com\pbl4\filter\AuthorizationFilter.class
 com\pbl4\model\bean\Location.class
 com\pbl4\model\bean\UserModel.class
 com\pbl4\service\IRankService.class
+com\pbl4\Cloudinary\test.class
 com\pbl4\GamePlay\GameModeAI.class
 com\pbl4\model\DAO\IFriendDAO.class
 com\pbl4\service\IFriendService.class
@@ -44,6 +45,7 @@ com\pbl4\mapper\RankMapper.class
 com\pbl4\controller\web\HomeController.class
 com\pbl4\model\bean\King.class
 com\pbl4\serviceImpl\RankService.class
+com\pbl4\Cloudinary\CloudinaryConfig.class
 com\pbl4\controller\web\testBanCo.class
 com\pbl4\mapper\RowMapper.class
 com\pbl4\model\bean\SessionPlayer.class
@@ -57,6 +59,7 @@ com\pbl4\controller\web\PvPController.class
 com\pbl4\model\DAOImpl\RankDAO.class
 com\pbl4\model\bean\ProfileModel.class
 com\pbl4\model\bean\ChessInfo.class
+com\pbl4\Cloudinary\CloudinaryUploader.class
 com\pbl4\mapper\HistoryMapper.class
 com\pbl4\model\bean\Chess.class
 com\pbl4\model\bean\Bishop.class

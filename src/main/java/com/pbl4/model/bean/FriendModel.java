@@ -7,6 +7,14 @@ public class FriendModel extends AbstractModel<FriendModel>{
 	private long idFriend;
 	private String status;
 	private String nameFriend;
+	private String avatarFriend;
+	
+	public String getAvatarFriend() {
+		return avatarFriend;
+	}
+	public void setAvatarFriend(String avatarFriend) {
+		this.avatarFriend = avatarFriend;
+	}
 	public String getNameFriend() {
 		return nameFriend;
 	}

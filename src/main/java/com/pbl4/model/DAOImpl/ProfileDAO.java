@@ -28,6 +28,7 @@ public class ProfileDAO extends DAOimple<ProfileModel> implements IProfileDAO {
     public void insert(long userId, String email) {
         String sql = "INSERT INTO Profile (userId, imageOfUser, description, email, createdate) " +
                      "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
-        insert(sql, userId, null, null, email);
+        String defaultAvatar ="http://res.cloudinary.com/dgubksrvu/image/upload/v1731923570/lfte4unpxhsazs5bqhoa.png";
+        insert(sql, userId, defaultAvatar, null, email);
     }
 }
