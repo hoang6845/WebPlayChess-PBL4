@@ -16,4 +16,6 @@ public interface IFriendDAO extends DAOInterface<FriendModel> {
 	void addNewFriend(Long Userid, Long FriendId);
 	
 	boolean updateFriend(FriendModel friend);
+	
+	void delete(long userId);
 }

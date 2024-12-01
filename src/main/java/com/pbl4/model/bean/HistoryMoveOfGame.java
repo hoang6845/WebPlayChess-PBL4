@@ -7,12 +7,6 @@ public class HistoryMoveOfGame {
 	private String whiteName;
 	private String blackName;
 	private String result;
-	public String getResult() {
-		return result;
-	}
-	public void setResult(String result) {
-		this.result = result;
-	}
 	private Stack<Undo> u = new Stack<Undo>();
 	public HistoryMoveOfGame(String id, Stack<Undo> u, String whiteName, String blackName) {
 		super();
@@ -20,6 +14,14 @@ public class HistoryMoveOfGame {
 		this.u = u;
 		this.whiteName = whiteName;
 		this.blackName = blackName;
+	}
+	
+
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
 	}
 	
 	public HistoryMoveOfGame(String id, Stack<Undo> u, String result) {

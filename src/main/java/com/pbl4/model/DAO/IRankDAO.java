@@ -12,4 +12,5 @@ public interface IRankDAO extends DAOInterface<RankModel> {
     int updateElo(long userId, int eloAfterChange);
     int updateGames(long userId,int totalMatches,int win,int draws,int lose);
     void insert(long userId);
+    void delete(long userId);
 }

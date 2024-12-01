@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import com.pbl4.model.DAOImpl.UserDAO;
 import com.pbl4.model.DAOImpl.RankDAO;
+import com.pbl4.model.DAOImpl.FriendDAO;
 import com.pbl4.model.DAOImpl.ProfileDAO;
 import com.pbl4.model.bean.RankModel;
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.paging.PageRequest;
 import com.pbl4.service.IUserService;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -51,6 +53,7 @@ public class UserService implements IUserService {
 	@Override
 	public UserModel FindUserById(long id) {
 		UserModel result = UserDAO.getInstance().FindUserById(id);
+		if (result==null) return null;
 		RankModel rankModel = RankService.getInstance().findByUserId(id);
 		result.setElo(rankModel.getElo());
 		result.setTotalMatches(rankModel.getTotalMatches());
@@ -110,6 +113,48 @@ public class UserService implements IUserService {
 	    RankDAO.getInstance().insert(userId);
 	    ProfileDAO.getInstance().insert(userId, email);
 	    return true;
+	}
+	
+	@Override 
+	public boolean insertBy(String username, String password, String email, String createby) {
+		UserModel user = UserDAO.getInstance().findByUserName(username);
+		if(user != null) return false;
+		String hashpass = hashPassword(password);
+	    UserDAO.getInstance().insertBy(username, hashpass, createby);
+	    long userId = UserDAO.getInstance().findByUserName(username).getId();
+	    RankDAO.getInstance().insert(userId);
+	    ProfileDAO.getInstance().insert(userId, email);
+	    return true;
+	}
+
+	@Override
+	public ArrayList<UserModel> findAll(PageRequest pageRequest) {
+		return UserDAO.getInstance().findAll(pageRequest);
+	}
+
+	@Override
+	public int totalItems() {
+		// TODO Auto-generated method stub
+		return UserDAO.getInstance().countItems();
+	}
+	
+	public void delete(Long[] longs) {
+		for (long id:longs) {
+			RankDAO.getInstance().delete(id);
+			ProfileDAO.getInstance().delete(id);
+			FriendDAO.getInstance().delete(id);
+			UserDAO.getInstance().delete(id);
+		}
+	}
+
+	@Override
+	public boolean update(long id, String fullname, String username, String password) {
+		UserModel user = UserDAO.getInstance().findByUserName(username);
+		if (user!=null&&user.getId()!=id) {
+			return false;
+		}
+		UserDAO.getInstance().update(id, fullname, username, hashPassword(password));
+		return true;
 	}
 
 }

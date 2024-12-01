@@ -24,6 +24,7 @@ import com.pbl4.model.bean.SessionPlayer;
 import com.pbl4.model.bean.Undo;
 import com.pbl4.model.bean.UserModel;
 import com.pbl4.serviceImpl.HistoryService;
+import com.pbl4.serviceImpl.ProfileService;
 import com.pbl4.serviceImpl.UserService;
 import com.pbl4.utils.SessionUtil;
 
@@ -89,23 +90,6 @@ public class PvPWebsocket {
 				System.out.println("Session " + session.getId() + " Player " + senderName + " joined room: " + roomId);
 				System.out.println("Room " + roomId + " có " + players.size() + " Player");
 
-				/*
-				 * if (players.size()==2) {
-				 * 
-				 * Iterator<SessionPlayer> iterator = players.iterator(); SessionPlayer
-				 * firstPlayer = iterator.next(); SessionPlayer secondPlayer = iterator.next();
-				 * UserModel whiteModel =
-				 * UserService.getInstance().FindUserById(firstPlayer.getUserId()); UserModel
-				 * blackModel =
-				 * UserService.getInstance().FindUserById(secondPlayer.getUserId());
-				 * 
-				 * //cách 1 SessionUtil.getInstance().putValueBySession("WHITEMODEL",
-				 * whiteModel); //cách 2 httpSession.setAttribute("WHITEMODEL", whiteModel); //
-				 * Không dùng được vì 2 cách đều cần reload lại trang để lấy dữ liệu trên http
-				 * 
-				 * }
-				 */
-
 				Message joinMessage = new Message(roomId, "join", responseMessage.getSender(),
 						String.valueOf(players.size()));
 				String jsonJoinMessage = gson.toJson(joinMessage);
@@ -122,7 +106,9 @@ public class PvPWebsocket {
 						SessionPlayer firstPlayer = iterator.next();
 						SessionPlayer SecondPlayer = iterator.next();
 						UserModel whiteModel = UserService.getInstance().FindUserById(firstPlayer.getUserId());
+						whiteModel.setAvatar(ProfileService.getInstance().findByUserId(whiteModel.getId()).getImageOfUser());
 						UserModel blackModel = UserService.getInstance().FindUserById(SecondPlayer.getUserId());
+						blackModel.setAvatar(ProfileService.getInstance().findByUserId(blackModel.getId()).getImageOfUser());
 						Message gameStartMessage = new Message(roomId, "start",
 								firstPlayer.getUserId() + "|" + SecondPlayer.getUserId(), "start", whiteModel,
 								blackModel);
@@ -144,7 +130,9 @@ public class PvPWebsocket {
 					SessionPlayer firstPlayer = iterator.next();
 					SessionPlayer SecondPlayer = iterator.next();
 					UserModel whiteModel = UserService.getInstance().FindUserById(firstPlayer.getUserId());
+					whiteModel.setAvatar(ProfileService.getInstance().findByUserId(whiteModel.getId()).getImageOfUser());
 					UserModel blackModel = UserService.getInstance().FindUserById(SecondPlayer.getUserId());
+					blackModel.setAvatar(ProfileService.getInstance().findByUserId(blackModel.getId()).getImageOfUser());
 					for (int i = 0; i < 16; i++) {
 						arr[i] = ChessInfo.getInstance().convertChessToChessInfo(G.mgr.Player[i], i);
 						arr[i + 16] = ChessInfo.getInstance().convertChessToChessInfo(G.mgr.Computer[i], i);

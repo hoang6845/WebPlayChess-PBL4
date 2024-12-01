@@ -6,6 +6,7 @@ import com.pbl4.SystemConstant.SystemConstant;
 import com.pbl4.mapper.UserMapper;
 import com.pbl4.model.DAO.IUserDAO;
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.paging.PageRequest;
 
 
 
@@ -70,6 +71,58 @@ public class UserDAO extends DAOimple<UserModel> implements IUserDAO {
 	    String sql = "INSERT INTO Userr (username, password, fullname, createdate, modifieddate, createby, modifiedby, idRole) " +
 	                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?)";
 	    insert(sql, username, password, username, null ,null, null, 2);
+	}
+	
+	@Override
+	public void insertBy(String username, String password, String createby) {
+	    String sql = "INSERT INTO Userr (username, password, fullname, createdate, modifieddate, createby, modifiedby, idRole) " +
+	                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?)";
+	    insert(sql, username, password, username, null ,createby, null, 2);
+	}
+
+
+	@Override
+	public ArrayList<UserModel> findAll(PageRequest pageRequest) {
+		StringBuilder sql = new StringBuilder("select * from userr u INNER JOIN Rolee r ON r.id = U.idRole ");
+		sql.append( "where codeRole=?");
+		if (pageRequest.getSorter().getSortName() == null) {
+			pageRequest.getSorter().setSortName("id");
+		}
+		sql.append(" ORDER BY u."+pageRequest.getSorter().getSortName());
+		if (pageRequest.getSorter().getSortBy() !=null) {
+			sql.append(" "+pageRequest.getSorter().getSortBy());
+		}
+		
+		if (pageRequest.getOffset() != null && pageRequest.getLimit() !=null) {
+			sql.append(" OFFSET ? ROWS"
+					+ " FETCH NEXT ? ROWS ONLY;");
+			System.out.println(sql);
+			return query(sql.toString(), new UserMapper(),SystemConstant.PLAYER , pageRequest.getOffset(),  pageRequest.getLimit());
+		}
+		else return query(sql.toString(), new UserMapper(), SystemConstant.PLAYER);
+	}
+
+
+	@Override
+	public int countItems() {
+		String sql = "select count(*) from userr";
+		return countItems(sql);
+	}
+
+
+	@Override
+	public void delete(long id) {
+		String sql = " delete from userr where id=?";
+		delete(sql, id);
+		
+	}
+
+
+	@Override
+	public boolean update(long id, String fullname, String username, String password) {
+		String sql = "UPDATE Userr SET username = ?, password = ?, fullname = ? " +
+                "WHERE id = ?";
+		return update(sql, username, password, fullname, id)>0;
 	}
 	
 }

@@ -11,6 +11,12 @@ public class RoleModel extends AbstractModel<RoleModel> {
 		this.codeRole = codeRole;
 		this.nameRole = nameRole;
 	}
+	
+	public RoleModel( String codeRole, String nameRole) {
+		super();
+		this.nameRole = nameRole;
+		this.codeRole = codeRole;
+	}
 	public RoleModel() {
 		super();
 	}

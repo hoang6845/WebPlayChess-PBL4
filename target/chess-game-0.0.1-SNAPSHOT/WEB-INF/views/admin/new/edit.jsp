@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="APIurl" value="/api-admin-new"/>
-<c:url var ="NewURL" value="/admin-new"/>
+<c:url var="APIurl" value="/api-admin-user"/>
+<c:url var ="UserURL" value="/admin-user"/>
 <html>
 <head>
     <title>Chỉnh sửa bài viết</title>
@@ -17,9 +17,9 @@
             <ul class="breadcrumb">
                 <li>
                     <i class="ace-icon fa fa-home home-icon"></i>
-                    <a href="#">Trang chủ</a>
+                    <a href='<c:url value="/admin-home"></c:url>'>Trang chủ</a>
                 </li>
-                <li class="active">Chỉnh sửa bài viết</li>
+                <li class="active">Chỉnh sửa người dùng</li>
             </ul><!-- /.breadcrumb -->
         </div>
         <div class="page-content">
@@ -32,20 +32,20 @@
 						</c:if>
                         <form id="formSubmit">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right">Thể loại</label>
+                                <label class="col-sm-3 control-label no-padding-right">Vai trò</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" id="categoryCode" name="categoryCode">
-                                        <c:if test="${empty model.categoryCode}">
-                                            <option value="">Chọn loại bài viết insert</option>
-                                            <c:forEach var="item" items="${catogories}">
-                                                <option value="${item.code}">${item.name}</option>
+                                    <select class="form-control" id="roleCode" name="roleCode">
+                                        <c:if test="${empty model.role}">
+                                            <option value="">Chọn loại role insert</option>
+                                            <c:forEach var="item" items="${ROLE}">
+                                                <option value="${item.codeRole}">${item.nameRole}</option>
                                             </c:forEach>
                                         </c:if>
-                                        <c:if test="${not empty model.categoryCode}">
-                                            <option value="">Chọn loại bài viết edit</option>
-                                            <c:forEach var="item" items="${catogories}">
-                                                <option value="${item.code}" <c:if test="${item.code == model.categoryCode}">selected="selected"</c:if>>
-                                                        ${item.name}
+                                        <c:if test="${not empty model.role}">
+                                            <option value="">Chọn loại role edit</option>
+                                            <c:forEach var="item" items="${ROLE}">
+                                                <option value="${item.codeRole}" <c:if test="${item.codeRole == model.role.codeRole}">selected="selected"</c:if>>
+                                                        ${item.nameRole}
                                                 </option>
                                             </c:forEach>
                                         </c:if>
@@ -55,33 +55,41 @@
                             <br/>
                             <br/>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right">Tiêu đề</label>
+                                <label class="col-sm-3 control-label no-padding-right">Tên người dùng </label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="title" name="title" value="${model.title}"/>
+                                    <input type="text" class="form-control" id="fullname" name="fullname" required value="${model.fullname}"/>
                                 </div>
                             </div>
                             <br/>
                             <br/>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right">Hình đại diện</label>
+                                <label class="col-sm-3 control-label no-padding-right">Username</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="${model.thumbnail}"/>
+                                    <input type="text" class="form-control" id="username" name="username" value="${model.username}"/>
                                 </div>
                             </div>
                             <br/>
                             <br/>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right">Mô tả ngắn</label>
+                                <label class="col-sm-3 control-label no-padding-right">Mật khẩu</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="shortDescription" name="shortDescription" value="${model.shortDescription}"/>
+                                    <input type="text" class="form-control" id="password" name="password" placeholder="${model.password}"/>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                              <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">Email</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="email" name="email" value="${profile.email}"/>
                                 </div>
                             </div>
                             <br/>
                             <br/>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right">Nội dung</label>
+                                <label class="col-sm-3 control-label no-padding-right">Description</label>
                                 <div class="col-sm-9">                                 
-                                    <textarea rows="" cols="" id="content" name="content" style="width: 100%;min-height: 120px">${model.content}</textarea>
+                                    <textarea rows="" cols="" id="description" name="description" style="width: 100%;min-height: 120px">${profile.description}</textarea>
                                 </div>
                             </div>
                             <br/>
@@ -89,10 +97,10 @@
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <c:if test="${not empty model.id}">
-                                        <input type="button" class="btn btn-white btn-warning btn-bold" value="Cập nhật bài viết" id="btnAddOrUpdateNew"/>
+                                        <input type="button" class="btn btn-white btn-warning btn-bold" value="Cập nhật người dùng" id="btnAddOrUpdateNew"/>
                                     </c:if>
                                     <c:if test="${empty model.id}">
-                                        <input type="button" class="btn btn-white btn-warning btn-bold" value="Thêm bài viết" id="btnAddOrUpdateNew"/>
+                                        <input type="button" class="btn btn-white btn-warning btn-bold" value="Thêm người dùng" id="btnAddOrUpdateNew"/>
                                     </c:if>
                                 </div>
                             </div>
@@ -125,21 +133,25 @@
 	        }
 	})
 	 function addNew(data) {
-        $.ajax({
-            url: '${APIurl}',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            dataType: 'json',
-            success: function (result) {
-            //	window.location.href = "${NewURL}?type=edit&id="+result.id+"&message=insert_success";
-            console.log(result);
-            },
-            error: function (error) {
-            	//window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=error_system";
-            	 console.log(error);
-            }
-        });
+		console.log(data);
+		if (data.username==''||data.password==''||data.email==''||data.fullname==''||data.roleCode=='') alert("Vui lòng điền đủ các trường bắt buộc");
+		else {
+			$.ajax({
+	            url: '${APIurl}',
+	            type: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify(data),
+	            dataType: 'json',
+	            success: function (result) {
+	            //	window.location.href = "${NewURL}?type=edit&id="+result.id+"&message=insert_success";
+	            console.log(result);
+	            },
+	            error: function (error) {
+	            	//window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=error_system";
+	            	 console.log(error);
+	            }
+	        });
+		}
     }
     function updateNew(data) {
         $.ajax({

@@ -12,6 +12,55 @@ public class AbstractModel<T> {
 	private String modifiedBy;
 	private ArrayList<T> listModel;
 	
+	private int page; //startPage
+	private int totalPage;
+	private int totalItems;
+	private String sortName;
+	private String sortBy;
+	private String type;
+	private int itemsInPage = 4;//tong so item 1 trang
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getTotalPage() {
+		return totalPage;
+	}
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+	public int getTotalItems() {
+		return totalItems;
+	}
+	public void setTotalItems(int totalItems) {
+		this.totalItems = totalItems;
+	}
+	public String getSortName() {
+		return sortName;
+	}
+	public void setSortName(String sortName) {
+		this.sortName = sortName;
+	}
+	public String getSortBy() {
+		return sortBy;
+	}
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public int getItemsInPage() {
+		return itemsInPage;
+	}
+	public void setItemsInPage(int itemsInPage) {
+		this.itemsInPage = itemsInPage;
+	}
 	public ArrayList<T> getListModel() {
 		return listModel;
 	}

@@ -7,4 +7,5 @@ public interface IProfileDAO extends DAOInterface<ProfileModel> {
     ProfileModel findByUserId(long userId);
     boolean updateProfile(ProfileModel profile);
     void insert(long userId, String email);
+    void delete(long userId);
 }

@@ -11,7 +11,7 @@
     <script src='<c:url value='/template/web/bootstrap/js/3.4.5'></c:url>'></script>
     <style>
         body {
-            background-image: url("https://images.pexels.com/photos/131616/pexels-photo-131616.jpeg");
+            background-image: url("http://res.cloudinary.com/dgubksrvu/image/upload/v1731930003/xduszbog8gteypm4rmww.jpg");
             background-size: cover;
             background-repeat: no-repeat;
         }

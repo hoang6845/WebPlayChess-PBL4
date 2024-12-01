@@ -20,7 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebFilter("/*")
 public class AuthorizationFilter implements Filter {
-
 	private ServletContext context;
 	private static ThreadLocal<HttpServletRequest> currentRequest = new ThreadLocal<>();
 	
@@ -28,7 +27,6 @@ public class AuthorizationFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.context = filterConfig.getServletContext();
     }
-	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -51,10 +49,8 @@ public class AuthorizationFilter implements Filter {
 		}
 		else {	
 			System.out.println("checkLinkNormal"+url);
-			//khoong co /admin thi cho vao thoai mai
 			chain.doFilter(request, response);
 		}
-		
 	}
 	   public static HttpServletRequest getCurrentRequest() {
 	        return currentRequest.get();

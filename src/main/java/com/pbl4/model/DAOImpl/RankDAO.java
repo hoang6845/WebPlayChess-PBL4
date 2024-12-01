@@ -64,4 +64,11 @@ public class RankDAO extends DAOimple<RankModel> implements IRankDAO {
 	    insert(sql, userId, 1200, 0, 0, 0, 0);
 	}
 
+	@Override
+	public void delete(long userId) {
+		String sql = " delete from rank where userId=?";
+		delete(sql, userId);
+		
+	}
+
 }

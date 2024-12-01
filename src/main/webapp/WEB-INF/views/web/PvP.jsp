@@ -454,6 +454,7 @@
     					whitePlayerName.textContent = "${USERMODEL.fullname}" ;
     					whitePlayerRank.textContent = "${USERMODEL.getElo()}" ;
     					let whitePlayerContent = document.getElementById('whitePlayerContent');
+    					whitePlayerContent.querySelector('img').src="${USERMODEL.avatar}";
     					console.log(whitePlayerContent);
     					whitePlayerContent.appendChild(whitePlayerInfo)
 							
@@ -493,6 +494,7 @@
 					whitePlayerRank.textContent = receivedMessage.whiteModel.elo ;
 					let whitePlayerContent = document.getElementById('whitePlayerContent');
 					console.log(whitePlayerContent);
+					whitePlayerContent.querySelector('img').src=receivedMessage.whiteModel.avatar;
 					whitePlayerContent.appendChild(whitePlayerInfo)
     				
 					//set info backPlayer
@@ -510,6 +512,7 @@
 					blackPlayerRank.textContent = receivedMessage.blackModel.elo ;
 					let blackPlayerContent = document.getElementById('blackPlayerContent');
 					console.log(blackPlayerContent);
+					blackPlayerContent.querySelector('img').src=receivedMessage.blackModel.avatar;
 					blackPlayerContent.appendChild(blackPlayerInfo)
     				
     				let [whitePlayer, blackPlayer]=receivedMessage.sender.split("|");
@@ -637,6 +640,7 @@
 					whitePlayerRank.textContent = receivedMessage.whiteModel.elo ;
 					let whitePlayerContent = document.getElementById('whitePlayerContent');
 					console.log(whitePlayerContent);
+					whitePlayerContent.querySelector('img').src=receivedMessage.whiteModel.avatar;
 					whitePlayerContent.appendChild(whitePlayerInfo)
     				
 					//set info backPlayer
@@ -654,6 +658,7 @@
 					blackPlayerRank.textContent = receivedMessage.blackModel.elo ;
 					let blackPlayerContent = document.getElementById('blackPlayerContent');
 					console.log(blackPlayerContent);
+					blackPlayerContent.querySelector('img').src=receivedMessage.blackModel.avatar;
 					blackPlayerContent.appendChild(blackPlayerInfo)
     			}
     		}else if(receivedMessage.type == "restart"){

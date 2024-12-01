@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
 <c:url var="APIurl" value="/api-admin-new"/>
-<c:url var ="NewURL" value="/admin-new"/>
+<c:url var ="UserURL" value="/admin-user"/>
 <!DOCTYPE html>
 <html>
 
@@ -13,12 +13,12 @@
 
 <body>
 	<div class="main-content">
-		<form action='<c:url value ='/admin-new'></c:url>' id="formSubmit"
+		<form action='<c:url value ='/admin-user'></c:url>' id="formSubmit"
 			method="get">
 			<div class="main-content-inner">
 				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Trang
+						<li><i class="ace-icon fa fa-home home-icon"></i> <a href='<c:url value="/admin-home"></c:url>'>Trang
 								chủ</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
@@ -31,13 +31,13 @@
 									<a flag="info"
 										class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
 										data-toggle="tooltip" title='Thêm bài viết'
-										href='<c:url value="/admin-new?type=edit"/>'> <span>
+										href='<c:url value="/admin-user?type=edit"/>'> <span>
 											<i class="fa fa-plus-circle bigger-110 purple"></i>
 									</span>
 									</a>
 									<button id="btnDelete"
 										class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-										data-toggle="tooltip" title='Xóa bài viết'>
+										data-toggle="tooltip" title='Xóa người dùng'>
 										<i class="fa fa-trash-o bigger-110 pink"></i>
 									</button>
 								</div>
@@ -51,24 +51,23 @@
 									<tr>
 										<th><input type="checkbox" id="checkAll"></th>
 										<th scope="col">STT</th>
-										<th scope="col">Tên bài viết</th>
-										<th scope="col">Mô tả ngắn</th>
-										<th scope="col">Thumbnail</th>
+										<th scope="col">Tên</th>
+										<th scope="col">username</th>
+										<th scope="col">password</th>
 										<th scope="col">Thao tác</th>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="item" items="${model.listResult}"
+									<c:forEach var="item" items="${model.listModel}"
 										varStatus="status">
 										<tr>
 											<td><input type="checkbox" id="checkbox_${item.id}" value="${item.id}"></td>
-											<th scope="row">${status.count}</th>
-											<td>${item.title}</td>
-											<td>${item.shortDescription}</td>
-											<td>${item.thumbnail}</td>
-											<!--<td><img src="${item.thumbnail}" alt="${item.title} thumbnail" /></td>  -->
+											<th scope="row">${status.count+(model.page-1)*model.itemsInPage}</th>
+											<td>${item.getFullname()}</td>
+											<td>${item.username}</td>
+											<td>${item.password}</td>
 											<td>
-											<c:url var="editURL" value = "/admin-new">
+											<c:url var="editURL" value = "/admin-user">
 												<c:param name="type" value="edit"></c:param>
 												<c:param name="id" value="${item.id}"></c:param>
 											</c:url>
@@ -100,7 +99,7 @@
 	<script type="text/javascript">
 		var totalPage = ${model.totalPage};
 		var currentPage = ${model.page};
-		var limit = 4;
+		var limit = ${model.itemsInPage};
 		$(function() {
 			window.pagObj = $('#pagination').twbsPagination({
 				totalPages : totalPage,
@@ -136,10 +135,10 @@
 		            contentType: 'application/json',
 		            data: JSON.stringify(data),
 		            success: function (result) {
-		                window.location.href = "${NewURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc";
+		                window.location.href = "${UserURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc";
 		            },
 		            error: function (error) {
-		            	window.location.href = "${NewURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc";
+		            	window.location.href = "${UserURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc";
 
 		            }
 		        });

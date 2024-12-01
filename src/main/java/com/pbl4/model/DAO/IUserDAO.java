@@ -3,6 +3,7 @@ package com.pbl4.model.DAO;
 import java.util.ArrayList;
 
 import com.pbl4.model.bean.UserModel;
+import com.pbl4.paging.PageRequest;
 
 public interface IUserDAO extends DAOInterface<UserModel> {
 
@@ -16,7 +17,16 @@ public interface IUserDAO extends DAOInterface<UserModel> {
 	
 	boolean updateUser(UserModel user);
 	
+	boolean update(long id, String fullname, String username, String password);
+	
 	UserModel findByUserName(String userName);
 	
 	void insert(String username, String password);
+	
+	public void insertBy(String username, String password, String createby);
+	
+	ArrayList<UserModel> findAll(PageRequest pageRequest);
+	
+	int countItems();
+	void delete(long id);
 }

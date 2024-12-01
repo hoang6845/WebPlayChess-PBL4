@@ -14,4 +14,5 @@ public interface IFriendService extends IService{
 	void acceptFriend(Long UserId, Long FriendId);
 	
 	void deleteFriend(Long UserId, Long FriendId);
+	
 }

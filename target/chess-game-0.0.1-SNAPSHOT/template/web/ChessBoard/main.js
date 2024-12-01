@@ -330,9 +330,6 @@ function drop(ev,MoveToClient=0) {
           destinationSquare.removeChild(children[i]);
         }
     }
-    // while (destinationSquare.firstChild) {
-    //   destinationSquare.removeChild(destinationSquare.firstChild);
-    // }
     destinationSquare.appendChild(piece);
     if (isWhiteTurn){
 		startBlackPlayerClock();
@@ -484,7 +481,8 @@ function checkPawnForwardMoves(
   let squareContent = currentSquare.pieceColor;
   if (squareContent != "blank") return legalSquares;
   legalSquares.push(currentSquareId);
-    if ((rankNumber != 2 && rankNumber != 7)||(rankNumber==2&&direction==-1)||(rankNumber==7&&direction==1)) return legalSquares;
+    if ((rankNumber != 2 && rankNumber != 7)||(rankNumber==2&&direction==-1)||(rankNumber==7&&direction==1)) 
+    	return legalSquares;
   currentRank += direction;
   currentSquareId = currentFile + currentRank;
   currentSquare = boardSquaresArray.find(
@@ -504,7 +502,6 @@ function getKnightMoves(startingSquareId, pieceColor, boardSquaresArray) {
   let currentFile = file;
   let currentRank = rankNumber;
   let legalSquares = [];
-
   const moves = [
     [-2, 1],
     [-1, 2],
@@ -526,8 +523,7 @@ function getKnightMoves(startingSquareId, pieceColor, boardSquaresArray) {
     ) {
       let currentSquareId = String.fromCharCode(currentFile + 97) + currentRank;
       let currentSquare = boardSquaresArray.find(
-        (element) => element.squareId === currentSquareId
-      );
+        (element) => element.squareId === currentSquareId);
       let squareContent = currentSquare.pieceColor;
       if (squareContent != "blank" && squareContent == pieceColor)
         return legalSquares;
@@ -613,7 +609,6 @@ function getKingMoves(startingSquareId, pieceColor, boardSquaresArray) {
   let currentFile = file;
   let currentRank = rankNumber;
   let legalSquares = [];
-
   const moves = [
     [0, 1],
     [0, -1],
@@ -624,8 +619,6 @@ function getKingMoves(startingSquareId, pieceColor, boardSquaresArray) {
     [-1, 1],
     [1, 0],
   ];
-
-  //  for (let move of moves)
   moves.forEach((move) => {
     currentFile = file + move[0];
     currentRank = rankNumber + move[1];

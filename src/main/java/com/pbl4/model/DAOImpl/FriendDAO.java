@@ -70,4 +70,11 @@ public class FriendDAO extends DAOimple<FriendModel> implements IFriendDAO {
 	    }
 	}
 
+	@Override
+	public void delete(long userId) {
+		String sql = "DELETE FROM friend_list WHERE iduser=? or idfriend=?";
+		delete(sql, userId, userId);
+		
+	}
+
 }

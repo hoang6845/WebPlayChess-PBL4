@@ -31,4 +31,11 @@ public class ProfileDAO extends DAOimple<ProfileModel> implements IProfileDAO {
         String defaultAvatar ="http://res.cloudinary.com/dgubksrvu/image/upload/v1731923570/lfte4unpxhsazs5bqhoa.png";
         insert(sql, userId, defaultAvatar, null, email);
     }
+
+	@Override
+	public void delete(long userId) {
+		// TODO Auto-generated method stub
+		String sql = "delete from profile where userid=?";
+		delete(sql, userId);
+	}
 }
