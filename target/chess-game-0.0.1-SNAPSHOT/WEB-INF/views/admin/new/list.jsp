@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="APIurl" value="/api-admin-new"/>
+<c:url var="APIurl" value="/api-admin-user"/>
 <c:url var ="UserURL" value="/admin-user"/>
 <!DOCTYPE html>
 <html>
@@ -13,6 +13,9 @@
 
 <body>
 	<div class="main-content">
+		<c:if test="${not empty message}">
+			<div class="alert alert-success bem absolute" role="alert">${message}</div>
+		</c:if>
 		<form action='<c:url value ='/admin-user'></c:url>' id="formSubmit"
 			method="get">
 			<div class="main-content-inner">
@@ -99,7 +102,7 @@
 	<script type="text/javascript">
 		var totalPage = ${model.totalPage};
 		var currentPage = ${model.page};
-		var limit = ${model.itemsInPage};
+		var limit = 4;
 		$(function() {
 			window.pagObj = $('#pagination').twbsPagination({
 				totalPages : totalPage,
@@ -129,16 +132,20 @@
 			deleteNew(data);
 		});
 		 function deleteNew(data) {
+			 event.preventDefault();
+			 alert(data.ids);
 		        $.ajax({
 		            url: '${APIurl}',
 		            type: 'DELETE',
 		            contentType: 'application/json',
 		            data: JSON.stringify(data),
 		            success: function (result) {
+		            	alert("đã xóa");
 		                window.location.href = "${UserURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc";
 		            },
 		            error: function (error) {
-		            	window.location.href = "${UserURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc";
+		            	alert("chưa xóa");
+		            	console.log(error);
 
 		            }
 		        });

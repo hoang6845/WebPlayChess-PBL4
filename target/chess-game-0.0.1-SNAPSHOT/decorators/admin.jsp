@@ -16,7 +16,54 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="<c:url value='/template/paging/jquery.twbsPagination.js' />"></script>
-   
+   <style>
+		.alert {
+		    position: relative;
+		    padding: 10px 84px 10px 24px;
+		    margin-bottom: 1rem;
+		    border: 4px solid transparent;
+		    border-radius: 4px;
+		}
+		.alert-danger{
+			color: #000;
+			background-color: #fff;
+			border-left: 6px red solid;
+
+		}
+		.alert-success{
+			color: #000;
+			background-color: #fff;
+			border-left: 6px #5dee5d solid;
+
+		}
+		.bem{
+		    position: absolute !important;
+			top: 80px;
+		    right: 40px;
+		    animation:SlideInLeft ease 0.6s, FadeOut linear 3.5s 0.4s forwards; */
+		    font-size: 22px;
+		    z-index: 50;
+		}
+		
+		@keyframes SlideInLeft {
+		    from {
+		        opacity: 0;
+		        transform: translateX(calc(100% + 15px));
+		        display: none;
+		    }
+		    to {
+		        display: flex;
+		        opacity: 1;
+		        transform: translateX(0);
+		    }
+		}
+		
+		@keyframes FadeOut{
+		    to {
+		        opacity: 0;
+		    }
+		}
+	</style>
     
     <script src="<c:url value='/ckeditor/ckeditor.js' />"></script>
 </head>

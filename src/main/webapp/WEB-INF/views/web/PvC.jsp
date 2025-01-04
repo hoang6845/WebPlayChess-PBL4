@@ -238,7 +238,7 @@
 				onclick="goHistoryMove()">
 				Xem lại ván đấu</button>
 			<button
-				class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect" id="btn_taiDau">
+				class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full hover-effect" id="btn_taiDau" onclick="choiLai('<c:url value="/PvC?type=${level}"></c:url>')">
 				Chơi lại</button>
 
 		</div>
@@ -305,6 +305,10 @@
 	   	function goHome(){
 	   	    window.location.assign("/chess-game/trang-chu?page=home");
 	   	}
+	   	
+	    function choiLai(url) {
+	        window.location.assign(url); 
+	    }
         
         function startBlackPlayerClock(){
         	document.getElementById('blackPlayerClock').classList.add("bg-white");

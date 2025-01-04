@@ -99,10 +99,8 @@
 								<div>
 									<button
 										class="bg-green-300 text-white px-3 py-1 rounded-md mr-2 hover:bg-opacity-80 transition duration-300 active:scale-95"
-										value="${item.idFriend}" >Profile</button>
-									<button
-										class="bg-yellow-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-yellow-500 transition duration-300 active:scale-95"
-										value="${item.idFriend}">Challenge</button>
+										value="${item.idFriend}" onclick="showProfile(this)"  >Profile</button>
+									
 									<button
 										class="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition duration-300 active:scale-95" value="${item.idFriend}"
 										onclick="showUnfriendConfirmation('${item.getNameFriend()}',this)">Unfriend</button>
@@ -234,6 +232,11 @@
             document.getElementById('unfriendModal').classList.add('flex');
             document.getElementById('btn_confirmUnfriend').setAttribute('idFr', btn.getAttribute('value'));
         }
+        
+        function showProfile(btn){
+        	var idv = btn.getAttribute('value');
+        	window.location.assign("/chess-game/profilefriend?id="+idv); 
+        }
 
         function closeUnfriendModal() {
             document.getElementById('unfriendModal').classList.add('hidden');
@@ -248,7 +251,7 @@
             closeUnfriendModal();
         }
         
-    	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/friend'); 
+    	let ws = new WebSocket('ws://192.168.1.2:8080/chess-game/friend'); 
 
         class MessageFriend {
         	constructor(content, userId, friendId, img=""){
@@ -350,11 +353,7 @@
   									friendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300');
   									friendButton.innerHTML = 'Bạn bè <i class="fa-solid fa-user-group"></i>';
   								  	div.appendChild(friendButton);
-  								  	let challengeButton = document.createElement('button');
-  						//			challengeButton.setAttribute('onclick', `challengeFriend(${USERMODEL.id}, this)`);
-  									challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-yellow-500', 'transition', 'duration-300');
-  									challengeButton.textContent = 'Thách đấu';
-  									div.appendChild(challengeButton);
+  								  	
   									};
   								
   								});
@@ -397,11 +396,8 @@
       								profileButton.classList.add('bg-green-300', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-opacity-80', 'transition', 'duration-300', 'active:scale-95');
       								profileButton.textContent = 'Profile';
       								profileButton.setAttribute('value',liflItem.getAttribute('id'));
+      								profileButton.setAttribute('onclick', `showProfile(this)`);
       								
-      								let challengeButton = document.createElement('button');
-      								challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-yellow-500', 'transition', 'duration-300', 'active:scale-95');
-      								challengeButton.textContent = 'Challenge';
-      								challengeButton.setAttribute('value',liflItem.getAttribute('id'));
       								let unfriendButton = document.createElement('button');
       								console.log(name);
       								unfriendButton.setAttribute('onclick', `showUnfriendConfirmation('${name}',this)`);
@@ -409,7 +405,7 @@
       								unfriendButton.textContent = 'Unfriend';
       								unfriendButton.setAttribute('value',liflItem.getAttribute('id'));
       								div.appendChild(profileButton);
-      								div.appendChild(challengeButton);
+      								
       								div.appendChild(unfriendButton);
       							}
       						});
@@ -436,11 +432,7 @@
       									friendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300');
       									friendButton.innerHTML = 'Bạn bè <i class="fa-solid fa-user-group"></i>';
       								  	div.appendChild(friendButton);
-      								  	let challengeButton = document.createElement('button');
-      						//			challengeButton.setAttribute('onclick', `challengeFriend(${USERMODEL.id}, this)`);
-      									challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-yellow-500', 'transition', 'duration-300');
-      									challengeButton.textContent = 'Thách đấu';
-      									div.appendChild(challengeButton);
+      								  	
       								};
       							});
       						
@@ -472,10 +464,7 @@
 						profileButton.classList.add('bg-green-300', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-opacity-80', 'transition', 'duration-300', 'active:scale-95');
 						profileButton.textContent = 'Profile';
 						profileButton.setAttribute('value',receivedMessage.userId);
-						let challengeButton = document.createElement('button');
-						challengeButton.classList.add('bg-yellow-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'mr-2', 'hover:bg-yellow-500', 'transition', 'duration-300', 'active:scale-95');
-						challengeButton.textContent = 'Challenge';
-						challengeButton.setAttribute('value',receivedMessage.userId);
+						profileButton.setAttribute('onclick', `showProfile(this)`);
 						let unfriendButton = document.createElement('button');
 						unfriendButton.setAttribute('onclick', `showUnfriendConfirmation(receivedMessage.userName,this)`);
 						unfriendButton.classList.add('bg-gray-400', 'text-white', 'px-3', 'py-1', 'rounded-md', 'hover:bg-gray-500', 'transition', 'duration-300', 'active:scale-95');
@@ -483,7 +472,7 @@
 						unfriendButton.setAttribute('value',receivedMessage.userId);
 						
 						div2.appendChild(profileButton);
-						div2.appendChild(challengeButton);
+					
 						div2.appendChild(unfriendButton);
 					 	console.log(div2);
 						lifl.appendChild(div1);

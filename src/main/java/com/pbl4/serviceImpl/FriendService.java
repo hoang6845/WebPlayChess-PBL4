@@ -48,5 +48,7 @@ public class FriendService implements IFriendService{
     	FriendDAO.getInstance().updateFriend(friend2);
     }
 
+
+
 	
 }

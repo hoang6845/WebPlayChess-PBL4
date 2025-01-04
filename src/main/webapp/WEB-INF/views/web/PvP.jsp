@@ -356,7 +356,7 @@
     	
     	var RoomGame = '${room}';
     	var checkTypePlayer ="";
-    	let ws = new WebSocket('ws://192.168.1.8:8080/chess-game/PvP'); 
+    	let ws = new WebSocket('ws://192.168.1.2:8080/chess-game/PvP'); 
 
     	var WhiteModelPlayer;
     	var BlackModelPlayer;

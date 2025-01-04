@@ -143,11 +143,16 @@
 	            data: JSON.stringify(data),
 	            dataType: 'json',
 	            success: function (result) {
-	            //	window.location.href = "${NewURL}?type=edit&id="+result.id+"&message=insert_success";
-	            console.log(result);
+	            	console.log(result);
+	            	if (result.type=='success'){
+	            		alert("Thêm thành công");
+		            	window.location.href = "${UserURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc&message=AddSuccess";
+	            	}else if(result.type=='fail'){
+	            		alert("username đã tồn tại");
+	            	}
 	            },
 	            error: function (error) {
-	            	//window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=error_system";
+	            	window.location.href = "${UserURL}?type=list&maxPageItem=2&page=1&message=error_system";
 	            	 console.log(error);
 	            }
 	        });
@@ -161,8 +166,13 @@
             data: JSON.stringify(data),
             dataType: 'json',
             success: function (result) {
-            	//window.location.href = "${NewURL}?type=edit&id="+result.id+"&message=update_success";
-            	 console.log(result);
+             	console.log(result);
+            	if (result.type=='success'){
+            		alert("Sửa thành công");
+	            	window.location.href = "${UserURL}?type=list&page=1&itemsInPage=4&sortName=id&sortBy=desc&message=AddSuccess";
+            	}else if(result.type=='fail'){
+            		alert("username đã tồn tại");
+            	}
             },
             error: function (error) {
             	//window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=error_system";

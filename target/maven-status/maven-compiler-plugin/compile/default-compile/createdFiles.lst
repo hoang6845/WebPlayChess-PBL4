@@ -3,6 +3,7 @@ com\pbl4\mapper\FriendMapper.class
 com\pbl4\model\bean\FriendModel.class
 com\pbl4\model\DAOImpl\FriendDAO.class
 com\pbl4\model\DAOImpl\DAOimple.class
+com\pbl4\api\UserApi$1.class
 com\pbl4\filter\AuthorizationFilter.class
 com\pbl4\model\bean\Location.class
 com\pbl4\model\bean\UserModel.class
@@ -26,6 +27,7 @@ com\pbl4\controller\web\HomeController$1.class
 com\pbl4\controller\web\ProfileController$1.class
 com\pbl4\websocket\PvPController.class
 com\pbl4\model\bean\RoleModel.class
+com\pbl4\api\UserApi$2.class
 com\pbl4\controller\web\FriendController.class
 com\pbl4\model\bean\dataString.class
 com\pbl4\service\IUserService.class
@@ -84,4 +86,5 @@ com\pbl4\model\bean\Pawn.class
 com\pbl4\model\DAO\IUserDAO.class
 com\pbl4\controller\web\PvCController.class
 com\pbl4\service\IHistoryService.class
+com\pbl4\api\UserApi$3.class
 com\pbl4\model\DAO\DAOInterface.class

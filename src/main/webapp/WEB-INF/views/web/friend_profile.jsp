@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="ProfileUrl" value="/profile?page=profile"/>
-<c:url var="uploadFileUrl" value="/uploadFile"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,13 +65,13 @@
 				<div class="space-y-6">
 					<div class="relative group">
 						<img id="avatar"
-							src="${USERMODEL.avatar}"
+							src="${FRIENDMODEL.avatar}"
 							alt="Profile Avatar"
 							class="w-48 h-48 rounded-full mx-auto object-cover transition-all duration-300 group-hover:opacity-75">
 						<label for="avatar-upload"
 							class="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-black">
 							<svg xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24"
+								class="h-6 w-6 text-black cursor-not-allowed" fill="none" viewBox="0 0 24 24"
 								stroke="currentColor">
                                 <path stroke-linecap="round"
 									stroke-linejoin="round" stroke-width="2"
@@ -86,10 +85,10 @@
 							
 					</div>
 					<div class="flex items-center justify-center space-x-2">
-						<h2 id="username" class="text-3xl font-semibold text-primary">${USERMODEL.fullname}</h2>
+						<h2 id="username" class="text-3xl font-semibold text-primary">${FRIENDMODEL.fullname}</h2>
 						<button class="edit-btn" onclick="editField('username')">
 							<svg xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24"
+								class="h-6 w-6 text-primary cursor-not-allowed" fill="none" viewBox="0 0 24 24"
 								stroke="currentColor">
                                 <path stroke-linecap="round"
 									stroke-linejoin="round" stroke-width="2"
@@ -104,7 +103,7 @@
 						</p>
 						<button class="edit-btn" onclick="editField('description')">
 							<svg xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-stone-950" fill="none" viewBox="0 0 24 24"
+								class="h-6 w-6 text-stone-950 cursor-not-allowed" fill="none" viewBox="0 0 24 24"
 								stroke="currentColor">
                                 <path stroke-linecap="round"
 									stroke-linejoin="round" stroke-width="2"
@@ -124,7 +123,7 @@
 									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
 							<span id="join-date" class="text-lg text-gray-700 ">Joined:
-								${USERMODEL.createDate}</span>
+								${FRIENDMODEL.createDate}</span>
 						</div>
 					</div>
 					<div class="flex items-center bg-gray-100 p-3 rounded-md">
@@ -139,7 +138,7 @@
 					</div>
 					<div class="mt-8">
 						<button onclick="showChangePasswordModal()"
-							class="w-full px-6 py-3 bg-primary text-white font-semibold rounded-md shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 bg-gray-500">
+							class="w-full px-6 py-3 bg-primary text-white font-semibold rounded-md shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 bg-gray-500 cursor-not-allowed">
 							Change Password</button>
 					</div>
 				</div>
@@ -185,7 +184,7 @@
 	</div>
 
 	<!-- Change Password Modal -->
-	<div id="changePasswordModal" 
+	<div id="changePasswordModal"
 		class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
 		<div
 			class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -210,158 +209,8 @@
 		</div>
 	</div>
 
-	<script>
-	document.getElementById("avatar-upload").addEventListener("change", function(event) {
-	    const file = event.target.files[0];
-	    if (!file) {
-	      alert("Chưa chọn ảnh");
-	      return;
-	    }
 
-	    console.log("Selected file:", file.name);
-	    console.log(file);
-
-	    const formData = new FormData();
-	    formData.append("avatar", file);
-	    formData.append("type", 'ChangeImage');
-
-		$.ajax({
-			url: '${uploadFileUrl}',
-			type:'POST',
-			data: formData,
-			dataType: 'json',
-			processData: false,  // Đảm bảo jQuery không xử lý dữ liệu (không chuyển processData thành chuỗi)
-			contentType: false,  // Đảm bảo jQuery không đặt contentType vì FormData sẽ tự động làm việc này
-            success: function (result) {
-            	 window.location.href = "${ProfileURL}";
-            	
-            },
-            error: function (error) {
-            	 console.log(error);
-            }
-		});
-	    
-	  });
-	
-		function editField(fieldId) {
-			const element = document.getElementById(fieldId);
-			const currentValue = element.innerText;
-			const input = document.createElement('input');
-			input.value = currentValue;
-			input.className = element.className;
-			input.classList.add('text-black');
-			element.replaceWith(input);
-			input.focus();
-
-			input.addEventListener('blur', function() {
-				const newValue = input.value;
-				const newElement = document.createElement(element.tagName);
-				newElement.id = fieldId;
-				newElement.innerText = newValue;
-				newElement.className = element.className;
-				input.replaceWith(newElement);
-				$.ajax({
-					url: '${ProfileUrl}',
-					type:'POST',
-					contentType:'application/json',
-					data: JSON.stringify({
-						type: fieldId,
-						newValue: newValue
-					}),
-					dataType: 'json',
-		            success: function (result) {
-		            	console.log(result);
-		            	if (result.type =="username"){
-		            		if (result.result=="success"){
-		            			$('body').append('<div class="alert alert-success bem" role="alert">Your name changed successfully</div>');
-		            			hideChangePasswordModal();
-		            		}
-		            		else{
-		            			$('body').append('<div class="alert alert-danger bem" role="alert">Failed to change your name</div>');
-		            			hideChangePasswordModal();
-		            		}
-		            	}else if (result.type =="description"){
-		             		if (result.result=="success"){
-		            			$('body').append('<div class="alert alert-success bem" role="alert">description changed successfully</div>');
-		            			hideChangePasswordModal();
-		            		}
-		            		else{
-		            			$('body').append('<div class="alert alert-danger bem" role="alert">Failed to change description</div>');
-		            			hideChangePasswordModal();
-		            		}
-		            	}
-		            	
-		            },
-		            error: function (error) {
-		            	 console.log("error");
-		            	 hideChangePasswordModal();
-		            }
-				})
-			});
-		}
 		
-		$(document).ready(function(){
-			console.log("đã chạy");
-			$('#confirm-password').on('input',function(){
-				var newPass = $('#new-password').val();
-				var confirmPass = $(this).val();
-				if (newPass != confirmPass){
-					$('#password-error').attr('class','fa-solid fa-x absolute text-red-600');
-				}else{
-					$('#password-error').attr('class','fa-solid fa-check absolute text-green-600');
-				}
-			});
-		});
 
-		function showChangePasswordModal() {
-			document.getElementById('changePasswordModal').classList
-					.remove('hidden');
-		}
-
-		function hideChangePasswordModal() {
-			
-			document.getElementById('changePasswordModal').classList
-					.add('hidden');
-		}
-
-		$('#changePasswordBtn').click(function(event){
-			event.preventDefault(); //ngăn form submit theo cách thông thường
-			console.log("vao day roi");
-			if ($('#new-password').val()==$('#new-password').val()){
-				$.ajax({
-			      	url: '${ProfileUrl}',
-		            type: 'POST',
-		            contentType: 'application/json',
-		            data: JSON.stringify({
-		            	type: "ChangePassword",
-		                oldPassword: $('#current-password').val(),
-		                newPassword: $('#new-password').val(),
-		                confirmPassword: $('#confirm-password').val()
-		            }),
-		            dataType: 'json',
-		            success: function (result) {
-		            	console.log(result);
-		            	if (result.type =="ChangePassword"){
-		            		if (result.result=="success"){
-		            			$('body').append('<div class="alert alert-success bem" role="alert">Password changed successfully</div>');
-		            			hideChangePasswordModal();
-		            		}
-		            		else{
-		            			$('body').append('<div class="alert alert-danger bem" role="alert">Failed to change password</div>');
-		            			hideChangePasswordModal();
-		            		}
-		            	}
-		            	
-		            },
-		            error: function (error) {
-		            	 console.log("error");
-		            	 hideChangePasswordModal();
-		            }
-				});
-				
-			}
-		});
-		
-	</script>
 </body>
 </html>
